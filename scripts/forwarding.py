@@ -857,8 +857,8 @@ def investigate(
             removal, share, source_pool = r, s, p
             if s is None and pools:
                 notes.append(
-                    "share of pool unknown — the pool is not among the token's "
-                    f"{SIZE_POOLS} largest, so it now holds less than the smallest of them"
+                    f"share of pool unknown — the pool is not in the token's pool list "
+                    f"({SIZE_POOLS} returned), so its depth now is not known"
                 )
             break
         refused.append(

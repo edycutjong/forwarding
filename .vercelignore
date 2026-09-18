@@ -1,0 +1,7 @@
+tests/
+out/
+.pytest_cache/
+.hypothesis/
+.ruff_cache/
+__pycache__/
+docs/proof/seed_sweep.json

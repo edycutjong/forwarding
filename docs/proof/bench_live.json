@@ -1,25 +1,25 @@
 {
   "adjudicate": {
-    "max": 0.0998,
+    "max": 0.2758,
     "n": 5,
-    "p50": 0.0923,
-    "p95": 0.0998,
+    "p50": 0.1329,
+    "p95": 0.2758,
     "unit": "ms"
   },
-  "calls_per_investigation": 12,
+  "calls_per_investigation": 11,
   "credits_used": 0,
   "follow": {
-    "max": 2.9965,
+    "max": 2.9866,
     "n": 5,
-    "p50": 2.6241,
-    "p95": 2.9965,
+    "p50": 2.5423,
+    "p95": 2.9866,
     "unit": "s"
   },
   "investigate": {
-    "max": 45.5763,
+    "max": 28.0359,
     "n": 5,
-    "p50": 29.5368,
-    "p95": 45.5763,
+    "p50": 26.9752,
+    "p95": 28.0359,
     "unit": "s"
   },
   "iterations": 5,

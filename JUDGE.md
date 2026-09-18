@@ -42,7 +42,7 @@ it refuses. Real session transcript: [docs/proof/mcp_session.md](docs/proof/mcp_
 
 1. **Nothing else is required.** No `pip install`, no `.env`, no API key, no signup. One thing is
    not a bug: the endpoint is CoinMarketCap’s shared anonymous tier, rate-limited per IP.
-   A clean run is 29.5 s (p50 of 5 live runs, 11 calls at 2 s
+   A clean run is 27.0 s (p50 of 5 live runs, 11 calls at 2 s
    spacing). If the tier is throttling, the script backs off (15 s, 30 s, 60 s) and says so;
    if your IP’s quota is exhausted it exits **75** with the way through — wait a minute, or
    export a free key as `CMC_API_KEY` (an escape hatch, never a requirement; every receipt here
@@ -68,7 +68,7 @@ Full annotated transcript with the receipt: **[DEMO.md](DEMO.md)**.
 | Credentials | none; run with every CMC env var unset |
 | Base rate | **335** removals ≥ $100,000 followed one wallet at a time: rebalance 194 · migration 19 · partial 10 · exit 112 — **67% were the same wallet putting liquidity back within 6 h** |
 | Tests | **117** offline tests + 8 live · **2,000 property cases, 0 failing** |
-| Latency | adjudicate replay p50 **0.004 ms** (n=1000) · live investigation p50 **29.5 s**, p95 45.6 s (n=5) |
+| Latency | adjudicate replay p50 **0.004 ms** (n=1000) · live investigation p50 **27.0 s**, p95 28.0 s (n=5) |
 | Raw receipts | [`hero.json`](docs/proof/hero.json) · [`exit.json`](docs/proof/exit.json) · [`rebalance.json`](docs/proof/rebalance.json) · [`jit.json`](docs/proof/jit.json) · [`base_rate.json`](docs/proof/base_rate.json) · [`live_run.json`](docs/proof/live_run.json) · [`bench_live.json`](docs/proof/bench_live.json) · [`bench_replay.json`](docs/proof/bench_replay.json) · [`spike_maker.json`](docs/proof/spike_maker.json) |
 
 The other three outcomes, captured by the same published rule: **EXIT** (LINK, 0% recovered), **REBALANCE** (LINK, 105% recovered), **refused** (DAI JIT pair, $229,834).

@@ -42,7 +42,10 @@ def lookup(platform, address):
         payload = {
             "verdict": asdict(v),
             "headline": v.headline(),
-            "scope": "same-chain follow — run the CLI for the cross-chain version",
+            "scope": (
+                "same-chain follow over the newest 100 rows — run the CLI for 300 rows "
+                "and the cross-chain version"
+            ),
         }
     except forwarding.NoCandidate as e:
         payload = {"refused": str(e)}

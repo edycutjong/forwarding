@@ -1,3 +1,12 @@
+[project]
+name = "forwarding-address"
+version = "1.0.0"
+description = "Follow the wallet behind a large LP removal — keyless, live, from CoinMarketCap's DEX API"
+requires-python = ">=3.11"
+# runtime dependencies: none, by design — scripts/forwarding.py and scripts/mcp_server.py are stdlib-only
+dependencies = []
+license = "MIT"
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"
