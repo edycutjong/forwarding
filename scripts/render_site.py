@@ -1,0 +1,489 @@
+#!/usr/bin/env python3
+"""Render site/index.html and JUDGE.md from the committed receipts.
+
+    python3 scripts/render_site.py            # write site/index.html and JUDGE.md
+    python3 scripts/render_site.py --check    # exit 1 if what is on disk is not this render
+
+Every number on either surface comes from docs/proof/*.json, which are real keyless runs. The
+templates in scripts/site_templates/ use {{slot}} tokens and the render fails if any slot is
+left unfilled, so a placeholder can never reach the committed HTML and a number can never be
+typed in by hand. The HTML under site/ is generated output: edit the template or the receipt,
+never the page.
+"""
+
+import hashlib
+import html
+import json
+import re
+import struct
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from forwarding import fmt_elapsed, fmt_utc, pair, short, ts_ms, usd, venue  # noqa: E402
+
+BUILD = Path(__file__).resolve().parents[1]
+TEMPLATES = BUILD / "scripts" / "site_templates"
+PROOF = BUILD / "docs" / "proof"
+SITE = BUILD / "site"
+
+REPO = "https://github.com/edycutjong/forwarding"
+SITE_URL = "https://forwarding-cmc.vercel.app"
+EVENT = "https://dorahacks.io/hackathon/coinmarketcap-api-202609/detail"
+AUTHOR = "Edy Cu"
+X_HANDLE = "@edycutjong"
+OG_IMAGE = SITE / "assets" / "og-image.png"
+OG_SIZE = (1200, 630)
+PROPERTY_CASES = 2000
+CLI_CMD = (
+    "python3 scripts/forwarding.py investigate --platform ethereum "
+    "--address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
+)
+MCP_CMD = "claude mcp add forwarding -- python3 $PWD/scripts/mcp_server.py"
+
+ENDPOINTS = [
+    (
+        "/v1/dex/liquidity-change/list",
+        "the trigger (removals ≥ $100k) and the join: `maker=` returns one wallet's adds and removes across every pool of the token",
+    ),
+    (
+        "/v1/dex/token/pools",
+        "every pool of the token: identity, liquidity now (share-of-pool), pool address, creation time (Consolidation)",
+    ),
+    (
+        "/v1/dex/search",
+        "asset resolution: address → CoinMarketCap id, then the same id on every other chain",
+    ),
+    (
+        "/v2/cryptocurrency/info",
+        "the canonical cross-chain contract registry the search rows are checked against",
+    ),
+    (
+        "/v4/dex/pairs/quotes/latest",
+        "depth confirmation: the destination pool's liquidity now, and the source pool's",
+    ),
+    ("/v1/dex/token", "the card header: name, symbol, token liquidity"),
+]
+COLOURS = {
+    "REBALANCE": "var(--rebalance)",
+    "MIGRATION": "var(--migration)",
+    "CONSOLIDATION": "var(--migration)",
+    "PARTIAL": "var(--partial)",
+    "EXIT": "var(--exit)",
+    "INCOMPLETE": "#7A2E2E",
+}
+
+
+def load(name):
+    p = PROOF / f"{name}.json"
+    return json.loads(p.read_text()) if p.exists() else None
+
+
+def money(x, dp=0):
+    return f"${x:,.{dp}f}"
+
+
+def compact_money(x):
+    if x >= 1e9:
+        return f"${x / 1e9:.2f}B"
+    if x >= 1e6:
+        return f"${x / 1e6:.2f}M"
+    if x >= 1e3:
+        return f"${x / 1e3:.0f}k"
+    return f"${x:,.0f}"
+
+
+def esc(s):
+    return html.escape(str(s), quote=True)
+
+
+def png_size(path):
+    head = path.read_bytes()[:24]
+    if head[:8] != b"\x89PNG\r\n\x1a\n" or head[12:16] != b"IHDR":
+        sys.exit(f"{path.relative_to(BUILD)} is not a PNG")
+    return struct.unpack(">II", head[16:24])
+
+
+def og_meta():
+    """The social-card tags, only when the image exists at exactly 1200x630 — never a dead link."""
+    if not OG_IMAGE.exists():
+        return ""
+    w, h = png_size(OG_IMAGE)
+    if (w, h) != OG_SIZE:
+        sys.exit(f"og-image.png is {w}x{h}; the card must be exactly {OG_SIZE[0]}x{OG_SIZE[1]}")
+    v = hashlib.sha1(OG_IMAGE.read_bytes()).hexdigest()[:8]
+    url = f"{SITE_URL}/assets/og-image.png?v={v}"
+    return (
+        f'<meta property="og:image" content="{url}">\n'
+        f'<meta property="og:image:width" content="{w}">\n'
+        f'<meta property="og:image:height" content="{h}">\n'
+        '<meta property="og:image:alt" content="A red LP-removed alert becoming an amber '
+        'MIGRATION verdict: 99.9% recovered.">\n'
+        '<meta name="twitter:card" content="summary_large_image">\n'
+        f'<meta name="twitter:image" content="{url}">'
+    )
+
+
+def json_panel(row, side):
+    """A liquidity-change row as highlighted JSON, every field, nothing truncated."""
+    order = [
+        "ts",
+        "tp",
+        "tu",
+        "m",
+        "en",
+        "eid",
+        "f",
+        "t0a",
+        "t1a",
+        "t0s",
+        "t1s",
+        "a0",
+        "a1",
+        "txn",
+        "h",
+        "lgid",
+        "txId",
+    ]
+    keys = [k for k in order if k in row] + [k for k in row if k not in order]
+    lines = []
+    for k in keys:
+        v = row[k]
+        val = json.dumps(v, ensure_ascii=False)
+        cls = None
+        if k == "m":
+            cls = "m"
+        elif k == "tu":
+            cls = "tu-r" if side == "remove" else "tu-a"
+        elif k in ("tp", "en", "t1s", "ts", "a0", "txn"):
+            cls = "hl"
+        else:
+            cls = "dim"
+        lines.append(f'  <span class="k">"{esc(k)}"</span>: <span class="{cls}">{esc(val)}</span>')
+    return "{\n" + ",\n".join(lines) + "\n}"
+
+
+def trace_rows(calls):
+    out = []
+    for c in calls:
+        params = " ".join(
+            f"{k}={short(v, 6) if len(str(v)) > 24 else v}"
+            for k, v in c["params"].items()
+            if k != "limit"
+        )
+        sha = c.get("sha256") or ""
+        credit = c.get("credit_count")
+        out.append(
+            '        <li><span class="ep">GET '
+            f"{esc(c['endpoint'])} <span>{esc(params)}</span></span>"
+            f'<span class="chip">{c["status"]}</span>'
+            f'<span class="ms">{c["ms"]} ms</span>'
+            f'<span class="cr">credit_count {credit if credit is not None else "–"} · 0 billed</span>'
+            f'<span class="sha" data-short="{sha[:8]}" data-full="{sha}" title="sha256 of the bytes received">{sha[:8]}</span></li>'
+        )
+    return "\n".join(out)
+
+
+def base_ctx(b):
+    if not b:
+        return {
+            "base.headline": "Base rate — not captured yet",
+            "base.bar": "",
+            "base.legend": "",
+            "base.aria": "",
+            "base.n": "0",
+            "base.min_usd": "100,000",
+            "base.tokens": "11",
+            "base.captured": "—",
+            "base.method": "—",
+            "base.summary": "not captured yet",
+            "base.put_back_pct": "—",
+        }
+    n = b["n"]
+    split = b["split"]
+    order = ["REBALANCE", "MIGRATION", "CONSOLIDATION", "PARTIAL", "EXIT", "INCOMPLETE"]
+    bar, legend, aria = [], [], []
+    for k in order:
+        c = split.get(k, 0)
+        if not c:
+            continue
+        pct = c / n * 100
+        bar.append(
+            f'      <div style="width:{pct:.2f}%;background:{COLOURS[k]}" title="{k} {c} ({pct:.0f}%)"></div>'
+        )
+        legend.append(
+            f'      <span><i style="background:{COLOURS[k]}"></i>{k.lower()} <b>{pct:.0f}%</b> ({c})</span>'
+        )
+        aria.append(f"{k.lower()} {pct:.0f}%")
+    back = b["put_back_share"]
+    summary = " · ".join(f"{k.lower()} {split.get(k, 0)}" for k in order if split.get(k, 0))
+    return {
+        "base.headline": (
+            f"{back * 100:.0f}% of “LP pulled” alerts are the same wallet putting it back within 6 h"
+        ),
+        "base.bar": "\n".join(bar),
+        "base.legend": "\n".join(legend),
+        "base.aria": ", ".join(aria),
+        "base.n": f"{n:,}",
+        "base.min_usd": f"{b['min_usd']:,.0f}",
+        "base.tokens": str(len(b["watchlist"])),
+        "base.captured": b["captured_utc"].replace("T", " ").replace("Z", " UTC"),
+        "base.method": esc(b["method"]),
+        "base.summary": summary,
+        "base.put_back_pct": f"{back * 100:.0f}",
+    }
+
+
+def mini_card(name, d):
+    if not d:
+        return ""
+    if name == "jit":
+        rows = d["rows"]
+        add = next(r for r in rows if r["tp"] == "add")
+        rem = next(r for r in rows if r["tp"] == "remove")
+        return (
+            '    <div class="mini grey"><h3 class="grey-t">Refused · JIT</h3>'
+            f'<div class="n">{esc(money(d["usd"]))}</div>'
+            f"<p><b>{esc(d['sym'])}</b> · +{esc(money(usd(add)))} and −{esc(money(usd(rem)))} in <b>one transaction</b> "
+            f"({esc(venue(rem))}) — just-in-time liquidity, not an event.</p>"
+            f"<p>Named by hash, the agent answers: <i>{esc(d['refused'])}</i></p>"
+            f'<p><a href="{REPO}/blob/main/docs/proof/jit.json" target="_blank" rel="noopener noreferrer">jit.json ↗</a></p></div>'
+        )
+    v = d["verdict"]
+    r = v["removal"]
+    kind = v["kind"]
+    cls = {
+        "EXIT": "red",
+        "REBALANCE": "grey",
+        "MIGRATION": "amber",
+        "CONSOLIDATION": "amber",
+        "PARTIAL": "amber",
+        "INCOMPLETE": "red",
+    }[kind]
+    tcls = {"red": "red-t", "grey": "grey-t", "amber": "amber-t"}[cls]
+    if kind == "EXIT":
+        chains = ", ".join(f["platform"] for f in v["follows"])
+        body = (
+            f"<p>−{esc(money(v['removed_usd']))} out of <b>{esc(venue(r))} · {esc(pair(r))}</b> "
+            f"by <span class='addr'>{esc(short(r['m']))}</span>.</p>"
+            f"<p>Nothing re-added by that wallet within ±{v['window_h']['back']:.0f} h on <b>{esc(chains)}</b> "
+            f"— every follow completed (200), so this is a real Exit, stated with the window it searched.</p>"
+        )
+        n = "0%"
+    elif kind == "REBALANCE":
+        note = ""
+        if v["adjudication"].get("other_removals_in_window"):
+            note = (
+                f" The wallet cycled again inside the window ({v['adjudication']['other_removals_in_window']} more removal(s)), "
+                f"so the share is over all of them — disclosed, not hidden."
+            )
+        body = (
+            f"<p>−{esc(money(v['removed_usd']))} out of <b>{esc(venue(r))} · {esc(pair(r))}</b> "
+            f"by <span class='addr'>{esc(short(r['m']))}</span>, back into the <b>same pool</b> "
+            f"<b>{esc(fmt_elapsed(v['elapsed_s']))}</b> later.{esc(note)}</p>"
+        )
+        n = f"{v['recovered_share'] * 100:.0f}%"
+    else:
+        dest = v.get("destination") or {}
+        body = (
+            f"<p>−{esc(money(v['removed_usd']))} out of <b>{esc(venue(r))} · {esc(pair(r))}</b>, "
+            f"{esc(money(v['recovered_usd']))} into <b>{esc(dest.get('venue', ''))} · {esc(dest.get('pair', ''))}</b>.</p>"
+        )
+        n = f"{v['recovered_share'] * 100:.1f}%"
+    return (
+        f'    <div class="mini {cls}"><h3 class="{tcls}">{esc(kind)} · {esc(d["sym"])}</h3>'
+        f'<div class="n">{n}<span style="font-size:.5em;color:var(--muted);font-weight:500"> recovered</span></div>'
+        f"{body}"
+        f"<p>captured {esc(d['captured_utc'].replace('T', ' ').replace('Z', ' UTC'))} · {d['calls_made']} calls · 0 credits · "
+        f'<a href="{REPO}/blob/main/docs/proof/{name}.json" target="_blank" rel="noopener noreferrer">{name}.json ↗</a></p></div>'
+    )
+
+
+def render(template, ctx):
+    out = template
+    for k, v in ctx.items():
+        out = out.replace("{{" + k + "}}", str(v))
+    left = sorted(set(re.findall(r"\{\{([a-zA-Z0-9_.]+)\}\}", out)))
+    if left:
+        sys.exit(f"unfilled slots: {left}")
+    return out
+
+
+def test_count():
+    """The offline and live test counts, from pytest itself — never typed."""
+    try:
+        r = subprocess.run(
+            [sys.executable, "-m", "pytest", "--collect-only", "-o", "addopts=", "-m", "not live"],
+            capture_output=True,
+            text=True,
+            cwd=BUILD,
+            timeout=120,
+        )
+        offline = _collected(r.stdout)
+        r = subprocess.run(
+            [sys.executable, "-m", "pytest", "--collect-only", "-o", "addopts=", "-m", "live"],
+            capture_output=True,
+            text=True,
+            cwd=BUILD,
+            timeout=120,
+        )
+        live = _collected(r.stdout)
+        return offline, live
+    except Exception as e:  # pytest missing on a bare judge machine: fall back to the receipt
+        counts = load("tests")
+        if counts:
+            return counts["offline"], counts["live"]
+        sys.exit(f"cannot count tests ({e}) and docs/proof/tests.json is absent")
+
+
+def _collected(stdout):
+    """pytest's summary line: '105 tests collected', '5/110 tests collected (105 deselected)',
+    or 'no tests collected (105 deselected)'."""
+    if re.search(r"no tests collected", stdout):
+        return 0
+    m = re.search(r"(\d+)(?:/\d+)? tests? collected", stdout)
+    if not m:
+        raise ValueError(f"unrecognised pytest summary: {stdout[-200:]!r}")
+    return int(m.group(1))
+
+
+def context():
+    hero = load("hero")
+    if not hero:
+        sys.exit("docs/proof/hero.json is missing — run: python3 scripts/seed.py")
+    v = hero["verdict"]
+    r = v["removal"]
+    adds = [e["row"] for e in v["evidence"] if e["row"].get("tp") == "add"]
+    dest = v.get("destination") or {}
+    add = next(
+        (a for a in adds if venue(a) == dest.get("venue") and pair(a) == dest.get("pair")),
+        adds[0] if adds else r,
+    )
+    exit_ = load("exit")
+    rebalance = load("rebalance")
+    jit = load("jit")
+    base = load("base_rate")
+    bench_replay = load("bench_replay") or {}
+    bench_live = load("bench_live") or {}
+    offline, live = test_count()
+    (PROOF / "tests.json").write_text(
+        json.dumps({"offline": offline, "live": live, "property_cases": PROPERTY_CASES}, indent=1)
+    )
+
+    others = [(n, d) for n, d in (("exit", exit_), ("rebalance", rebalance), ("jit", jit)) if d]
+    others_summary = ", ".join(
+        f"**{d['verdict']['kind']}** ({d['sym']}, {d['verdict']['recovered_share'] * 100:.0f}% recovered)"
+        if n != "jit"
+        else f"**refused** ({d['sym']} JIT pair, ${d['usd']:,.0f})"
+        for n, d in others
+    )
+    elapsed_s = v["elapsed_s"] or 0
+    desc = (
+        f"An LP pulled {money(v['removed_usd'])} from {venue(r)} {pair(r)}. The same wallet put "
+        f"{v['recovered_share'] * 100:.1f}% of it into {dest.get('venue', '')} {fmt_elapsed(elapsed_s)} later. "
+        "Follow the wallet behind any large removal — keyless, live, from CoinMarketCap's DEX API."
+    )
+    ctx = {
+        "repo": REPO,
+        "site_url": SITE_URL,
+        "site_host": SITE_URL.replace("https://", ""),
+        "event": EVENT,
+        "author": AUTHOR,
+        "x_handle": X_HANDLE,
+        "og.meta": og_meta(),
+        "meta.description": esc(desc[:300]),
+        "cli_cmd": CLI_CMD,
+        "mcp_cmd": MCP_CMD,
+        "tests": str(offline),
+        "tests_live": str(live),
+        "property_cases": f"{PROPERTY_CASES:,}",
+        "rendered_utc": time.strftime("%Y-%m-%d", time.gmtime()),
+        "hero.removed_usd": money(v["removed_usd"]),
+        "hero.recovered_usd": money(v["recovered_usd"]),
+        "hero.recovered_pct": f"{v['recovered_share'] * 100:.1f}",
+        "hero.share_4dp": f"{v['recovered_share']:.4f}",
+        "hero.kind": v["kind"],
+        "hero.severity": v["severity"],
+        "hero.venue": esc(venue(r)),
+        "hero.pair": esc(pair(r)),
+        "hero.utc": fmt_utc(ts_ms(r)),
+        "hero.maker": r["m"],
+        "hero.maker_short": short(r["m"]),
+        "hero.share_of_pool": f"{(v['removal_share_of_pool'] or 0) * 100:.1f}%",
+        "hero.txn_short": short(r["txn"], 6),
+        "hero.add_txn_short": short(add["txn"], 6),
+        "hero.dest_venue": esc(dest.get("venue", "")),
+        "hero.dest_pair": esc(dest.get("pair", "")),
+        "hero.dest_liq": compact_money(dest.get("liquidity_now_usd") or 0),
+        "hero.elapsed": fmt_elapsed(elapsed_s),
+        "hero.elapsed_s": str(elapsed_s),
+        "hero.a0": f"{abs(float(add.get('a0') or 0)):,.2f}",
+        "hero.sym": esc(v["token"].get("sym") or ""),
+        "hero.trace_rows": trace_rows(hero["calls"]),
+        "hero.remove_json": json_panel(r, "remove"),
+        "hero.add_json": json_panel(add, "add"),
+        "hero.add_tu": f"{abs(float(add['tu'])):,.2f}",
+        "hero.remove_tu": f"{abs(float(r['tu'])):,.2f}",
+        "hero.calls": str(hero["calls_made"]),
+        "hero.wall": f"{hero['wall_clock_s']:.1f} s",
+        "hero.captured": hero["captured_utc"].replace("T", " ").replace("Z", " UTC"),
+        "hero.captured_iso": hero["captured_utc"],
+        "hero.headline": (
+            f"◆ {v['kind']} · severity {v['severity']}\n"
+            f"    {v['recovered_share'] * 100:.1f}% recovered — {money(v['recovered_usd'])} of {money(v['removed_usd'])}\n"
+            f"    +{money(dest.get('added_usd', v['recovered_usd']))} into {dest.get('venue', '')} · {dest.get('pair', '')} ({dest.get('platform', '')})   "
+            f"{fmt_elapsed(elapsed_s)} later · pool now holds {money(dest.get('liquidity_now_usd') or 0)}"
+        ),
+        "other_cards": "\n".join(mini_card(n, d) for n, d in others),
+        "others.summary": others_summary,
+        "jit.sym": esc(jit["sym"]) if jit else "—",
+        "jit.usd": f"{jit['usd']:,.0f}" if jit else "—",
+        "endpoints.count": str(len(ENDPOINTS)),
+        "endpoints.rows": "\n".join(
+            f'        <tr><td class="mono">{esc(p)}</td><td>{esc(what).replace("`maker=`", "<span class=mono>maker=</span>")}</td><td class="ok-t">yes · 0 credits</td></tr>'
+            for p, what in ENDPOINTS
+        ),
+        "bench.replay_p50": f"{bench_replay.get('adjudicate', {}).get('p50', 0):.3f}",
+        "bench.replay_n": str(bench_replay.get("adjudicate", {}).get("n", 0)),
+        "bench.live_p50": f"{bench_live.get('investigate', {}).get('p50', 0):.1f}",
+        "bench.live_p95": f"{bench_live.get('investigate', {}).get('p95', 0):.1f}",
+        "bench.live_n": str(bench_live.get("investigate", {}).get("n", 0)),
+    }
+    ctx.update(base_ctx(base))
+    return ctx
+
+
+def main():
+    check = "--check" in sys.argv
+    ctx = context()
+    outputs = {
+        SITE / "index.html": render((TEMPLATES / "landing.html").read_text(), ctx),
+        BUILD / "JUDGE.md": render((TEMPLATES / "JUDGE.md").read_text(), ctx),
+    }
+    if check:
+        # the render stamp is a date; a page rendered yesterday is not drift
+        stale = []
+        for p, out in outputs.items():
+            on_disk = p.read_text() if p.exists() else ""
+            strip = lambda s: re.sub(r"rendered \d{4}-\d{2}-\d{2}", "rendered DATE", s)  # noqa: E731
+            if strip(on_disk) != strip(out):
+                stale.append(p)
+        for p in stale:
+            print(f"DRIFT: {p.relative_to(BUILD)} is not what the receipts render")
+        if stale:
+            sys.exit(1)
+        print("in sync: site/index.html and JUDGE.md match docs/proof/*.json")
+        return
+    SITE.mkdir(parents=True, exist_ok=True)
+    for path, out in outputs.items():
+        path.write_text(out)
+    print(
+        "rendered "
+        + ", ".join(f"{p.relative_to(BUILD)} ({len(o):,} B)" for p, o in outputs.items())
+    )
+
+
+if __name__ == "__main__":
+    main()

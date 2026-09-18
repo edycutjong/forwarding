@@ -1,0 +1,17 @@
+{
+  "adjudicate": {
+    "max": 0.0223,
+    "n": 600,
+    "p50": 0.0059,
+    "p95": 0.0091,
+    "unit": "ms"
+  },
+  "byte_identical": "600/600",
+  "iterations": 200,
+  "mode": "replay",
+  "receipts": [
+    "hero",
+    "exit",
+    "rebalance"
+  ]
+}

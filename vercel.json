@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "outputDirectory": "site",
+  "functions": {
+    "api/*.py": {
+      "maxDuration": 60,
+      "excludeFiles": "{tests/**,site/**,out/**,docs/proof/seed_sweep.json,docs/proof/jit.json,docs/proof/rebalance.json,docs/proof/exit.json,docs/proof/spike_maker.json}"
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
+    }
+  ]
+}

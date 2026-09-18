@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forwarding Address — where the pulled liquidity went</title>
+<meta name="description" content="{{meta.description}}">
+<meta name="author" content="{{author}}">
+<meta name="theme-color" content="#0B0E14">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="canonical" href="{{site_url}}/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Forwarding Address">
+<meta property="og:title" content="Forwarding Address — where the pulled liquidity went">
+<meta property="og:description" content="{{meta.description}}">
+<meta property="og:url" content="{{site_url}}/">
+{{og.meta}}
+<meta name="twitter:title" content="Forwarding Address — where the pulled liquidity went">
+<meta name="twitter:description" content="{{meta.description}}">
+<meta name="twitter:creator" content="{{x_handle}}">
+<style>
+@font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-latin-var.woff2) format("woff2")}
+@font-face{font-family:"Inter Tight";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-tight-latin-var.woff2) format("woff2")}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:100 800;font-display:swap;src:url(assets/fonts/jetbrains-mono-latin-var.woff2) format("woff2")}
+:root{
+  --bg:#0B0E14;--surface:#141A24;--surface-2:#1A2230;--border:#243044;--text:#E6EDF3;--muted:#8B98A9;
+  --exit:#FF5C5C;--migration:#FFB020;--partial:#FF8A3D;--rebalance:#8B98A9;--maker:#4C9AFF;--ok:#3DDC97;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --display:"Inter Tight","Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--maker);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .15s}
+a:hover,a:focus-visible{border-bottom-color:currentColor;outline:none}
+a:focus-visible{outline:2px solid var(--maker);outline-offset:3px;border-radius:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+header.top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:28px 0 8px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:800;letter-spacing:.14em;font-size:.95rem;text-transform:uppercase}
+.brand small{display:block;letter-spacing:0;text-transform:none;font-weight:400;color:var(--muted);font-family:var(--sans);font-size:1rem;margin-top:2px}
+nav.links{display:flex;gap:18px;flex-wrap:wrap;font-size:.95rem}
+nav.links a{color:var(--muted)}
+nav.links a:hover{color:var(--text)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;letter-spacing:-.02em;margin:36px 0 12px}
+.lede{font-size:1.2rem;color:var(--muted);max-width:52ch;margin:0 0 28px}
+.lede b{color:var(--text);font-weight:600}
+section{margin:56px 0}
+h2{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px 28px;position:relative;overflow:hidden}
+.card.alert{border-color:var(--exit);box-shadow:0 0 0 1px rgba(255,92,92,.15),0 12px 40px -20px rgba(255,92,92,.5);transition:border-color .5s,box-shadow .5s}
+.card.alert.flipped{border-color:var(--migration);box-shadow:0 0 0 1px rgba(255,176,32,.15),0 12px 40px -20px rgba(255,176,32,.5)}
+.card.alert.flipped.grey{border-color:var(--border);box-shadow:none}
+.card.alert.flipped.red{border-color:var(--exit)}
+.card.alert.flipped.amberred{border-color:var(--partial)}
+.dot{display:inline-block;width:.7em;height:.7em;border-radius:50%;background:var(--exit);margin-right:.5em;vertical-align:-.02em;box-shadow:0 0 12px var(--exit)}
+.flipped .dot{background:var(--migration);box-shadow:0 0 12px var(--migration);border-radius:2px;transform:rotate(45deg)}
+.flipped.grey .dot{background:var(--rebalance);box-shadow:none}
+.flipped.red .dot{background:var(--exit);box-shadow:0 0 12px var(--exit)}
+.flipped.amberred .dot{background:var(--partial);box-shadow:0 0 12px var(--partial)}
+.state{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;font-family:var(--display);font-weight:700;letter-spacing:.06em;font-size:1.25rem;text-transform:uppercase}
+.state .sev{font-family:var(--mono);font-size:.85rem;letter-spacing:0;text-transform:none;color:var(--muted);font-weight:400}
+.sev b{font-weight:600}
+.red-t{color:var(--exit)}.amber-t{color:var(--migration)}.grey-t{color:var(--rebalance)}.blue-t{color:var(--maker)}.ok-t{color:var(--ok)}.partial-t{color:var(--partial)}
+.big{font-family:var(--display);font-weight:800;font-size:clamp(3rem,8vw,6rem);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin:14px 0 6px}
+.big small{font-size:.32em;font-weight:600;letter-spacing:0;color:var(--muted);margin-left:.3em}
+.sub{color:var(--muted);font-size:1.05rem}
+.sub b{color:var(--text);font-weight:600}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.addr{font-family:var(--mono);color:var(--maker);word-break:break-all}
+.phase{display:none}
+.card.alert .phase-red{display:block}
+.card.alert.flipped .phase-red{display:none}
+.card.alert.flipped .phase-verdict{display:block}
+.card.alert.static .phase-red,.card.alert.static .phase-verdict{display:block}
+.trace{margin:10px 0 0;padding:0;list-style:none;font-family:var(--mono);font-size:.85rem}
+.trace li{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto;gap:14px;padding:7px 0;border-top:1px solid var(--border);align-items:baseline;opacity:0;transform:translateY(4px);animation:rowin .35s ease forwards}
+.trace li:first-child{border-top:0}
+.trace .ep{color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trace .ep span{color:var(--muted)}
+.trace .chip{color:var(--ok);background:rgba(61,220,151,.1);border:1px solid rgba(61,220,151,.3);border-radius:6px;padding:1px 8px;font-size:.78rem}
+.trace .ms,.trace .cr,.trace .sha{color:var(--muted);font-size:.8rem;white-space:nowrap}
+.trace .sha{cursor:pointer;border-bottom:1px dotted var(--muted)}
+@keyframes rowin{to{opacity:1;transform:none}}
+.rows{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.json{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 18px;font-family:var(--mono);font-size:.84rem;line-height:1.6;overflow-x:auto;white-space:pre;margin:0}
+.json .k{color:var(--muted)}
+.json .m{color:var(--maker);font-weight:600}
+.json .tu-r{color:var(--exit);font-weight:600}
+.json .tu-a{color:var(--migration);font-weight:600}
+.json .hl{color:var(--text);font-weight:600}
+.json .dim{color:#5E6C80}
+.json-title{font-family:var(--display);letter-spacing:.1em;text-transform:uppercase;font-size:.8rem;color:var(--muted);margin:0 0 8px}
+.division{font-family:var(--mono);font-size:1.1rem;margin:18px 0 0;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.division b{color:var(--migration)}
+.bar{display:flex;height:34px;border-radius:9px;overflow:hidden;border:1px solid var(--border);margin:14px 0 10px}
+.bar div{height:100%;transition:width .6s ease}
+.legend{display:flex;gap:20px;flex-wrap:wrap;color:var(--muted);font-size:.95rem}
+.legend i{display:inline-block;width:.75em;height:.75em;border-radius:3px;margin-right:.45em;vertical-align:-.05em}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.mini{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;border-top:3px solid var(--border)}
+.mini.red{border-top-color:var(--exit)}.mini.grey{border-top-color:var(--rebalance)}.mini.amber{border-top-color:var(--migration)}
+.mini h3{font-family:var(--display);font-size:1rem;letter-spacing:.08em;text-transform:uppercase;margin:0 0 6px}
+.mini .n{font-family:var(--display);font-weight:800;font-size:2rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin:4px 0}
+.mini p{margin:6px 0;color:var(--muted);font-size:.95rem}
+.mini p b{color:var(--text);font-weight:600}
+pre.cmd{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 72px 14px 16px;font-family:var(--mono);font-size:.9rem;overflow-x:auto;margin:0 0 10px;position:relative;white-space:pre-wrap;word-break:break-all}
+pre.cmd .c{color:var(--muted)}
+button,.btn{font:inherit;font-weight:600;font-size:.95rem;background:var(--migration);color:#141A24;border:0;border-radius:10px;padding:10px 18px;cursor:pointer;transition:transform .08s,filter .15s,box-shadow .15s}
+button:hover,.btn:hover{filter:brightness(1.08);box-shadow:0 6px 18px -8px rgba(255,176,32,.7)}
+button:active{transform:translateY(1px)}
+button:focus-visible{outline:2px solid var(--text);outline-offset:3px}
+button.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+button.ghost:hover{border-color:var(--muted);box-shadow:none}
+button.copy{position:absolute;top:8px;right:8px;padding:4px 10px;font-size:.78rem;background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+button.copy:hover{color:var(--text);box-shadow:none}
+.live{display:grid;grid-template-columns:150px 1fr auto;gap:10px;align-items:center}
+input,select{font:inherit;font-family:var(--mono);font-size:.9rem;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:10px 12px;width:100%}
+input:focus,select:focus{outline:2px solid var(--maker);outline-offset:1px;border-color:var(--maker)}
+.note{color:var(--muted);font-size:.92rem;margin:10px 0 0}
+.note b{color:var(--text)}
+#live-out{margin-top:16px}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th,td{text-align:left;padding:9px 10px;border-top:1px solid var(--border);vertical-align:top}
+th{color:var(--muted);font-weight:500;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;border-top:0}
+td.mono{font-size:.85rem;white-space:nowrap}
+td.ok-t{white-space:nowrap}
+ul.plain{margin:0;padding-left:1.2em;color:var(--muted)}
+ul.plain li{margin:6px 0}
+ul.plain b{color:var(--text);font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+footer{margin:64px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.hatched{background:repeating-linear-gradient(135deg,transparent 0 8px,rgba(255,92,92,.12) 8px 16px)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:760px){
+  .rows,.grid3,.two{grid-template-columns:1fr}
+  .live{grid-template-columns:1fr}
+  .trace li{grid-template-columns:1fr auto;row-gap:2px}
+  .trace .ms,.trace .cr,.trace .sha{display:none}
+  .card{padding:20px}
+  .big{font-size:clamp(2.6rem,14vw,4rem)}
+}
+@media (prefers-reduced-motion:reduce){
+  .trace li{animation:none;opacity:1;transform:none}
+  .card.alert,.card.alert.flipped{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="brand">Forwarding Address<small>Where the pulled liquidity went.</small></div>
+  <nav class="links" aria-label="Project links">
+    <a href="{{repo}}" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href="{{repo}}/blob/main/JUDGE.md" target="_blank" rel="noopener noreferrer">For judges</a>
+    <a href="{{repo}}/blob/main/DEMO.md" target="_blank" rel="noopener noreferrer">Demo &amp; receipt</a>
+    <a href="{{repo}}/blob/main/FEEDBACK.md" target="_blank" rel="noopener noreferrer">API feedback</a>
+    <a href="#live">Run it live</a>
+  </nav>
+</header>
+
+<h1>Every “LP removed” alert stops at the row that fired it.<br>This one follows the wallet.</h1>
+<p class="lede">A large removal fires. Forwarding Address discards just-in-time pairs, follows the <b>maker address</b> across every pool of the token — on this chain and on every other EVM chain the same asset trades on — and rewrites the alert: <b>Rebalance</b>, <b>Migration</b>, <b>Partial</b>, or a real <b>Exit</b>. Keyless, live, from CoinMarketCap’s DEX API.</p>
+
+<section id="hero" aria-label="The verdict">
+  <div class="card alert" id="alert-card" data-severity="{{hero.severity}}">
+    <div class="phase phase-red">
+      <div class="state"><span><span class="dot"></span><span class="red-t">LP removed</span> <span class="mono">−{{hero.removed_usd}}</span></span><span class="sev">{{hero.venue}} · {{hero.pair}} · {{hero.utc}}</span></div>
+      <div class="big red-t">−{{hero.removed_usd}}</div>
+      <p class="sub">maker <span class="addr">{{hero.maker}}</span> · <b>{{hero.share_of_pool}}</b> of the pool walked out · txn <span class="mono">{{hero.txn_short}}</span></p>
+    </div>
+    <div class="phase phase-verdict">
+      <div class="state"><span><span class="dot"></span><span class="amber-t">{{hero.kind}}</span></span><span class="sev">severity rewritten: <b class="red-t">red</b> → <b class="amber-t">{{hero.severity}}</b></span></div>
+      <div class="big amber-t"><span id="share" data-target="{{hero.recovered_pct}}">{{hero.recovered_pct}}</span>%<small>recovered</small></div>
+      <p class="sub"><b>+{{hero.recovered_usd}}</b> into <b>{{hero.dest_venue}} · {{hero.dest_pair}}</b> — <b>{{hero.elapsed}}</b> later</p>
+      <p class="sub">same wallet <span class="addr">{{hero.maker_short}}</span> · same <b>{{hero.a0}} {{hero.sym}}</b> to ten decimals · the pool now holds <b>{{hero.dest_liq}}</b> · <a href="{{repo}}/blob/main/docs/proof/hero.json" target="_blank" rel="noopener noreferrer">receipt ↗</a></p>
+    </div>
+    <p class="json-title" style="margin-top:18px">the agent's trace — every call, as made · endpoint · status · ms · credit_count · sha256 of the bytes</p>
+    <ol class="trace" id="trace" aria-label="API calls the agent made">
+{{hero.trace_rows}}
+    </ol>
+  </div>
+  <p class="note">Captured live, keyless, <b>{{hero.captured}}</b> — {{hero.calls}} calls, all HTTP 200, <b>0 credits</b>, {{hero.wall}} wall clock. Selected by a published rule (largest non-JIT removal across an 11-token watchlist), not picked. <a href="#" id="replay">Replay the flip ↻</a></p>
+</section>
+
+<section id="rows" aria-label="The two raw rows">
+  <h2>The two rows, verbatim</h2>
+  <div class="rows">
+    <div><p class="json-title">remove · <span class="red-t">{{hero.venue}}</span> · txn <span class="mono">{{hero.txn_short}}</span></p><pre class="json">{{hero.remove_json}}</pre></div>
+    <div><p class="json-title">add · <span class="amber-t">{{hero.dest_venue}}</span> · txn <span class="mono">{{hero.add_txn_short}}</span></p><pre class="json">{{hero.add_json}}</pre></div>
+  </div>
+  <p class="division">recovered share = <b>{{hero.add_tu}}</b> ÷ {{hero.remove_tu}} = <b>{{hero.share_4dp}}</b> &nbsp;·&nbsp; elapsed = ts<sub>add</sub> − ts<sub>remove</sub> = {{hero.elapsed_s}} s &nbsp;·&nbsp; both rows from <span class="mono">/v1/dex/liquidity-change/list?maker=</span></p>
+  <p class="note">Both rows come from one keyless call — the list is token-scoped and takes <span class="mono">maker=</span>, so the cross-pool join is <b>one request</b>, not a scan. No endpoint returns the verdict; the division is the product.</p>
+</section>
+
+<section id="base" aria-label="Base rate">
+  <h2>{{base.headline}}</h2>
+  <div class="card">
+    <div class="bar" role="img" aria-label="{{base.aria}}">
+{{base.bar}}
+    </div>
+    <div class="legend">
+{{base.legend}}
+    </div>
+    <p class="note"><b>n = {{base.n}}</b> non-JIT removals ≥ ${{base.min_usd}} across {{base.tokens}} tokens on 3 chains, captured <b>{{base.captured}}</b>. Method: {{base.method}}. <a href="{{repo}}/blob/main/docs/proof/base_rate.json" target="_blank" rel="noopener noreferrer">base_rate.json ↗</a></p>
+  </div>
+</section>
+
+<section id="others" aria-label="The other outcomes">
+  <h2>The other three cards exist too</h2>
+  <div class="grid3">
+{{other_cards}}
+  </div>
+</section>
+
+<section id="run" aria-label="Run it yourself">
+  <h2>Run it yourself — no key, no install, one file</h2>
+  <div class="two">
+    <div>
+      <pre class="cmd" id="cmd-cli"><span class="c"># the product: newest large removal on UNI → verdict, live</span>
+{{cli_cmd}}<button class="copy" data-copy="cmd-cli" type="button">copy</button></pre>
+      <p class="note">Python 3.11+, stdlib only. Exit 0 = verdict, 3 = nothing qualified, 75 = the anonymous tier is throttling (wait a minute). Every call it makes is printed as it happens.</p>
+    </div>
+    <div>
+      <pre class="cmd" id="cmd-mcp"><span class="c"># the agent surface: three tools into Claude Code</span>
+{{mcp_cmd}}<button class="copy" data-copy="cmd-mcp" type="button">copy</button></pre>
+      <p class="note">Then ask: <i>“where did the UNI liquidity go?”</i> Your model chooses the token and the removal; the tool decides what is true, and refuses a JIT pair. Transcript: <a href="{{repo}}/blob/main/docs/proof/mcp_session.md" target="_blank" rel="noopener noreferrer">mcp_session.md ↗</a></p>
+    </div>
+  </div>
+</section>
+
+<section id="live" aria-label="Run it live">
+  <h2>Run it live on this page</h2>
+  <div class="card">
+    <form class="live" id="live-form">
+      <label class="sr-only" for="platform">chain</label>
+      <select id="platform"><option value="ethereum">ethereum</option><option value="base">base</option><option value="bsc">bsc</option><option value="arbitrum">arbitrum</option><option value="polygon">polygon</option><option value="unichain">unichain</option></select>
+      <label class="sr-only" for="address">token address</label>
+      <input id="address" value="0x1f9840a85d5af5bf1d1762f925bdaddc4201f984" spellcheck="false" autocomplete="off">
+      <button type="submit" id="go">Follow the wallet</button>
+    </form>
+    <p class="note">Same-chain follow through a keyless serverless proxy (CoinMarketCap sends no CORS header, so the browser cannot call it directly). The proxy shares one IP across every visitor, and the anonymous tier throttles per IP — if it says so, that is the tier, not the tool: <b>run the CLI</b>, where every reader has their own quota, for the cross-chain version.</p>
+    <div id="live-out" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="honest" aria-label="Refusals and limits">
+  <div class="two">
+    <div>
+      <h2>What it refuses</h2>
+      <ul class="plain">
+        <li><b>Just-in-time pairs.</b> A transaction that both adds and removes is not an event. It is discarded before the trigger, and naming one by hash returns a refusal, not a verdict ({{jit.sym}} ${{jit.usd}}, <a href="{{repo}}/blob/main/docs/proof/jit.json" target="_blank" rel="noopener noreferrer">jit.json ↗</a>).</li>
+        <li><b>Slivers.</b> A removal below 10% of its pool is large in dollars and small for the pool — skipped, with the share printed.</li>
+        <li><b>Solana as a cross-chain destination.</b> A Solana maker is not an EVM address; it cannot be this wallet.</li>
+        <li><b>Chains with no market.</b> An asset with under $10k of DEX liquidity on a chain is not followed there — stated, not silently skipped.</li>
+        <li><b>A throttled follow is never an Exit.</b> If any planned follow fails, the verdict is INCOMPLETE and says so (invariant I6).</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Honest limits</h2>
+      <ul class="plain">
+        <li><b>Pool identity is venue + pair, not pool address.</b> Rows carry no pool address; two fee tiers of one pair on one venue collapse into one identity.</li>
+        <li><b>The window is ±6 h.</b> A wallet that comes back a day later reads as an Exit for that window — the card says which window it searched.</li>
+        <li><b>A wallet is not an entity.</b> Liquidity moved through a second wallet is not followed; the share is a floor.</li>
+        <li><b>A wallet that cycles more than once in the window</b> can show a share over 100% — the adds are attributed to the whole window, and the card discloses the other removals.</li>
+        <li><b>This page is a dated receipt.</b> Your numbers will differ — re-run it.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="endpoints" aria-label="Endpoints">
+  <h2>{{endpoints.count}} CoinMarketCap endpoints, all keyless, 0 credits</h2>
+  <div class="card" style="padding:8px 16px;overflow-x:auto">
+    <table style="min-width:640px">
+      <thead><tr><th>Endpoint</th><th>What the agent takes from it</th><th>Keyless</th></tr></thead>
+      <tbody>
+{{endpoints.rows}}
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Remove CoinMarketCap and there is no <span class="mono">maker=</span> filter, no pool list, no cross-chain contract registry: the join has nothing to join. Where the API got in the way is written up for the CMC team in <a href="{{repo}}/blob/main/FEEDBACK.md" target="_blank" rel="noopener noreferrer">FEEDBACK.md ↗</a>.</p>
+</section>
+
+<footer>
+  <span>{{tests}} tests · {{property_cases}} property cases, 0 failing · adjudicate replay p50 {{bench.replay_p50}} ms · <a href="{{repo}}" target="_blank" rel="noopener noreferrer">source (MIT)</a></span>
+  <span>Built for the <a href="{{event}}" target="_blank" rel="noopener noreferrer">Build with CMC: API Hackathon</a> · AI Agents &amp; Automation · rendered {{rendered_utc}} from <span class="mono">docs/proof/*.json</span></span>
+</footer>
+
+</div>
+<script>
+(function(){
+  var card=document.getElementById('alert-card');
+  var trace=document.getElementById('trace');
+  var rows=trace?trace.querySelectorAll('li'):[];
+  var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sevClass={grey:'grey',red:'red','amber-red':'amberred',amber:''}[card.dataset.severity]||'';
+  function flip(){card.classList.add('flipped');if(sevClass)card.classList.add(sevClass);countUp();}
+  function countUp(){var el=document.getElementById('share');if(!el)return;var target=parseFloat(el.dataset.target);if(reduced){el.textContent=el.dataset.target;return;}var t0=performance.now(),dur=900;function step(t){var p=Math.min(1,(t-t0)/dur);var v=target*(1-Math.pow(1-p,3));el.textContent=v.toFixed(1);if(p<1)requestAnimationFrame(step);else el.textContent=el.dataset.target;}requestAnimationFrame(step);}
+  function play(){
+    card.classList.remove('flipped','grey','red','amberred');
+    if(reduced){flip();return;}
+    rows.forEach(function(li,i){li.style.animation='none';li.offsetHeight;li.style.animation='';li.style.animationDelay=(1.2+i*0.18)+'s';});
+    var total=1200+rows.length*180+500;
+    setTimeout(flip,total);
+  }
+  play();
+  var replay=document.getElementById('replay');
+  if(replay)replay.addEventListener('click',function(e){e.preventDefault();play();});
+
+  document.querySelectorAll('button.copy').forEach(function(b){b.addEventListener('click',function(){var pre=document.getElementById(b.dataset.copy);var text=Array.prototype.filter.call(pre.childNodes,function(n){return !(n.classList&&(n.classList.contains('c')||n.tagName==='BUTTON'));}).map(function(n){return n.textContent;}).join('').trim();navigator.clipboard&&navigator.clipboard.writeText(text).then(function(){b.textContent='copied';setTimeout(function(){b.textContent='copy';},1200);});});});
+  document.querySelectorAll('.trace .sha').forEach(function(s){s.addEventListener('click',function(){s.textContent=s.textContent.length>8?s.dataset.short:s.dataset.full;});});
+
+  var form=document.getElementById('live-form'),out=document.getElementById('live-out'),go=document.getElementById('go');
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
+  function short(a){a=String(a||'');return a.length>14?a.slice(0,6)+'…'+a.slice(-4):a;}
+  function traceHtml(calls){return '<ol class="trace">'+calls.map(function(c,i){var p=Object.keys(c.params||{}).filter(function(k){return k!=='limit';}).map(function(k){return k+'='+short(c.params[k]);}).join(' ');return '<li style="animation-delay:'+(i*0.12)+'s"><span class="ep">GET '+esc(c.endpoint)+' <span>'+esc(p)+'</span></span><span class="chip">'+(c.status||'ERR')+'</span><span class="ms">'+c.ms+' ms</span><span class="cr">credit '+(c.credit_count==null?'–':c.credit_count)+' (keyless: 0 billed)</span><span class="sha">'+(c.sha256?c.sha256.slice(0,8):'')+'</span></li>';}).join('')+'</ol>';}
+  function render(d){
+    if(d.throttled){out.innerHTML='<div class="card hatched"><div class="state"><span><span class="dot"></span><span class="red-t">Throttled</span></span></div><p class="sub">CoinMarketCap’s anonymous tier refused the proxy’s shared IP: <span class="mono">'+esc(d.throttled)+'</span>. Wait a minute, or run the CLI — every reader has their own quota there.</p></div>';return;}
+    if(d.refused&&!d.verdict){out.innerHTML='<div class="card"><div class="state"><span><span class="dot" style="background:var(--rebalance);box-shadow:none"></span><span class="grey-t">No verdict</span></span></div><p class="sub">'+esc(d.refused)+'</p>'+traceHtml(d.calls||[])+'</div>';return;}
+    var v=d.verdict,r=v.removal,sev={grey:'grey',red:'red','amber-red':'amberred',amber:''}[v.severity]||'';
+    var colour={REBALANCE:'grey-t',MIGRATION:'amber-t',CONSOLIDATION:'amber-t',PARTIAL:'partial-t',EXIT:'red-t',INCOMPLETE:'red-t'}[v.kind];
+    var line='';
+    if(v.destination&&(v.kind==='MIGRATION'||v.kind==='CONSOLIDATION'||v.kind==='PARTIAL'))line='+'+money(v.destination.added_usd)+' into <b>'+esc(v.destination.venue)+' · '+esc(v.destination.pair)+'</b>'+(v.elapsed_s!=null?' — '+Math.abs(v.elapsed_s)+' s '+(v.elapsed_s>=0?'later':'earlier'):'')+(v.destination.liquidity_now_usd?' · pool now holds '+money(v.destination.liquidity_now_usd):'');
+    else if(v.kind==='REBALANCE')line='back into the same pool'+(v.elapsed_s!=null?' '+v.elapsed_s+' s later':'');
+    else if(v.kind==='EXIT')line='nothing re-added by this wallet within ±'+v.window_h.back+' h on '+v.follows.map(function(f){return f.platform;}).join(', ')+' (same-chain follow on this page — run the CLI for cross-chain)';
+    else if(v.kind==='INCOMPLETE')line='a follow was throttled — this is not an Exit; re-run';
+    var adds=v.evidence.filter(function(e){return e.row.tp==='add';});
+    var rowsHtml=adds.length?'<p class="json-title" style="margin-top:14px">the rows</p><pre class="json">'+esc('remove  ts='+r.ts+' tu='+r.tu+' m='+r.m+' en='+(r.en||'')+'\n')+adds.slice(0,4).map(function(a){var x=a.row;return esc('add     ts='+x.ts+' tu='+x.tu+' m='+x.m+' en='+(x.en||'')+'  ['+a.platform+']\n');}).join('')+'</pre>':'';
+    out.innerHTML='<div class="card alert static '+sev+' flipped"><div class="state"><span><span class="dot"></span><span class="'+colour+'">'+esc(v.kind)+'</span></span><span class="sev">severity: <b>'+esc(v.severity)+'</b> · '+(d.calls||[]).length+' calls · 0 credits · '+(d.wall_clock_s||'')+' s</span></div><div class="big '+colour+'">'+(v.recovered_share*100).toFixed(1)+'%<small>recovered</small></div><p class="sub"><b>'+esc(v.token.sym||'')+'</b> removal of <b>'+money(v.removed_usd)+'</b> from <b>'+esc(r.en||'unlabeled DEX')+' · '+esc(r.t0s)+'/'+esc(r.t1s)+'</b> by <span class="addr">'+esc(r.m)+'</span></p><p class="sub">'+line+'</p>'+rowsHtml+traceHtml(d.calls||[])+(v.refused&&v.refused.length?'<p class="note">refused: '+esc(v.refused.join(' · '))+'</p>':'')+'</div>';
+  }
+  if(form)form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var platform=document.getElementById('platform').value,address=document.getElementById('address').value.trim();
+    go.disabled=true;go.textContent='following…';
+    out.innerHTML='<p class="note">following the wallet — up to 8 keyless calls at 0.4 s spacing, usually 5–10 s…</p>';
+    fetch('/api/lookup?platform='+encodeURIComponent(platform)+'&address='+encodeURIComponent(address)).then(function(r){return r.json();}).then(render).catch(function(err){out.innerHTML='<div class="card"><p class="sub">This copy of the page has no proxy behind it (<span class="mono">/api/lookup</span> did not answer: '+esc(err.message)+'). The live surface is the Vercel deployment; from a clone, run the CLI.</p></div>';}).finally(function(){go.disabled=false;go.textContent='Follow the wallet';});
+  });
+})();
+</script>
+</body>
+</html>
