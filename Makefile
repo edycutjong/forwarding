@@ -43,8 +43,8 @@ check:  ## refuse to ship a placeholder, a drifted page, or a README test count 
 mcp:  ## run the MCP server on stdio (what `claude mcp add forwarding -- python3 scripts/mcp_server.py` does)
 	python3 scripts/mcp_server.py
 
-watch:  ## the autonomous loop: poll the watchlist, adjudicate every qualifying removal as it lands
-	python3 scripts/forwarding.py watch --watchlist watchlist.json
+watch:  ## the autonomous loop: poll the built-in 11-token watchlist (or --watchlist file.json), adjudicate every new qualifying removal
+	python3 scripts/forwarding.py watch
 
 ci: lint test verify check  ## everything CI runs, offline
 all: ci bench  ## ci plus the deterministic benchmark
