@@ -1,0 +1,45 @@
+# secrets — credentials live in ~/.config/, never in this tree
+.env
+.env.*
+!.env.example
+*.key
+credentials.json
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.hypothesis/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# node / vercel
+node_modules/
+.vercel/
+.next/
+dist/
+
+# os / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# kitchen guard — specs/, submission/ and assets/ live one level up and must never
+# enter this repo. /publish copies selected artifacts into docs/, never into these.
+/assets/*
+!/assets/fonts-src/
+/specs/
+/submission/
+_ideas/
+_specs/
+graphify-out/
+
+# scratch output from local runs (the committed receipts live in docs/proof/)
+/out/
+*.local.json

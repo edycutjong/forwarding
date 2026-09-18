@@ -1,0 +1,2 @@
+# Runtime: none. scripts/forwarding.py and scripts/mcp_server.py are stdlib-only by design —
+# a judge runs them with a bare python3 and no install step.
