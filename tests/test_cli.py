@@ -2,6 +2,7 @@
 
 import json
 
+import forwarding
 import pytest
 from conftest import (
     HERO_ADD,
@@ -16,8 +17,6 @@ from conftest import (
     row,
     scenario,
 )
-
-import forwarding
 
 
 @pytest.fixture
@@ -149,10 +148,10 @@ def test_watch_one_cycle_fires_on_the_newest_removal_and_prints_the_rewrite(rout
 def _watchlist():
     import tempfile
 
-    f = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
-    json.dump([{"platform": "ethereum", "address": UNI, "symbol": "UNI"}], f)
-    f.close()
-    return f.name
+    path = tempfile.mktemp(suffix=".json")
+    with open(path, "w") as f:
+        json.dump([{"platform": "ethereum", "address": UNI, "symbol": "UNI"}], f)
+    return path
 
 
 def test_no_subcommand_prints_help_and_exits_two(capsys):

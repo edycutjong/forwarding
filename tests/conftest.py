@@ -175,9 +175,7 @@ def lc(platform=None, address=None, maker=None, page=ANY):
             return False
         if maker and p.get("maker") != maker:
             return False
-        if page is not ANY and (p.get("lastId") or None) != page:
-            return False
-        return True
+        return page is ANY or (p.get("lastId") or None) == page
 
     return m
 

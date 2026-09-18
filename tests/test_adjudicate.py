@@ -3,9 +3,8 @@
 Regression tests are named for the defect they pin, with the date it was seen live.
 """
 
-from conftest import HERO_ADD, HERO_REMOVE, MAKER, T0, UNI, USDC, V3, V4, WETH, row
-
 import forwarding
+from conftest import HERO_ADD, HERO_REMOVE, MAKER, T0, UNI, USDC, V3, V4, WETH, row
 from forwarding import FULL, PARTIAL_MIN, adjudicate, jit_txns, pool_id, usd, window_rows
 
 

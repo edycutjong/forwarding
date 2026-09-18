@@ -9,10 +9,9 @@ published in README.md and DEMO.md; test_published_counts pins it.
 import json
 
 from conftest import T0, V4, WETH, row
+from forwarding import FULL, KINDS, PARTIAL_MIN, SEVERITY, adjudicate, pool_id
 from hypothesis import given, settings
 from hypothesis import strategies as st
-
-from forwarding import FULL, KINDS, PARTIAL_MIN, SEVERITY, adjudicate, pool_id
 
 PROPERTY_CASES = 2000
 
@@ -86,7 +85,7 @@ def test_adjudication_invariants_hold_over_the_whole_input_space(removed, adds, 
         )
         assert d["added_usd"] <= a["other_pools_usd"] + 1e-6
     elif k == "PARTIAL":
-        assert PARTIAL_MIN <= a["total_share"]
+        assert a["total_share"] >= PARTIAL_MIN
         assert a["same_share"] < FULL and a["other_share"] < FULL
         assert a["recovered_share"] == a["total_share"]
     elif k == "EXIT":

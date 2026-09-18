@@ -3,6 +3,7 @@
 import json
 from dataclasses import asdict
 
+import forwarding
 import pytest
 from conftest import (
     HERO_ADD,
@@ -14,7 +15,6 @@ from conftest import (
     UNI,
     USDC,
     V3_POOL,
-    V4,
     V4_POOL,
     FakeClient,
     envelope,
@@ -23,8 +23,6 @@ from conftest import (
     row,
     scenario,
 )
-
-import forwarding
 from forwarding import NoCandidate, Throttled, investigate, receipt
 
 BSC_UNI = "0xbf5140a22578168fd562dccf235e5d43a02ce9b1"
@@ -343,7 +341,8 @@ def test_the_verdict_serialises_and_the_headline_reads_as_one_sentence(hero_rout
     d = asdict(v)
     json.dumps(d)
     assert v.headline().startswith(
-        "MIGRATION · 99.9% recovered — $2,918,988 of $2,921,711 into Uniswap v4 (Ethereum) · UNI/USDC 4 min 12 s later"
+        "MIGRATION · 99.9% recovered — $2,918,988 of $2,921,711 into "
+        "Uniswap v4 (Ethereum) · UNI/USDC 4 min 12 s later"
     )
 
 

@@ -8,10 +8,9 @@ import json
 import urllib.error
 import urllib.request
 
+import forwarding
 import pytest
 from conftest import UNI, FakeClient, envelope, lc, row
-
-import forwarding
 from forwarding import Client, walk
 
 
