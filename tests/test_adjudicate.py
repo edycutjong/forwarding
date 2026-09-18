@@ -280,3 +280,21 @@ def test_a_wallet_that_cycled_twice_in_the_window_is_disclosed_not_hidden():
     assert a["recovered_share"] > 1.9
     assert a["other_removals_in_window"] == 1
     assert abs(a["other_removals_usd"] - 861585.51) < 1e-6
+
+
+def test_a_usd_value_larger_than_every_market_on_earth_is_a_price_artefact_not_a_removal():
+    """CAKE on BSC, live 2026-09-19: 13 rows on an unlabeled venue carried tu = -1e42 (and
+    a0 = -1e42 CAKE — trillions of times the supply) and out-ranked every real removal in the
+    seed sweep. No liquidity event has ever been $10B; above that the row is refused."""
+    absurd = row("remove", -1e42, en=None, f="0xe56c0a29c9b18004442ddac244bbff7ff701fa97")
+    assert forwarding.plausible(absurd) is False
+    assert forwarding.plausible(row("remove", -21_330_274.56)) is True
+    assert forwarding.SANE_USD == 10_000_000_000.0
+    # an implausible ADD must not inflate a recovery either
+    rows, meta = window_rows(
+        [row("add", 1e42, ts=T0 + 1000, txn="0xabsurd"), row("add", 10.0, ts=T0 + 2000)],
+        {"pages": 1, "error": None, "throttled": False},
+        t0_ms=T0,
+    )
+    assert [r["tu"] for r in rows] == [10.0]
+    assert meta["implausible_dropped"] == 1

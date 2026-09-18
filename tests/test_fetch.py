@@ -290,3 +290,27 @@ def test_the_envelope_liquidity_and_pool_count_ride_along_in_meta():
     c = FakeClient([(lc(), envelope([], last_id=None, tlu=42063378.87, lpc="10"))])
     _, meta = walk(c, {"platform": "ethereum", "address": UNI}, pages=1)
     assert meta["tlu"] == 42063378.87 and meta["lpc"] == "10"
+
+
+def test_a_call_that_backed_off_and_then_answered_says_so_in_its_receipt(monkeypatch, no_sleep):
+    """bench 2026-09-19: two 15 s backoffs fired and the receipt reported 0 throttle events,
+    because a retried call was recorded once, as its final 200."""
+    answers = [http_error(429, THROTTLE_429), Resp({"data": {"lcs": []}})]
+
+    def fake_open(req, timeout=0):
+        a = answers.pop(0)
+        if isinstance(a, Exception):
+            raise a
+        return a
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_open)
+    c = Client(spacing=0)
+    c.get("/v1/dex/liquidity-change/list", platform="ethereum", address=UNI)
+    assert c.calls[0]["status"] == 200 and c.calls[0]["attempts"] == 2
+
+
+def test_a_clean_call_carries_no_attempts_field(monkeypatch, no_sleep):
+    monkeypatch.setattr(urllib.request, "urlopen", lambda req, timeout=0: Resp({"data": {}}))
+    c = Client(spacing=0)
+    c.get("/v1/dex/token", platform="ethereum", address=UNI)
+    assert "attempts" not in c.calls[0]

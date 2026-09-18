@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Forwarding Address — where the pulled liquidity went</title>
-<meta name="description" content="An LP pulled $2,921,711 from Uniswap v3 (Ethereum) UNI/USDC. The same wallet put 99.9% of it into Uniswap v4 (Ethereum) 4 min 12 s later. Follow the wallet behind any large removal — keyless, live, from CoinMarketCap&#x27;s DEX API.">
+<meta name="description" content="An LP pulled $21,330,275 from Ring Exchange (Ethereum) UNI/WBTC. The same wallet put 99.8% of it into Ring Exchange (Ethereum) 2 min 12 s later. Follow the wallet behind any large removal — keyless, live, from CoinMarketCap&#x27;s DEX API.">
 <meta name="author" content="Edy Cu">
 <meta name="theme-color" content="#0B0E14">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
@@ -12,11 +12,11 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Forwarding Address">
 <meta property="og:title" content="Forwarding Address — where the pulled liquidity went">
-<meta property="og:description" content="An LP pulled $2,921,711 from Uniswap v3 (Ethereum) UNI/USDC. The same wallet put 99.9% of it into Uniswap v4 (Ethereum) 4 min 12 s later. Follow the wallet behind any large removal — keyless, live, from CoinMarketCap&#x27;s DEX API.">
+<meta property="og:description" content="An LP pulled $21,330,275 from Ring Exchange (Ethereum) UNI/WBTC. The same wallet put 99.8% of it into Ring Exchange (Ethereum) 2 min 12 s later. Follow the wallet behind any large removal — keyless, live, from CoinMarketCap&#x27;s DEX API.">
 <meta property="og:url" content="https://forwarding-cmc.vercel.app/">
 
 <meta name="twitter:title" content="Forwarding Address — where the pulled liquidity went">
-<meta name="twitter:description" content="An LP pulled $2,921,711 from Uniswap v3 (Ethereum) UNI/USDC. The same wallet put 99.9% of it into Uniswap v4 (Ethereum) 4 min 12 s later. Follow the wallet behind any large removal — keyless, live, from CoinMarketCap&#x27;s DEX API.">
+<meta name="twitter:description" content="An LP pulled $21,330,275 from Ring Exchange (Ethereum) UNI/WBTC. The same wallet put 99.8% of it into Ring Exchange (Ethereum) 2 min 12 s later. Follow the wallet behind any large removal — keyless, live, from CoinMarketCap&#x27;s DEX API.">
 <meta name="twitter:creator" content="@edycutjong">
 <style>
 @font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-latin-var.woff2) format("woff2")}
@@ -167,78 +167,77 @@ footer{margin:64px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px soli
 <section id="hero" aria-label="The verdict">
   <div class="card alert" id="alert-card" data-severity="amber">
     <div class="phase phase-red">
-      <div class="state"><span><span class="dot"></span><span class="red-t">LP removed</span> <span class="mono">−$2,921,711</span></span><span class="sev">Uniswap v3 (Ethereum) · UNI/USDC · 2026-09-18 03:32:23 UTC</span></div>
-      <div class="big red-t">−$2,921,711</div>
-      <p class="sub">maker <span class="addr">0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56</span> · <b>68.3%</b> of the pool walked out · txn <span class="mono">0xf560f1…074793</span></p>
+      <div class="state"><span><span class="dot"></span><span class="red-t">LP removed</span> <span class="mono">−$21,330,275</span></span><span class="sev">Ring Exchange (Ethereum) · UNI/WBTC · 2026-09-02 03:59:11 UTC</span></div>
+      <div class="big red-t">−$21,330,275</div>
+      <p class="sub">maker <span class="addr">0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9</span> · <b>0.0%</b> of the pool walked out · txn <span class="mono">0x5081d9…dcd495</span></p>
     </div>
     <div class="phase phase-verdict">
       <div class="state"><span><span class="dot"></span><span class="amber-t">MIGRATION</span></span><span class="sev">severity rewritten: <b class="red-t">red</b> → <b class="amber-t">amber</b></span></div>
-      <div class="big amber-t"><span id="share" data-target="99.9">99.9</span>%<small>recovered</small></div>
-      <p class="sub"><b>+$2,918,988</b> into <b>Uniswap v4 (Ethereum) · UNI/USDC</b> — <b>4 min 12 s</b> later</p>
-      <p class="sub">same wallet <span class="addr">0xc3da…5e56</span> · same <b>342,774.98 UNI</b> to ten decimals · the pool now holds <b>$6.61M</b> · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/hero.json" target="_blank" rel="noopener noreferrer">receipt ↗</a></p>
+      <div class="big amber-t"><span id="share" data-target="99.8">99.8</span>%<small>recovered</small></div>
+      <p class="sub"><b>+$21,287,255</b> into <b>Ring Exchange (Ethereum) · UNI/WETH</b> — <b>2 min 12 s</b> later</p>
+      <p class="sub">same wallet <span class="addr">0x4f0a…b9a9</span> · same <b>1,962,475.54 UNI</b> to ten decimals · the pool now holds <b>$102.24M</b> · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/hero.json" target="_blank" rel="noopener noreferrer">receipt ↗</a></p>
     </div>
     <p class="json-title" style="margin-top:18px">the agent's trace — every call, as made · endpoint · status · ms · credit_count · sha256 of the bytes</p>
     <ol class="trace" id="trace" aria-label="API calls the agent made">
-        <li><span class="ep">GET /v1/dex/token <span>address=0x1f9840…01f984 platform=ethereum</span></span><span class="chip">200</span><span class="ms">465 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="46beb0d0" data-full="46beb0d0b150fca7256dbe7c450bfbf36526f0e12060543b00ffaf7c8985f81b" title="sha256 of the bytes received">46beb0d0</span></li>
-        <li><span class="ep">GET /v1/dex/liquidity-change/list <span>address=0x1f9840…01f984 maker=0xc3da47…1a5e56 platform=ethereum</span></span><span class="chip">200</span><span class="ms">546 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="f1d4ef43" data-full="f1d4ef43d2e69b5c8476a825abaa53a7ec1874a315ff287b988e4916419eb46a" title="sha256 of the bytes received">f1d4ef43</span></li>
-        <li><span class="ep">GET /v1/dex/token/pools <span>address=0x1f9840…01f984 platform=ethereum size=20</span></span><span class="chip">200</span><span class="ms">519 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="206e590a" data-full="206e590a13e0e46eb0c7d40260b366492e50b2cd90cb8cac4833693521448c30" title="sha256 of the bytes received">206e590a</span></li>
-        <li><span class="ep">GET /v1/dex/search <span>q=0x1f9840…01f984</span></span><span class="chip">200</span><span class="ms">465 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="4b153b3b" data-full="4b153b3b80e08197f1281a934e27e2dc3f62c55751fa654a3679ab3a342be634" title="sha256 of the bytes received">4b153b3b</span></li>
-        <li><span class="ep">GET /v1/dex/search <span>q=UNI</span></span><span class="chip">200</span><span class="ms">448 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="26701b77" data-full="26701b77194ec267b366987b30e71b319bc46e2a0237b2b1c77ac015ea6708ec" title="sha256 of the bytes received">26701b77</span></li>
-        <li><span class="ep">GET /v2/cryptocurrency/info <span>id=7083</span></span><span class="chip">200</span><span class="ms">307 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="3b65ac53" data-full="3b65ac537f5f3262b4aeda3be493d321f42bd73bf18b2daa1fdfca901e11cde2" title="sha256 of the bytes received">3b65ac53</span></li>
-        <li><span class="ep">GET /v1/dex/liquidity-change/list <span>address=0xbf5140…2ce9b1 maker=0xc3da47…1a5e56 platform=bsc</span></span><span class="chip">200</span><span class="ms">997 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="b5228412" data-full="b5228412ef49e5a128230ffae69372e40984d141f65fb83c68c9345ff0b3b575" title="sha256 of the bytes received">b5228412</span></li>
-        <li><span class="ep">GET /v1/dex/liquidity-change/list <span>address=0xfa7f89…f1f7f0 maker=0xc3da47…1a5e56 platform=arbitrum</span></span><span class="chip">200</span><span class="ms">854 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="74389b43" data-full="74389b43a61533a4828265db87b179a08787ea610354525bb3b48a4f41451b98" title="sha256 of the bytes received">74389b43</span></li>
-        <li><span class="ep">GET /v1/dex/liquidity-change/list <span>address=0x8f187a…e9ea21 maker=0xc3da47…1a5e56 platform=unichain</span></span><span class="chip">200</span><span class="ms">858 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="0f3f4322" data-full="0f3f43229fa72e38958cc9349bc741fe7a11bd6ebf1cacf1567360d8780b5b95" title="sha256 of the bytes received">0f3f4322</span></li>
-        <li><span class="ep">GET /v1/dex/liquidity-change/list <span>address=0xb33eaa…b5180f maker=0xc3da47…1a5e56 platform=polygon</span></span><span class="chip">200</span><span class="ms">521 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="2a583ae7" data-full="2a583ae732f677f34026226959e7047c739cf650df811b760f273ed1517e7e00" title="sha256 of the bytes received">2a583ae7</span></li>
-        <li><span class="ep">GET /v4/dex/pairs/quotes/latest <span>contract_address=0x9a5c1d…3c5167 network_slug=ethereum</span></span><span class="chip">200</span><span class="ms">622 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="0e5d3e0f" data-full="0e5d3e0f1ab58e659280495629ce7a0fa8b4edfd786cd2715916f8e5765cfb14" title="sha256 of the bytes received">0e5d3e0f</span></li>
-        <li><span class="ep">GET /v4/dex/pairs/quotes/latest <span>contract_address=0xd0fc8b…dc6d78 network_slug=ethereum</span></span><span class="chip">200</span><span class="ms">1274 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="700959ce" data-full="700959ce1cdc2e7808769225532c909edfce26be849d81d4723cbe5ab26657d0" title="sha256 of the bytes received">700959ce</span></li>
+        <li><span class="ep">GET /v1/dex/token <span>address=0x1f9840…01f984 platform=ethereum</span></span><span class="chip">200</span><span class="ms">456 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="42305d3a" data-full="42305d3a63dcdb2de4a5badcec219a5fc3315e354b6fbb451308fc151dfe6054" title="sha256 of the bytes received">42305d3a</span></li>
+        <li><span class="ep">GET /v1/dex/liquidity-change/list <span>address=0x1f9840…01f984 maker=0x4f0aa5…8bb9a9 platform=ethereum</span></span><span class="chip">200</span><span class="ms">577 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="5bf63e4f" data-full="5bf63e4f3fed28fcbc93f205f1741c71469cbac6a2efa32c5bebf5f2c3eeae89" title="sha256 of the bytes received">5bf63e4f</span></li>
+        <li><span class="ep">GET /v1/dex/token/pools <span>address=0x1f9840…01f984 platform=ethereum size=20</span></span><span class="chip">200</span><span class="ms">485 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="3ead9d29" data-full="3ead9d29cb7fe987d76ea0da897b883cf178fea8b2fd82fbe46889071f115955" title="sha256 of the bytes received">3ead9d29</span></li>
+        <li><span class="ep">GET /v1/dex/search <span>q=0x1f9840…01f984</span></span><span class="chip">200</span><span class="ms">1185 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="84b9b294" data-full="84b9b2940b80bd415628476934097cf5326665d3eb4489920db2e841853463f3" title="sha256 of the bytes received">84b9b294</span></li>
+        <li><span class="ep">GET /v1/dex/search <span>q=UNI</span></span><span class="chip">200</span><span class="ms">458 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="4ef369fd" data-full="4ef369fd8d554aab14c2634626ee2ecf7d864f887bddbfa497a854cd4edf7415" title="sha256 of the bytes received">4ef369fd</span></li>
+        <li><span class="ep">GET /v2/cryptocurrency/info <span>id=7083</span></span><span class="chip">200</span><span class="ms">355 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="06d1aa87" data-full="06d1aa87ed66526bc133be9939cdbe4da38837683d2c9ff0f8f3100fb1366527" title="sha256 of the bytes received">06d1aa87</span></li>
+        <li><span class="ep">GET /v1/dex/liquidity-change/list <span>address=0xbf5140…2ce9b1 maker=0x4f0aa5…8bb9a9 platform=bsc</span></span><span class="chip">200</span><span class="ms">1213 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="b0f83c31" data-full="b0f83c31998c54d5c53a67d16a2d56a82f83c2bf018e5d7d3f79ea952810de50" title="sha256 of the bytes received">b0f83c31</span></li>
+        <li><span class="ep">GET /v1/dex/liquidity-change/list <span>address=0xfa7f89…f1f7f0 maker=0x4f0aa5…8bb9a9 platform=arbitrum</span></span><span class="chip">200</span><span class="ms">535 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="67b65141" data-full="67b651417d1b6b3a5adf4e40d375d43c5034360cf977ee4444af567ed7c64d56" title="sha256 of the bytes received">67b65141</span></li>
+        <li><span class="ep">GET /v1/dex/liquidity-change/list <span>address=0x8f187a…e9ea21 maker=0x4f0aa5…8bb9a9 platform=unichain</span></span><span class="chip">200</span><span class="ms">612 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="cf6b4f53" data-full="cf6b4f53059f1991f483ea48c57e6d924f6c9790506e73c5973d1f20ab883f53" title="sha256 of the bytes received">cf6b4f53</span></li>
+        <li><span class="ep">GET /v1/dex/liquidity-change/list <span>address=0xb33eaa…b5180f maker=0x4f0aa5…8bb9a9 platform=polygon</span></span><span class="chip">200</span><span class="ms">508 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="5be7b3d7" data-full="5be7b3d74569d601f12ed9f99e930c1b30ba959468f8fa1792748fa82a65e97a" title="sha256 of the bytes received">5be7b3d7</span></li>
+        <li><span class="ep">GET /v4/dex/pairs/quotes/latest <span>contract_address=0x8626be…4a7306 network_slug=ethereum</span></span><span class="chip">200</span><span class="ms">885 ms</span><span class="cr">credit_count 1 · 0 billed</span><span class="sha" data-short="9dffddaf" data-full="9dffddafeedae6dcdc469215140cc1937c1311662b4e1649f32df2b6369fffaa" title="sha256 of the bytes received">9dffddaf</span></li>
     </ol>
   </div>
-  <p class="note">Captured live, keyless, <b>2026-09-18 22:33:25 UTC</b> — 12 calls, all HTTP 200, <b>0 credits</b>, 30.0 s wall clock. Selected by a published rule (largest non-JIT removal across an 11-token watchlist), not picked. <a href="#" id="replay">Replay the flip ↻</a></p>
+  <p class="note">Captured live, keyless, <b>2026-09-18 23:16:31 UTC</b> — 11 calls, all HTTP 200, <b>0 credits</b>, 73.0 s wall clock. Selected by a published rule (largest non-JIT removal across an 11-token watchlist), not picked. <a href="#" id="replay">Replay the flip ↻</a></p>
 </section>
 
 <section id="rows" aria-label="The two raw rows">
   <h2>The two rows, verbatim</h2>
   <div class="rows">
-    <div><p class="json-title">remove · <span class="red-t">Uniswap v3 (Ethereum)</span> · txn <span class="mono">0xf560f1…074793</span></p><pre class="json">{
-  <span class="k">"ts"</span>: <span class="hl">&quot;1789702343000&quot;</span>,
+    <div><p class="json-title">remove · <span class="red-t">Ring Exchange (Ethereum)</span> · txn <span class="mono">0x5081d9…dcd495</span></p><pre class="json">{
+  <span class="k">"ts"</span>: <span class="hl">&quot;1788321551000&quot;</span>,
   <span class="k">"tp"</span>: <span class="hl">&quot;remove&quot;</span>,
-  <span class="k">"tu"</span>: <span class="tu-r">-2921711.1957615116</span>,
-  <span class="k">"m"</span>: <span class="m">&quot;0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56&quot;</span>,
-  <span class="k">"en"</span>: <span class="hl">&quot;Uniswap v3 (Ethereum)&quot;</span>,
-  <span class="k">"eid"</span>: <span class="dim">1348</span>,
-  <span class="k">"f"</span>: <span class="dim">&quot;0x1f98431c8ad98523631ae4a59f267346ea31f984&quot;</span>,
+  <span class="k">"tu"</span>: <span class="tu-r">-21330274.564875204</span>,
+  <span class="k">"m"</span>: <span class="m">&quot;0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9&quot;</span>,
+  <span class="k">"en"</span>: <span class="hl">&quot;Ring Exchange (Ethereum)&quot;</span>,
+  <span class="k">"eid"</span>: <span class="dim">32396</span>,
+  <span class="k">"f"</span>: <span class="dim">&quot;0xeb2a625b704d73e82946d8d026e1f588eed06416&quot;</span>,
   <span class="k">"t0a"</span>: <span class="dim">&quot;0x1f9840a85d5af5bf1d1762f925bdaddc4201f984&quot;</span>,
-  <span class="k">"t1a"</span>: <span class="dim">&quot;0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&quot;</span>,
+  <span class="k">"t1a"</span>: <span class="dim">&quot;0x2260fac5e5542a773aa44fbcfedf7c193bc2c599&quot;</span>,
   <span class="k">"t0s"</span>: <span class="dim">&quot;UNI&quot;</span>,
-  <span class="k">"t1s"</span>: <span class="hl">&quot;USDC&quot;</span>,
-  <span class="k">"a0"</span>: <span class="hl">-342774.9807839334</span>,
-  <span class="k">"a1"</span>: <span class="dim">0</span>,
-  <span class="k">"txn"</span>: <span class="hl">&quot;0xf560f13928f2e654062a38be2725efd92dc4d56c5071a103927cf92b92074793&quot;</span>,
-  <span class="k">"h"</span>: <span class="dim">&quot;26001712&quot;</span>,
-  <span class="k">"lgid"</span>: <span class="dim">&quot;185&quot;</span>,
-  <span class="k">"txId"</span>: <span class="dim">&quot;28&quot;</span>
+  <span class="k">"t1s"</span>: <span class="hl">&quot;WBTC&quot;</span>,
+  <span class="k">"a0"</span>: <span class="hl">-1962475.5391248302</span>,
+  <span class="k">"a1"</span>: <span class="dim">-137.95919726</span>,
+  <span class="k">"txn"</span>: <span class="hl">&quot;0x5081d91ab6eae50971e0dec5b5f2b03561893a638768ec4773197622dddcd495&quot;</span>,
+  <span class="k">"h"</span>: <span class="dim">&quot;25887070&quot;</span>,
+  <span class="k">"lgid"</span>: <span class="dim">&quot;494&quot;</span>,
+  <span class="k">"txId"</span>: <span class="dim">&quot;178&quot;</span>
 }</pre></div>
-    <div><p class="json-title">add · <span class="amber-t">Uniswap v4 (Ethereum)</span> · txn <span class="mono">0x0b8c0b…f89fb0</span></p><pre class="json">{
-  <span class="k">"ts"</span>: <span class="hl">&quot;1789702595000&quot;</span>,
+    <div><p class="json-title">add · <span class="amber-t">Ring Exchange (Ethereum)</span> · txn <span class="mono">0x9fafe3…71a0f3</span></p><pre class="json">{
+  <span class="k">"ts"</span>: <span class="hl">&quot;1788321683000&quot;</span>,
   <span class="k">"tp"</span>: <span class="hl">&quot;add&quot;</span>,
-  <span class="k">"tu"</span>: <span class="tu-a">2918987.6118409373</span>,
-  <span class="k">"m"</span>: <span class="m">&quot;0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56&quot;</span>,
-  <span class="k">"en"</span>: <span class="hl">&quot;Uniswap v4 (Ethereum)&quot;</span>,
-  <span class="k">"eid"</span>: <span class="dim">11955</span>,
-  <span class="k">"f"</span>: <span class="dim">&quot;0x000000000004444c5dc75cb358380d2e3de08a90&quot;</span>,
+  <span class="k">"tu"</span>: <span class="tu-a">21287254.934237212</span>,
+  <span class="k">"m"</span>: <span class="m">&quot;0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9&quot;</span>,
+  <span class="k">"en"</span>: <span class="hl">&quot;Ring Exchange (Ethereum)&quot;</span>,
+  <span class="k">"eid"</span>: <span class="dim">32396</span>,
+  <span class="k">"f"</span>: <span class="dim">&quot;0xeb2a625b704d73e82946d8d026e1f588eed06416&quot;</span>,
   <span class="k">"t0a"</span>: <span class="dim">&quot;0x1f9840a85d5af5bf1d1762f925bdaddc4201f984&quot;</span>,
-  <span class="k">"t1a"</span>: <span class="dim">&quot;0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&quot;</span>,
+  <span class="k">"t1a"</span>: <span class="dim">&quot;0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&quot;</span>,
   <span class="k">"t0s"</span>: <span class="dim">&quot;UNI&quot;</span>,
-  <span class="k">"t1s"</span>: <span class="hl">&quot;USDC&quot;</span>,
-  <span class="k">"a0"</span>: <span class="hl">342774.9807839334</span>,
-  <span class="k">"a1"</span>: <span class="dim">0</span>,
-  <span class="k">"txn"</span>: <span class="hl">&quot;0x0b8c0bdbada121485d7c4009ca87b22ba5c5d284afc8751277d00036f8f89fb0&quot;</span>,
-  <span class="k">"h"</span>: <span class="dim">&quot;26001733&quot;</span>,
-  <span class="k">"lgid"</span>: <span class="dim">&quot;241&quot;</span>,
-  <span class="k">"txId"</span>: <span class="dim">&quot;241&quot;</span>
+  <span class="k">"t1s"</span>: <span class="hl">&quot;WETH&quot;</span>,
+  <span class="k">"a0"</span>: <span class="hl">1962475.5391248302</span>,
+  <span class="k">"a1"</span>: <span class="dim">4402.694523200528</span>,
+  <span class="k">"txn"</span>: <span class="hl">&quot;0x9fafe3ab124a818f9908a4ef5b67103ce97d8aea3734bbf18d6f7938c871a0f3&quot;</span>,
+  <span class="k">"h"</span>: <span class="dim">&quot;25887081&quot;</span>,
+  <span class="k">"lgid"</span>: <span class="dim">&quot;527&quot;</span>,
+  <span class="k">"txId"</span>: <span class="dim">&quot;101&quot;</span>
 }</pre></div>
   </div>
-  <p class="division">recovered share = <b>2,918,987.61</b> ÷ 2,921,711.20 = <b>0.9991</b> &nbsp;·&nbsp; elapsed = ts<sub>add</sub> − ts<sub>remove</sub> = 252 s &nbsp;·&nbsp; both rows from <span class="mono">/v1/dex/liquidity-change/list?maker=</span></p>
+  <p class="division">recovered share = <b>21,287,254.93</b> ÷ 21,330,274.56 = <b>0.9980</b> &nbsp;·&nbsp; elapsed = ts<sub>add</sub> − ts<sub>remove</sub> = 132 s &nbsp;·&nbsp; both rows from <span class="mono">/v1/dex/liquidity-change/list?maker=</span></p>
   <p class="note">Both rows come from one keyless call — the list is token-scoped and takes <span class="mono">maker=</span>, so the cross-pool join is <b>one request</b>, not a scan. No endpoint returns the verdict; the division is the product.</p>
 </section>
 
@@ -264,9 +263,9 @@ footer{margin:64px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px soli
 <section id="others" aria-label="The other outcomes">
   <h2>The other three cards exist too</h2>
   <div class="grid3">
-    <div class="mini red"><h3 class="red-t">EXIT · UNI</h3><div class="n">0%<span style="font-size:.5em;color:var(--muted);font-weight:500"> recovered</span></div><p>−$1,749,075 out of <b>Uniswap v3 (Ethereum) · UNI/WETH</b> by <span class='addr'>0xe9bf…902f</span>.</p><p>Nothing re-added by that wallet within ±6 h on <b>ethereum, bsc, arbitrum, unichain, polygon</b> — every follow completed (200), so this is a real Exit, stated with the window it searched.</p><p>captured 2026-09-18 22:33:56 UTC · 11 calls · 0 credits · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/exit.json" target="_blank" rel="noopener noreferrer">exit.json ↗</a></p></div>
-    <div class="mini grey"><h3 class="grey-t">REBALANCE · LINK</h3><div class="n">200%<span style="font-size:.5em;color:var(--muted);font-weight:500"> recovered</span></div><p>−$861,881 out of <b>Uniswap v3 (Ethereum) · LINK/WETH</b> by <span class='addr'>0x72f0…9083</span>, back into the <b>same pool</b> <b>7 min 00 s</b> later. The wallet cycled again inside the window (1 more removal(s)), so the share is over all of them — disclosed, not hidden.</p><p>captured 2026-09-18 22:37:47 UTC · 14 calls · 0 credits · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/rebalance.json" target="_blank" rel="noopener noreferrer">rebalance.json ↗</a></p></div>
-    <div class="mini grey"><h3 class="grey-t">Refused · JIT</h3><div class="n">$171,495</div><p><b>DAI</b> · +$171,495 and −$171,495 in <b>one transaction</b> (Uniswap v3 (Ethereum)) — just-in-time liquidity, not an event.</p><p>Named by hash, the agent answers: <i>txn 0xad03ee…237ee0 is not an event — it adds and removes in the same transaction (JIT)</i></p><p><a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/jit.json" target="_blank" rel="noopener noreferrer">jit.json ↗</a></p></div>
+    <div class="mini red"><h3 class="red-t">EXIT · LINK</h3><div class="n">0%<span style="font-size:.5em;color:var(--muted);font-weight:500"> recovered</span></div><p>−$5,823,200 out of <b>Uniswap v4 (Ethereum) · LINK/ETH</b> by <span class='addr'>0xdd12…59d5</span>.</p><p>Nothing re-added by that wallet within ±6 h on <b>ethereum, bsc, arbitrum, polygon, base, optimism, gnosis, avalanche</b> — every follow completed (200), so this is a real Exit, stated with the window it searched.</p><p>captured 2026-09-18 23:19:10 UTC · 14 calls · 0 credits · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/exit.json" target="_blank" rel="noopener noreferrer">exit.json ↗</a></p></div>
+    <div class="mini grey"><h3 class="grey-t">REBALANCE · LINK</h3><div class="n">105%<span style="font-size:.5em;color:var(--muted);font-weight:500"> recovered</span></div><p>−$8,506,390 out of <b>Uniswap v4 (Ethereum) · LINK/ETH</b> by <span class='addr'>0x772d…e50b</span>, back into the <b>same pool</b> <b>48 min 48 s</b> later.</p><p>captured 2026-09-18 23:18:35 UTC · 14 calls · 0 credits · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/rebalance.json" target="_blank" rel="noopener noreferrer">rebalance.json ↗</a></p></div>
+    <div class="mini grey"><h3 class="grey-t">Refused · JIT</h3><div class="n">$229,834</div><p><b>DAI</b> · +$229,834 and −$229,565 in <b>one transaction</b> (Uniswap v4 (Ethereum)) — just-in-time liquidity, not an event.</p><p>Named by hash, the agent answers: <i>txn 0x3f8c69…f2fd84 is not an event — it adds and removes in the same transaction (JIT)</i></p><p><a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/jit.json" target="_blank" rel="noopener noreferrer">jit.json ↗</a></p></div>
   </div>
 </section>
 
@@ -306,7 +305,7 @@ claude mcp add forwarding -- python3 $PWD/scripts/mcp_server.py<button class="co
     <div>
       <h2>What it refuses</h2>
       <ul class="plain">
-        <li><b>Just-in-time pairs.</b> A transaction that both adds and removes is not an event. It is discarded before the trigger, and naming one by hash returns a refusal, not a verdict (DAI $171,495, <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/jit.json" target="_blank" rel="noopener noreferrer">jit.json ↗</a>).</li>
+        <li><b>Just-in-time pairs.</b> A transaction that both adds and removes is not an event. It is discarded before the trigger, and naming one by hash returns a refusal, not a verdict (DAI $229,834, <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/jit.json" target="_blank" rel="noopener noreferrer">jit.json ↗</a>).</li>
         <li><b>Slivers.</b> A removal below 10% of its pool is large in dollars and small for the pool — skipped, with the share printed.</li>
         <li><b>Solana as a cross-chain destination.</b> A Solana maker is not an EVM address; it cannot be this wallet.</li>
         <li><b>Chains with no market.</b> An asset with under $10k of DEX liquidity on a chain is not followed there — stated, not silently skipped.</li>
@@ -345,7 +344,7 @@ claude mcp add forwarding -- python3 $PWD/scripts/mcp_server.py<button class="co
 </section>
 
 <footer>
-  <span>105 tests · 2,000 property cases, 0 failing · adjudicate replay p50 0.006 ms · <a href="https://github.com/edycutjong/forwarding" target="_blank" rel="noopener noreferrer">source (MIT)</a></span>
+  <span>110 tests · 2,000 property cases, 0 failing · adjudicate replay p50 0.004 ms · <a href="https://github.com/edycutjong/forwarding" target="_blank" rel="noopener noreferrer">source (MIT)</a></span>
   <span>Built for the <a href="https://dorahacks.io/hackathon/coinmarketcap-api-202609/detail" target="_blank" rel="noopener noreferrer">Build with CMC: API Hackathon</a> · AI Agents &amp; Automation · rendered 2026-09-18 from <span class="mono">docs/proof/*.json</span></span>
 </footer>
 

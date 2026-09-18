@@ -1,17 +1,19 @@
 {
   "adjudicate": {
     "max": 0.0223,
-    "n": 600,
-    "p50": 0.0059,
-    "p95": 0.0091,
+    "n": 1000,
+    "p50": 0.0042,
+    "p95": 0.0062,
     "unit": "ms"
   },
-  "byte_identical": "600/600",
+  "byte_identical": "1000/1000",
   "iterations": 200,
   "mode": "replay",
   "receipts": [
     "hero",
+    "runner_up",
     "exit",
-    "rebalance"
+    "rebalance",
+    "uni_v3_v4"
   ]
 }

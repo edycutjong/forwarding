@@ -37,6 +37,7 @@ from forwarding import (  # noqa: E402
     fmt_utc,
     jit_txns,
     pair,
+    plausible,
     pool_id,
     pools_of,
     ts_ms,
@@ -90,7 +91,10 @@ def main():
         removes = [
             r
             for r in rows
-            if r.get("tp") == "remove" and r.get("txn") not in jit and usd(r) >= a.min_usd
+            if r.get("tp") == "remove"
+            and r.get("txn") not in jit
+            and usd(r) >= a.min_usd
+            and plausible(r)
         ]
         sweep_meta.append(
             {
@@ -100,6 +104,7 @@ def main():
                 "pages": meta["pages"],
                 "error": meta["error"],
                 "jit_txns": len(jit),
+                "implausible_rows": sum(1 for r in rows if not plausible(r)),
                 "removals": len(removes),
             }
         )

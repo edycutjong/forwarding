@@ -402,3 +402,18 @@ def test_watch_skips_a_throttled_token_and_keeps_going():
         [("ethereum", UNI, "UNI")], cycles=1, client=FakeClient(routes), out=out
     )
     assert fired == [] and "skipped" in out.getvalue()
+
+
+def test_implausible_rows_are_refused_before_the_trigger_and_named_in_the_refusals():
+    absurd = row("remove", -1e42, ts=T0 + 1000, m=OTHER, en=None, txn="0xabsurd")
+    c = FakeClient(scenario(trigger_rows=[absurd, HERO_REMOVE], maker_rows=[HERO_ADD, HERO_REMOVE]))
+    v = investigate("ethereum", UNI, client=c)
+    assert v.removal["txn"] == HERO_REMOVE["txn"]
+    assert any("price-feed artefact" in x for x in v.refused)
+
+
+def test_an_implausible_txn_named_by_hash_and_maker_is_refused():
+    absurd = row("remove", -1e42, txn="0xabsurd")
+    c = FakeClient(scenario(trigger_rows=[], maker_rows=[absurd]))
+    with pytest.raises(NoCandidate, match="price-feed artefact"):
+        investigate("ethereum", UNI, txn="0xabsurd", maker=MAKER, client=c)

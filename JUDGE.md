@@ -10,7 +10,7 @@ Built on the CoinMarketCap DEX API for the Build with CMC: API Hackathon — **A
 across every pool of the token — on this chain and on the asset’s other EVM chains — and
 rewrites the alert: Rebalance, Migration, Partial, or a real Exit. A plain API call shows the
 removal; only the maker-keyed cross-pool join and the adjudication turn “liquidity gone” into
-“liquidity moved to Uniswap v4 (Ethereum), 99.9% recovered”.**
+“liquidity moved to Ring Exchange (Ethereum), 99.8% recovered”.**
 
 ## The 30-second path
 
@@ -22,12 +22,12 @@ python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840
 ```
 
 Expected: the trace of every call as it happens (endpoint, status, ms), then a red
-`● LP REMOVED` line, then the verdict — for UNI, as of 2026-09-18 22:33:25 UTC:
+`● LP REMOVED` line, then the verdict — for UNI, as of 2026-09-18 23:16:31 UTC:
 
 ```
 ◆ MIGRATION · severity amber
-    99.9% recovered — $2,918,988 of $2,921,711
-    +$2,918,988 into Uniswap v4 (Ethereum) · UNI/USDC (ethereum)   4 min 12 s later · pool now holds $6,613,827
+    99.8% recovered — $21,287,255 of $21,330,275
+    +$21,287,255 into Ring Exchange (Ethereum) · UNI/WETH (ethereum)   2 min 12 s later · pool now holds $102,239,395
 ```
 
 Then the agent surface, in one line:
@@ -42,7 +42,7 @@ it refuses. Real session transcript: [docs/proof/mcp_session.md](docs/proof/mcp_
 
 1. **Nothing else is required.** No `pip install`, no `.env`, no API key, no signup. One thing is
    not a bug: the endpoint is CoinMarketCap’s shared anonymous tier, rate-limited per IP.
-   A clean run is 0.0 s (p50 of 0 live runs, 12 calls at 2 s
+   A clean run is 29.5 s (p50 of 5 live runs, 11 calls at 2 s
    spacing). If the tier is throttling, the script backs off (15 s, 30 s, 60 s) and says so;
    if your IP’s quota is exhausted it exits **75** with the way through — wait a minute, or
    export a free key as `CMC_API_KEY` (an escape hatch, never a requirement; every receipt here
@@ -56,22 +56,22 @@ it refuses. Real session transcript: [docs/proof/mcp_session.md](docs/proof/mcp_
 
 Full annotated transcript with the receipt: **[DEMO.md](DEMO.md)**.
 
-## Receipt — live run, 2026-09-18T22:33:25Z
+## Receipt — live run, 2026-09-18T23:16:31Z
 
 | | |
 |---|---|
-| **The removal** | **−$2,921,711** out of Uniswap v3 (Ethereum) · UNI/USDC, 2026-09-18 03:32:23 UTC, 68.3% of the pool, maker `0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56` |
-| **The verdict** | **MIGRATION · 99.9% recovered** — +$2,918,988 into Uniswap v4 (Ethereum) · UNI/USDC, **4 min 12 s** later, the same 342,774.98 UNI to ten decimals |
-| **Re-derive it** | `2,918,987.61 ÷ 2,921,711.20 = 0.9991` — two `tu` fields from `/v1/dex/liquidity-change/list?maker=` |
-| API calls | 12, all HTTP 200, 30.0 s wall clock |
+| **The removal** | **−$21,330,275** out of Ring Exchange (Ethereum) · UNI/WBTC, 2026-09-02 03:59:11 UTC, 0.0% of the pool, maker `0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9` |
+| **The verdict** | **MIGRATION · 99.8% recovered** — +$21,287,255 into Ring Exchange (Ethereum) · UNI/WETH, **2 min 12 s** later, the same 1,962,475.54 UNI to ten decimals |
+| **Re-derive it** | `21,287,254.93 ÷ 21,330,274.56 = 0.9980` — two `tu` fields from `/v1/dex/liquidity-change/list?maker=` |
+| API calls | 11, all HTTP 200, 73.0 s wall clock |
 | **Credits used** | **0** — every endpoint is on the keyless `/public-api` surface |
 | Credentials | none; run with every CMC env var unset |
 | Base rate | **335** removals ≥ $100,000 followed one wallet at a time: rebalance 194 · migration 19 · partial 10 · exit 112 — **67% were the same wallet putting liquidity back within 6 h** |
-| Tests | **105** offline + 0 live · **2,000 property cases, 0 failing** |
-| Latency | adjudicate replay p50 **0.006 ms** (n=600) · live investigation p50 **0.0 s**, p95 0.0 s (n=0) |
+| Tests | **110** offline + 8 live · **2,000 property cases, 0 failing** |
+| Latency | adjudicate replay p50 **0.004 ms** (n=1000) · live investigation p50 **29.5 s**, p95 45.6 s (n=5) |
 | Raw receipts | [`hero.json`](docs/proof/hero.json) · [`exit.json`](docs/proof/exit.json) · [`rebalance.json`](docs/proof/rebalance.json) · [`jit.json`](docs/proof/jit.json) · [`base_rate.json`](docs/proof/base_rate.json) · [`live_run.json`](docs/proof/live_run.json) · [`bench_live.json`](docs/proof/bench_live.json) · [`bench_replay.json`](docs/proof/bench_replay.json) · [`spike_maker.json`](docs/proof/spike_maker.json) |
 
-The other three outcomes, captured by the same published rule: **EXIT** (UNI, 0% recovered), **REBALANCE** (LINK, 200% recovered), **refused** (DAI JIT pair, $171,495).
+The other three outcomes, captured by the same published rule: **EXIT** (LINK, 0% recovered), **REBALANCE** (LINK, 105% recovered), **refused** (DAI JIT pair, $229,834).
 
 ## Reproduce
 
@@ -79,8 +79,8 @@ The other three outcomes, captured by the same published rule: **EXIT** (UNI, 0%
 python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984   # the hero, live
 python3 scripts/forwarding.py investigate --platform ethereum --address 0x514910771af9ca656af840dff83e8264ecf986ca   # LINK
 python3 scripts/forwarding.py watch --cycles 1                    # the autonomous loop, one pass over 11 tokens
-make test                                                         # 105 offline tests
-make test-live                                                    # 0 tests against the real CMC contract
+make test                                                         # 110 offline tests
+make test-live                                                    # 8 tests against the real CMC contract
 make verify                                                       # replay every receipt, assert I1–I6, check the page
 pytest tests/test_property.py --hypothesis-show-statistics        # the 2,000
 ```

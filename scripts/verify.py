@@ -4,7 +4,7 @@
     python3 scripts/verify.py            # exit 1 on any failure
     python3 scripts/verify.py --json
 
-For each of docs/proof/{hero,exit,rebalance}.json this
+For each of docs/proof/{hero,runner_up,exit,rebalance,uni_v3_v4}.json this
     1. re-runs adjudicate() on the receipt's own rows and asserts the stored verdict and the
        recovered share to 9 decimal places;
     2. checks the invariants in docs/SPEC.md, I1-I6, against the receipt;
@@ -28,7 +28,7 @@ from forwarding import KINDS, adjudicate, jit_txns, pool_id, usd  # noqa: E402
 
 BUILD = Path(__file__).resolve().parents[1]
 PROOF = BUILD / "docs" / "proof"
-RECEIPTS = ("hero", "exit", "rebalance")
+RECEIPTS = ("hero", "runner_up", "exit", "rebalance", "uni_v3_v4")
 
 
 def check(cond, label, failures, detail=""):

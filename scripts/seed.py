@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 """Capture the demo receipts from the live API by a PUBLISHED rule — never by hand.
 
-    python3 scripts/seed.py            # docs/proof/{hero,exit,rebalance,jit,seed_sweep}.json
+    python3 scripts/seed.py      # docs/proof/{hero,runner_up,exit,rebalance,jit,seed_sweep}.json
     python3 scripts/seed.py --only hero
 
 The rule, printed on the landing page and reproduced here so a judge can re-run it:
 
     1. watchlist   the 11 tokens in forwarding.WATCHLIST (ethereum x8, base x2, bsc x1)
-    2. sweep       liquidity-change/list?minVolume=25000&limit=100 for each — one call per token
+    2. sweep       liquidity-change/list?minVolume=100000, 3 pages (300 rows) per token — the
+                   same trigger depth `investigate` uses with no flags
     3. filter      drop every transaction that both adds and removes (just-in-time liquidity)
     4. hero        argmax |tu| over the remaining removals -> investigate() -> hero.json
                    WHATEVER its verdict is: the rule selects the removal, never the outcome
-    5. exit        walk the remaining removals in |tu| order; the first whose full follow
+    5. runner-up   the second-largest -> runner_up.json, the same way
+    6. exit        walk the remaining removals in |tu| order; the first whose full follow
                    (maker= on every EVM chain of the asset, +-6 h, every follow 200) finds
                    nothing re-added -> exit.json
-    6. rebalance   the first whose follow lands >= 70% back in the same pool -> rebalance.json
-    7. jit         the largest same-transaction add+remove pair discarded in step 3, handed to
+    7. rebalance   the first whose follow lands >= 70% back in the same pool -> rebalance.json
+    8. jit         the largest same-transaction add+remove pair discarded in step 3, handed to
                    investigate() by txn -> jit.json (the refusal, receipted)
-    8. stamp       every receipt embeds every response verbatim, keyed by the sha256 the trace cites
+    9. stamp       every receipt embeds every response verbatim, keyed by the sha256 the trace cites
 
 WHAT THIS IS NOT: the demo path. `scripts/forwarding.py investigate` always runs live; nothing
 on the judged path reads these files. They exist so the landing page, DEMO.md and verify.py
@@ -33,6 +35,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from forwarding import (  # noqa: E402
     FULL,
+    TRIGGER_PAGES,
     WATCHLIST,
     Client,
     NoCandidate,
@@ -41,6 +44,7 @@ from forwarding import (  # noqa: E402
     follow_maker,
     investigate,
     jit_txns,
+    plausible,
     pool_id,
     receipt,
     short,
@@ -51,7 +55,7 @@ from forwarding import (  # noqa: E402
 )
 
 PROOF = Path(__file__).resolve().parents[1] / "docs" / "proof"
-SWEEP_MIN_USD = 25_000
+SWEEP_MIN_USD = 100_000  # forwarding.MIN_USD — the trigger's own threshold
 MAX_CANDIDATES = 12  # how far down the |tu| ranking the exit/rebalance search walks
 
 
@@ -60,14 +64,19 @@ def sweep(client, watchlist):
     candidates, jit_pairs, per_token = [], [], []
     for platform, address, sym in watchlist:
         rows, meta = walk(
-            client, {"platform": platform, "address": address, "minVolume": SWEEP_MIN_USD}, 1
+            client,
+            {"platform": platform, "address": address, "minVolume": SWEEP_MIN_USD},
+            TRIGGER_PAGES,
         )
         if meta["error"] and not rows:
             per_token.append({"sym": sym, "platform": platform, "error": meta["error"]})
             print(f"  {sym:6s} {platform:9s} error — {meta['error']}")
             continue
         jit = jit_txns(rows)
-        removes = [r for r in rows if r.get("tp") == "remove" and r.get("txn") not in jit]
+        implausible = [r for r in rows if not plausible(r)]
+        removes = [
+            r for r in rows if r.get("tp") == "remove" and r.get("txn") not in jit and plausible(r)
+        ]
         by_txn = {}
         for r in rows:
             if r.get("txn") in jit:
@@ -94,13 +103,15 @@ def sweep(client, watchlist):
                 "rows": len(rows),
                 "span_h": round(span_h, 1),
                 "jit_txns": len(jit),
+                "implausible_rows": len(implausible),
                 "removals": len(removes),
                 "largest_removal_usd": max((usd(r) for r in removes), default=0),
             }
         )
         print(
             f"  {sym:6s} {platform:9s} {len(rows):3d} rows · {span_h:6.1f} h · "
-            f"{len(jit):2d} JIT txns · {len(removes):2d} removals · largest "
+            f"{len(jit):2d} JIT txns · {len(implausible):2d} implausible · "
+            f"{len(removes):3d} removals · largest "
             f"${max((usd(r) for r in removes), default=0):,.0f}"
         )
     candidates.sort(key=lambda c: usd(c["row"]), reverse=True)
@@ -163,10 +174,10 @@ def write(name, payload):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--only", choices=["hero", "exit", "rebalance", "jit"], nargs="*")
+    ap.add_argument("--only", choices=["hero", "runner_up", "exit", "rebalance", "jit"], nargs="*")
     ap.add_argument("--max-candidates", type=int, default=MAX_CANDIDATES)
     a = ap.parse_args()
-    wanted = set(a.only or ["hero", "exit", "rebalance", "jit"])
+    wanted = set(a.only or ["hero", "runner_up", "exit", "rebalance", "jit"])
     started = time.time()
 
     print(f"seed — keyless · {len(WATCHLIST)} tokens · minVolume={SWEEP_MIN_USD:,}\n")
@@ -176,8 +187,8 @@ def main():
         "seed_sweep",
         {
             "captured_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(started)),
-            "rule": "one page of 100 rows per token at minVolume=25000; JIT transactions "
-            "(add and remove in one txn) discarded; removals ranked by |tu|",
+            "rule": f"{TRIGGER_PAGES} pages of 100 rows per token at minVolume={SWEEP_MIN_USD}; "
+            "JIT transactions (add and remove in one txn) discarded; removals ranked by |tu|",
             "watchlist": [list(t) for t in WATCHLIST],
             "per_token": per_token,
             "candidates": [
@@ -212,16 +223,26 @@ def main():
 
     hero_rule = (
         f"argmax |tu| over non-JIT removals >= ${SWEEP_MIN_USD:,} across the "
-        f"{len(WATCHLIST)}-token watchlist, last 100 rows per token, at capture time"
+        f"{len(WATCHLIST)}-token watchlist, last {TRIGGER_PAGES * 100} rows per token, "
+        "at capture time"
     )
     if "hero" in wanted:
         got = capture(candidates[0], Client(keep_bodies=True), hero_rule, "hero")
         if got:
             write("hero", got[0])
+    if "runner_up" in wanted and len(candidates) > 1:
+        got = capture(
+            candidates[1],
+            Client(keep_bodies=True),
+            "the second-largest non-JIT removal in the same sweep",
+            "runner_up",
+        )
+        if got:
+            write("runner_up", got[0])
 
     if "exit" in wanted or "rebalance" in wanted:
         need = {k for k in ("exit", "rebalance") if k in wanted}
-        for c_ in candidates[1 : 1 + a.max_candidates]:
+        for c_ in candidates[2 : 2 + a.max_candidates]:
             if not need:
                 break
             probe = Client()

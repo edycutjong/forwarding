@@ -68,6 +68,10 @@ TRIGGER_PAGES = 3  # 300 rows >= MIN_USD is the trigger's depth
 FOLLOW_PAGES = 10  # a maker's own rows: 1,000 is more than any LP has in +-6 h
 SIZE_POOLS = 20  # /v1/dex/token/pools cap per call
 SIBLING_MIN_LIQ = 10_000.0  # another chain is followed only if the asset has a market there
+# A single liquidity event above this is not a removal, it is a price-feed artefact: live
+# 2026-09-19, 13 CAKE rows on an unlabeled BSC venue carried tu = -1e42 (and a0 = -1e42 CAKE,
+# trillions of times the supply) and out-ranked every real removal on the watchlist.
+SANE_USD = 10_000_000_000.0
 
 KINDS = ("REBALANCE", "MIGRATION", "CONSOLIDATION", "PARTIAL", "EXIT", "INCOMPLETE")
 SEVERITY = {
@@ -167,7 +171,7 @@ class Client:
         self.bodies = {}
         self._last = 0.0
 
-    def _record(self, path, params, status, ms, body=None, raw=b"", error=None):
+    def _record(self, path, params, status, ms, body=None, raw=b"", error=None, attempts=1):
         sha = hashlib.sha256(raw).hexdigest() if raw else None
         credit = None
         if isinstance(body, dict):
@@ -182,6 +186,8 @@ class Client:
             "sha256": sha,
             "utc": utc_now(),
         }
+        if attempts > 1:
+            receipt["attempts"] = attempts  # backoff fired: the tier throttled, then answered
         if error:
             receipt["error"] = error
         self.calls.append(receipt)
@@ -220,9 +226,17 @@ class Client:
                 try:
                     body = json.loads(raw)
                 except ValueError as e:
-                    self._record(path, params, status, ms, raw=raw, error=f"malformed JSON: {e}")
+                    self._record(
+                        path,
+                        params,
+                        status,
+                        ms,
+                        raw=raw,
+                        error=f"malformed JSON: {e}",
+                        attempts=attempt + 1,
+                    )
                     return {"_err": f"malformed JSON: {e}", "_throttled": False}
-                self._record(path, params, status, ms, body=body, raw=raw)
+                self._record(path, params, status, ms, body=body, raw=raw, attempts=attempt + 1)
                 return body
             except urllib.error.HTTPError as e:
                 ms = int((time.monotonic() - t0) * 1000)
@@ -230,7 +244,7 @@ class Client:
                 last = describe_http_error(e)
                 transient = e.code == 429 or 500 <= e.code < 600
                 if not transient or attempt == self.retries:
-                    self._record(path, params, e.code, ms, error=last)
+                    self._record(path, params, e.code, ms, error=last, attempts=attempt + 1)
                     return {"_err": last, "_throttled": transient, "_status": e.code}
                 wait = BACKOFF_S * (2**attempt)
                 print(
@@ -247,7 +261,7 @@ class Client:
                 ms = int((time.monotonic() - t0) * 1000)
                 last = f"{type(e).__name__}: {e}"
                 if attempt == self.retries:
-                    self._record(path, params, 0, ms, error=last)
+                    self._record(path, params, 0, ms, error=last, attempts=attempt + 1)
                     return {"_err": last, "_throttled": True, "_status": 0}
                 wait = BACKOFF_S * (2**attempt)
                 print(f"    connection dropped — waiting {wait}s", file=sys.stderr)
@@ -307,6 +321,11 @@ def venue(row):
 
 def pair(row):
     return f"{row.get('t0s')}/{row.get('t1s')}"
+
+
+def plausible(row):
+    """False for a row whose USD value no market could have produced (see SANE_USD)."""
+    return usd(row) <= SANE_USD
 
 
 def jit_txns(rows):
@@ -406,11 +425,17 @@ def largest_removals(client, platform, address, *, min_usd=MIN_USD, pages=TRIGGE
     )
     jit = jit_txns(rows)
     removals = [
-        r for r in rows if r.get("tp") == "remove" and r.get("txn") not in jit and usd(r) >= min_usd
+        r
+        for r in rows
+        if r.get("tp") == "remove"
+        and r.get("txn") not in jit
+        and usd(r) >= min_usd
+        and plausible(r)
     ]
     removals.sort(key=usd, reverse=True)
     meta["rows"] = len(rows)
     meta["jit_txns"] = len(jit)
+    meta["implausible"] = [r for r in rows if not plausible(r)]
     return removals, meta, [r for r in rows if r.get("txn") in jit]
 
 
@@ -438,12 +463,13 @@ def window_rows(rows, meta, *, t0_ms, back_h=W_BACK_H, fwd_h=W_FWD_H):
     """Cut a maker's rows down to the window, JIT excluded, oldest first; annotate meta."""
     lo, hi = t0_ms - int(back_h * 3600_000), t0_ms + int(fwd_h * 3600_000)
     jit = jit_txns(rows)
-    inside = [r for r in rows if lo <= ts_ms(r) <= hi and r.get("txn") not in jit]
+    inside = [r for r in rows if lo <= ts_ms(r) <= hi and r.get("txn") not in jit and plausible(r)]
     inside.sort(key=ts_ms)
     meta = dict(meta)
     meta["rows_total"] = len(rows)
     meta["rows_in_window"] = len(inside)
     meta["jit_dropped"] = sum(1 for r in rows if r.get("txn") in jit)
+    meta["implausible_dropped"] = sum(1 for r in rows if not plausible(r))
     meta["reached_window_start"] = bool(
         meta.get("exhausted") or meta.get("stopped") or (rows and min(map(ts_ms, rows)) < lo)
     )
@@ -773,6 +799,11 @@ def investigate(
             raise NoCandidate(
                 f"txn {short(txn, 6)} is not a removal by {short(maker)} on this token"
             )
+        if not all(plausible(r) for r in hits):
+            raise NoCandidate(
+                f"txn {short(txn, 6)} carries a USD value above ${SANE_USD:,.0f} — a price-feed "
+                "artefact, not a removal"
+            )
         if txn in jit:
             raise NoCandidate(
                 f"txn {short(txn, 6)} is not an event — it adds and removes in the same "
@@ -801,10 +832,17 @@ def investigate(
                 )
         elif newest:
             candidates.sort(key=ts_ms, reverse=True)
+    for r in [] if pre else meta.get("implausible", []):
+        refused.append(
+            f"{fmt_utc(ts_ms(r))} {r.get('tp')} on {venue(r)} {pair(r)}: tu = {r.get('tu')} is "
+            f"above ${SANE_USD:,.0f} — a price-feed artefact, not an event"
+        )
     if not candidates:
+        n_bad = len(meta.get("implausible", []))
         raise NoCandidate(
             f"no non-JIT removal ≥ ${min_usd:,.0f} in the last {meta.get('rows', 0)} rows "
-            f"({meta.get('jit_txns', 0)} JIT transactions discarded)"
+            f"({meta.get('jit_txns', 0)} JIT transactions discarded"
+            + (f", {n_bad} implausible rows refused)" if n_bad else ")")
         )
 
     # 2. pools: identity, liquidity now, pubAt — and the removal's share of its pool

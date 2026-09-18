@@ -1,0 +1,5015 @@
+{
+ "auth": "none \u2014 CoinMarketCap keyless /public-api surface",
+ "calls": [
+  {
+   "credit_count": 1,
+   "endpoint": "/v1/dex/token",
+   "ms": 709,
+   "params": {
+    "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+    "platform": "ethereum"
+   },
+   "sha256": "d118b9bf0993e175ef6c25942bcbb48072f2bae7b1f6bff585e923dd2ee5a79a",
+   "status": 200,
+   "utc": "2026-09-18T23:21:20Z"
+  },
+  {
+   "credit_count": 1,
+   "endpoint": "/v1/dex/liquidity-change/list",
+   "ms": 538,
+   "params": {
+    "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+    "limit": "100",
+    "maker": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+    "platform": "ethereum"
+   },
+   "sha256": "3dd47c2855e92a425d0b71b8b7a3deeed8f2f234639181908fe2e630b98a7c5f",
+   "status": 200,
+   "utc": "2026-09-18T23:21:23Z"
+  },
+  {
+   "credit_count": 1,
+   "endpoint": "/v1/dex/token/pools",
+   "ms": 740,
+   "params": {
+    "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+    "platform": "ethereum",
+    "size": "20"
+   },
+   "sha256": "a22fc3d4465f962600bb6c432966d6fe13fd86826b57706fa4515e96f64d5f99",
+   "status": 200,
+   "utc": "2026-09-18T23:21:26Z"
+  },
+  {
+   "credit_count": 1,
+   "endpoint": "/v1/dex/search",
+   "ms": 461,
+   "params": {
+    "limit": "10",
+    "q": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
+   },
+   "sha256": "9657184d412549c3dfb67993e8a9b89653e90852ee63dfff7640d69d2c28998e",
+   "status": 200,
+   "utc": "2026-09-18T23:21:28Z"
+  },
+  {
+   "credit_count": 1,
+   "endpoint": "/v1/dex/search",
+   "ms": 930,
+   "params": {
+    "limit": "50",
+    "q": "UNI"
+   },
+   "sha256": "83cac0066eeca689e0c90ae7577f319ef1882def872ec8ef334f54cc3daa4a59",
+   "status": 200,
+   "utc": "2026-09-18T23:21:31Z"
+  },
+  {
+   "credit_count": 1,
+   "endpoint": "/v2/cryptocurrency/info",
+   "ms": 282,
+   "params": {
+    "id": "7083"
+   },
+   "sha256": "94cf0a63215f8fc8a2007ba3fc02ae214091d5422bcda3d84c904779f6f53986",
+   "status": 200,
+   "utc": "2026-09-18T23:21:33Z"
+  },
+  {
+   "credit_count": 1,
+   "endpoint": "/v1/dex/liquidity-change/list",
+   "ms": 520,
+   "params": {
+    "address": "0xbf5140a22578168fd562dccf235e5d43a02ce9b1",
+    "limit": "100",
+    "maker": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+    "platform": "bsc"
+   },
+   "sha256": "5ef7e99da895bebce383b119d78485b1fefe3f4ea4e50b5017e437a1d8003900",
+   "status": 200,
+   "utc": "2026-09-18T23:21:36Z"
+  },
+  {
+   "credit_count": 1,
+   "endpoint": "/v1/dex/liquidity-change/list",
+   "ms": 801,
+   "params": {
+    "address": "0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0",
+    "limit": "100",
+    "maker": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+    "platform": "arbitrum"
+   },
+   "sha256": "7ca9f4366e72e96b3cba1ef062c9c17e915f4a20e7313c99352eac68b8a12721",
+   "status": 200,
+   "utc": "2026-09-18T23:21:39Z"
+  },
+  {
+   "credit_count": 1,
+   "endpoint": "/v1/dex/liquidity-change/list",
+   "ms": 534,
+   "params": {
+    "address": "0x8f187aa05619a017077f5308904739877ce9ea21",
+    "limit": "100",
+    "maker": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+    "platform": "unichain"
+   },
+   "sha256": "6442e486fbbc63feed50ba51d8a7007eaff113137c745669350c026dcfae2630",
+   "status": 200,
+   "utc": "2026-09-18T23:21:41Z"
+  },
+  {
+   "credit_count": 1,
+   "endpoint": "/v1/dex/liquidity-change/list",
+   "ms": 503,
+   "params": {
+    "address": "0xb33eaad8d922b1083446dc23f610c2567fb5180f",
+    "limit": "100",
+    "maker": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+    "platform": "polygon"
+   },
+   "sha256": "ca1e38e606597e9e8b499c0221dca9b4e06df4a77348260bc1bee95ef3cf3a4e",
+   "status": 200,
+   "utc": "2026-09-18T23:21:44Z"
+  },
+  {
+   "credit_count": 1,
+   "endpoint": "/v4/dex/pairs/quotes/latest",
+   "ms": 649,
+   "params": {
+    "contract_address": "0x9a5c1d2f4a7a7962a63259de6fcc1afb1d0aa1abdf5d19c23d22fd78953c5167",
+    "network_slug": "ethereum"
+   },
+   "sha256": "5258d0e6371bd6906151d5dcd4c777852e5cfd05282e7b99056e467e03ff01ba",
+   "status": 200,
+   "utc": "2026-09-18T23:21:46Z"
+  },
+  {
+   "credit_count": 1,
+   "endpoint": "/v4/dex/pairs/quotes/latest",
+   "ms": 630,
+   "params": {
+    "contract_address": "0xd0fc8ba7e267f2bc56044a7715a489d851dc6d78",
+    "network_slug": "ethereum"
+   },
+   "sha256": "9a11dd095b944821c4cdc84141262b0e2b2ab04c4ccd9e25eb5f54dd929a22ed",
+   "status": 200,
+   "utc": "2026-09-18T23:21:49Z"
+  }
+ ],
+ "calls_made": 12,
+ "captured_utc": "2026-09-18T23:21:20Z",
+ "credits_used": 0,
+ "responses": {
+  "3dd47c2855e92a425d0b71b8b7a3deeed8f2f234639181908fe2e630b98a7c5f": {
+   "data": {
+    "lcs": [
+     {
+      "a0": 342774.9807839334,
+      "a1": 0,
+      "eid": 11955,
+      "en": "Uniswap v4 (Ethereum)",
+      "f": "0x000000000004444c5dc75cb358380d2e3de08a90",
+      "h": "26001733",
+      "lgid": "241",
+      "m": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+      "t0a": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "t0s": "UNI",
+      "t1a": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "t1s": "USDC",
+      "tp": "add",
+      "ts": "1789702595000",
+      "tu": 2918987.6118409373,
+      "txId": "241",
+      "txn": "0x0b8c0bdbada121485d7c4009ca87b22ba5c5d284afc8751277d00036f8f89fb0"
+     },
+     {
+      "a0": -342774.9807839334,
+      "a1": 0,
+      "eid": 1348,
+      "en": "Uniswap v3 (Ethereum)",
+      "f": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+      "h": "26001712",
+      "lgid": "185",
+      "m": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+      "t0a": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "t0s": "UNI",
+      "t1a": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "t1s": "USDC",
+      "tp": "remove",
+      "ts": "1789702343000",
+      "tu": -2921711.1957615116,
+      "txId": "28",
+      "txn": "0xf560f13928f2e654062a38be2725efd92dc4d56c5071a103927cf92b92074793"
+     },
+     {
+      "a0": 342774.9807839334,
+      "a1": 0,
+      "eid": 1348,
+      "en": "Uniswap v3 (Ethereum)",
+      "f": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+      "h": "25926492",
+      "lgid": "296",
+      "m": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+      "t0a": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "t0s": "UNI",
+      "t1a": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "t1s": "USDC",
+      "tp": "add",
+      "ts": "1788796355000",
+      "tu": 2338824.038662817,
+      "txId": "159",
+      "txn": "0x210da44051c77a97edf50df4e75844e2689f3501b48e1ecf58bba49b56b61238"
+     },
+     {
+      "a0": -342774.9807839334,
+      "a1": 0,
+      "eid": 1348,
+      "en": "Uniswap v3 (Ethereum)",
+      "f": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+      "h": "25926462",
+      "lgid": "546",
+      "m": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+      "t0a": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "t0s": "UNI",
+      "t1a": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "t1s": "WETH",
+      "tp": "remove",
+      "ts": "1788795995000",
+      "tu": -2346316.4538817527,
+      "txId": "139",
+      "txn": "0x7d13208f3ce1223b15c93d543b9ad4f29e5044c3e0b49093aec7b5d6997a8fd5"
+     },
+     {
+      "a0": 342774.9807839334,
+      "a1": 0,
+      "eid": 1348,
+      "en": "Uniswap v3 (Ethereum)",
+      "f": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+      "h": "25887577",
+      "lgid": "671",
+      "m": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+      "t0a": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "t0s": "UNI",
+      "t1a": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "t1s": "WETH",
+      "tp": "add",
+      "ts": "1788327635000",
+      "tu": 2132019.353306206,
+      "txId": "55",
+      "txn": "0x1e0156721fded8832afc9efce988a29887d82d28132e0a23acae5336b64cccce"
+     },
+     {
+      "a0": -342774.96790482325,
+      "a1": 0,
+      "eid": 1348,
+      "en": "Uniswap v3 (Ethereum)",
+      "f": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+      "h": "25887555",
+      "lgid": "410",
+      "m": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+      "t0a": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "t0s": "UNI",
+      "t1a": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "t1s": "WETH",
+      "tp": "remove",
+      "ts": "1788327371000",
+      "tu": -2136295.7736962405,
+      "txId": "124",
+      "txn": "0x721167b57d64e6e86dd9ccee28acf2ad274a2bc5d0ec0c31761c14577f578476"
+     }
+    ],
+    "lpc": "10",
+    "tlu": 41346752.81654182
+   },
+   "status": {
+    "credit_count": 1,
+    "elapsed": 240,
+    "error_code": "0",
+    "error_message": "",
+    "timestamp": "2026-09-18T23:21:23.199Z"
+   }
+  },
+  "5258d0e6371bd6906151d5dcd4c777852e5cfd05282e7b99056e467e03ff01ba": {
+   "data": [
+    {
+     "base_asset_contract_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+     "base_asset_id": null,
+     "base_asset_name": "Uniswap",
+     "base_asset_symbol": "UNI",
+     "base_asset_ucid": "7083",
+     "contract_address": "0x9a5c1d2f4a7a7962a63259de6fcc1afb1d0aa1abdf5d19c23d22fd78953c5167",
+     "created_at": null,
+     "dex_id": "11955",
+     "dex_slug": "uniswap-v4",
+     "last_updated": "2026-09-18T23:15:47.000Z",
+     "name": "UNI/USDC",
+     "network_id": "1",
+     "network_slug": "Ethereum",
+     "quote": [
+      {
+       "convert_id": "2781",
+       "fully_diluted_value": 8897244475.722181,
+       "last_updated": "2026-09-18T23:21:06.621Z",
+       "liquidity": 6672349.712935641,
+       "percent_change_price_1h": -0.0036,
+       "percent_change_price_24h": 0.1545,
+       "price": 8.897244475722182,
+       "price_by_quote_asset": 8.898448128426224,
+       "volume_24h": 2601631.750607499
+      }
+     ],
+     "quote_asset_contract_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+     "quote_asset_id": null,
+     "quote_asset_name": "USD Coin",
+     "quote_asset_symbol": "USDC",
+     "quote_asset_ucid": "3408"
+    }
+   ],
+   "status": {
+    "credit_count": 1,
+    "elapsed": 360,
+    "error_code": "0",
+    "error_message": "",
+    "timestamp": "2026-09-18T23:21:46.688Z"
+   }
+  },
+  "5ef7e99da895bebce383b119d78485b1fefe3f4ea4e50b5017e437a1d8003900": {
+   "data": {
+    "lcs": [],
+    "lpc": "10",
+    "tlu": 3094900.4493497126
+   },
+   "status": {
+    "credit_count": 1,
+    "elapsed": 234,
+    "error_code": "0",
+    "error_message": "",
+    "timestamp": "2026-09-18T23:21:36.165Z"
+   }
+  },
+  "6442e486fbbc63feed50ba51d8a7007eaff113137c745669350c026dcfae2630": {
+   "data": {
+    "lcs": [],
+    "lpc": "8",
+    "tlu": 1234275.2047722044
+   },
+   "status": {
+    "credit_count": 1,
+    "elapsed": 251,
+    "error_code": "0",
+    "error_message": "",
+    "timestamp": "2026-09-18T23:21:41.514Z"
+   }
+  },
+  "7ca9f4366e72e96b3cba1ef062c9c17e915f4a20e7313c99352eac68b8a12721": {
+   "data": {
+    "lcs": [],
+    "lpc": "8",
+    "tlu": 1004358.889388654
+   },
+   "status": {
+    "credit_count": 1,
+    "elapsed": 513,
+    "error_code": "0",
+    "error_message": "",
+    "timestamp": "2026-09-18T23:21:38.975Z"
+   }
+  },
+  "83cac0066eeca689e0c90ae7577f319ef1882def872ec8ef334f54cc3daa4a59": {
+   "data": {
+    "tks": [
+     {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "cid": 7083,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1600302037000",
+      "fpt": "1740319967000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "lf": 1,
+      "liq": 41346752.81654182,
+      "mc": 8904372612.294182,
+      "n": "Uniswap",
+      "pc24h": 0.1608,
+      "plt": "Ethereum",
+      "pltId": 1,
+      "plti": 1027,
+      "pt": "1600107086000",
+      "pu": "8.904372612294181957177129350391884",
+      "s": "UNI",
+      "ts": "1789773539000",
+      "tsup": "1000000000.000000000000000000",
+      "ut24h": "1992",
+      "v24h": 31070791.086494036,
+      "w": "https://uniswap.org/blog/uni/,https://uniswap.org/",
+      "x": "https://twitter.com/Uniswap"
+     },
+     {
+      "addr": "0xbf5140a22578168fd562dccf235e5d43a02ce9b1",
+      "cid": 7083,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1602870474000",
+      "fpt": "1740155586000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "lf": 1,
+      "liq": 3094900.4493497126,
+      "lt": "1789054145000",
+      "mc": 60190595.5062393,
+      "n": "Uniswap",
+      "pc24h": 0.1566,
+      "plt": "BSC",
+      "pltId": 14,
+      "plti": 1839,
+      "pt": "1602583935000",
+      "pu": "8.903934246485104150683367525874345",
+      "s": "UNI",
+      "ts": "1789773347000",
+      "tsup": "6759999.999999999999999999",
+      "ut24h": "1250",
+      "v24h": 1470580.5747662112,
+      "w": "https://uniswap.org/blog/uni/,https://uniswap.org/",
+      "x": "https://twitter.com/Uniswap"
+     },
+     {
+      "addr": "0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0",
+      "cid": 7083,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1643323804000",
+      "fpt": "1735677907000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "lf": 1,
+      "liq": 994366.9585752747,
+      "mc": 9096966.187886601,
+      "n": "Uniswap",
+      "pc24h": 0.1516,
+      "plt": "Arbitrum",
+      "pltId": 51,
+      "plti": 11841,
+      "pt": "1600300800000",
+      "pu": "8.889478331736675103482921141215354",
+      "s": "UNI",
+      "ts": "1789773418000",
+      "tsup": "1023340.836031869819456188",
+      "ut24h": "684",
+      "v24h": 1723302.75218895,
+      "w": "https://uniswap.org/blog/uni/,https://uniswap.org/",
+      "x": "https://twitter.com/Uniswap"
+     },
+     {
+      "addr": "0x8f187aa05619a017077f5308904739877ce9ea21",
+      "cid": 7083,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1739517387000",
+      "fpt": "1752744083000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "lf": 1,
+      "liq": 1234275.2047722044,
+      "mc": 2003166.3700514622,
+      "n": "Uniswap",
+      "pc24h": 0.2089,
+      "plt": "Unichain",
+      "pltId": 246,
+      "plti": 7083,
+      "pt": "1755612787000",
+      "pu": "8.754564315544423449726615178657566",
+      "s": "UNI",
+      "ts": "1789773283000",
+      "tsup": "228813.941830855177309821",
+      "ut24h": "560",
+      "v24h": 555229.3429988545,
+      "w": "https://uniswap.org/blog/uni/,https://uniswap.org/",
+      "x": "https://twitter.com/Uniswap"
+     },
+     {
+      "addr": "0xb33eaad8d922b1083446dc23f610c2567fb5180f",
+      "cid": 7083,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1643452402000",
+      "fpt": "1740100137000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "lf": 1,
+      "liq": 357015.5031959016,
+      "mc": 2159844.5243219663,
+      "n": "Uniswap (PoS)",
+      "pc24h": 0.1489,
+      "plt": "Polygon",
+      "pltId": 25,
+      "plti": 28321,
+      "pt": "1600300800000",
+      "pu": "8.846069608024019189832777646609207",
+      "s": "UNI",
+      "ts": "1789773562000",
+      "tsup": "244158.662550296088914203",
+      "ut24h": "577",
+      "v24h": 331375.9027558338,
+      "w": "https://uniswap.org/blog/uni/,https://uniswap.org/",
+      "x": "https://twitter.com/Uniswap"
+     },
+     {
+      "addr": "8FU95xFJhUUkyyCLU13HSzDLs7oC4QZdXQHL6SCeab36",
+      "cid": 7083,
+      "dec": 8,
+      "ecs": 0,
+      "fpct": "1726735336000",
+      "fpt": "1740789701000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "lf": 1,
+      "liq": 13047.601483952109,
+      "mc": 292122.22472238936,
+      "n": "Uniswap (Portal)",
+      "pc24h": 0.1341,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1600300800000",
+      "pu": "8.777361786019234150820869219040141",
+      "s": "UNI",
+      "ts": "1789773247000",
+      "tsup": "33281.32437103",
+      "ut24h": "156",
+      "v24h": 21228.42143229784,
+      "w": "https://uniswap.org/blog/uni/,https://uniswap.org/",
+      "x": "https://twitter.com/Uniswap"
+     },
+     {
+      "addr": "0xaf9e228fd0292e2a27b4859bc57a2f3a9faedb9341b6307c84fef163e44790cc::uni::UNI",
+      "cid": 33433,
+      "dec": 9,
+      "ecs": 0,
+      "fpt": "1742540271000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/33433.png",
+      "lf": 1,
+      "liq": 12536.470256202618,
+      "mc": 38942.98605698879,
+      "n": "Uni",
+      "pc24h": 0.0199,
+      "plt": "Sui Network",
+      "pltId": 176,
+      "plti": 20947,
+      "pt": "1728518400000",
+      "pu": "0.000038942986056988789548977695417255",
+      "s": "Uni",
+      "ts": "1789763423000",
+      "tsup": "1000000000",
+      "ut24h": "9",
+      "v24h": 498.14119148334703,
+      "w": "https://unicoinsui.com/",
+      "x": "https://twitter.com/UniSuiCoin"
+     },
+     {
+      "addr": "0x4537e328bf7e4efa29d05caea260d7fe26af9d74",
+      "cid": 7083,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1662627030000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "lf": 1,
+      "liq": 238.95002717034473,
+      "mc": 14046.012776797812,
+      "n": "Uniswap on xDai",
+      "pc24h": 0.2067,
+      "plt": "Gnosis",
+      "pltId": 20,
+      "plti": 1659,
+      "pt": "1600300800000",
+      "pu": "9.081610824800816413480161136118259",
+      "s": "UNI",
+      "ts": "1789772665000",
+      "tsup": "1546.643326582525910242",
+      "ut24h": "37",
+      "v24h": 62.25554517472454,
+      "w": "https://uniswap.org/blog/uni/,https://uniswap.org/",
+      "x": "https://twitter.com/Uniswap"
+     },
+     {
+      "addr": "0x22c54ce8321a4015740ee1109d9cbc25815c46e6",
+      "cid": 7083,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1647647380000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "lf": 1,
+      "n": "Heco-Peg UNI Token",
+      "plt": "HECO",
+      "pltId": 19,
+      "plti": 2502,
+      "pt": "1600300800000",
+      "s": "UNI",
+      "tsup": "172234.3",
+      "w": "https://uniswap.org/blog/uni/,https://uniswap.org/",
+      "x": "https://twitter.com/Uniswap"
+     },
+     {
+      "addr": "0x004e9c3ef86bc1ca1f0bb5c7662861ee93350568",
+      "cid": 36175,
+      "dec": 8,
+      "ecs": 0,
+      "fpct": "1724849663000",
+      "fpt": "1740331379000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/36175.png",
+      "lf": 1,
+      "liq": 3607271.276589276,
+      "mc": 239440398.57393894,
+      "n": "uniBTC",
+      "pc24h": 0.0556,
+      "plt": "Ethereum",
+      "pltId": 1,
+      "plti": 1027,
+      "pt": "1747128587000",
+      "pu": "80310.72841353901516194952487994278",
+      "s": "uniBTC",
+      "ts": "1789750247000",
+      "tsup": "2981.42481464",
+      "ut24h": "3",
+      "v24h": 468.6964228247739,
+      "w": "https://www.bedrock.technology/",
+      "x": "https://twitter.com/Bedrock_DeFi"
+     },
+     {
+      "addr": "0x4a6eec8a30b49d289b9fc865fd374b4d61eab8fb",
+      "cid": 40959,
+      "dec": 18,
+      "fpct": "1784847473000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/40959.png",
+      "lf": 1,
+      "liq": 235423.31046072594,
+      "lt": "1785911529000",
+      "mc": 1046933.5872067594,
+      "n": "Liluni",
+      "pc24h": -0.1461,
+      "plt": "Robinhood",
+      "pltId": 300,
+      "plti": 40670,
+      "pu": "0.001046933587206759425406057497497410",
+      "s": "Liluni",
+      "ts": "1789773614000",
+      "tsup": "1000000000.000000000000000000",
+      "ut24h": "832",
+      "v24h": 151577.27536920624,
+      "w": "https://lilunicoin.com",
+      "x": "https://twitter.com/LilUni_Coin"
+     },
+     {
+      "addr": "0x93919784c523f39cacaa98ee0a9d96c3f32b593e",
+      "cid": 36175,
+      "dec": 8,
+      "ecs": 0,
+      "fpct": "1751547919000",
+      "fpt": "1751964561000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/36175.png",
+      "lf": 1,
+      "liq": 1858673.8041172987,
+      "mc": 37848360.308826424,
+      "n": "uniBTC",
+      "pc24h": 0.0,
+      "plt": "Base",
+      "pltId": 199,
+      "plti": 27716,
+      "pt": "1749799761000",
+      "pu": "76247.62831376682746373626373626374",
+      "s": "uniBTC",
+      "ts": "1789663447000",
+      "tsup": "496.38737815",
+      "ut24h": "0",
+      "v24h": 0,
+      "w": "https://www.bedrock.technology/",
+      "x": "https://twitter.com/Bedrock_DeFi"
+     },
+     {
+      "addr": "eth-0x1f9840a85d5af5bf1d1762f925bdaddc4201f984.omft.near",
+      "dec": 18,
+      "liq": 14769962.071741989,
+      "mc": 208734.42453631922,
+      "n": "Uniswap",
+      "pc24h": 0.1727,
+      "plt": "Near",
+      "pltId": 60,
+      "plti": 6535,
+      "pu": "9.141683754529313744404746786610304",
+      "s": "UNI",
+      "ts": "1789765504000",
+      "tsup": "23408.542223293263328104",
+      "ut24h": "4",
+      "v24h": 1762.709343858537
+     },
+     {
+      "addr": "0x93919784c523f39cacaa98ee0a9d96c3f32b593e",
+      "cid": 36175,
+      "dec": 8,
+      "ecs": 0,
+      "fpct": "1721999107000",
+      "fpt": "1740806197000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/36175.png",
+      "lf": 1,
+      "liq": 338511.2592702144,
+      "mc": 294386.1085879763,
+      "n": "uniBTC",
+      "pc24h": 0.0401,
+      "plt": "Optimism",
+      "pltId": 42,
+      "plti": 11840,
+      "pt": "1755058427000",
+      "pu": "80337.71699905668353656260771627232",
+      "s": "uniBTC",
+      "ts": "1789744395000",
+      "tsup": "3.66435741",
+      "ut24h": "2",
+      "v24h": 964.3578538338356,
+      "w": "https://www.bedrock.technology/",
+      "x": "https://twitter.com/Bedrock_DeFi"
+     },
+     {
+      "addr": "0xf819d9cb1c2a819fd991781a822de3ca8607c3c9",
+      "cid": 27009,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1686576239000",
+      "fpt": "1740320291000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/27009.png",
+      "lf": 1,
+      "liq": 823088.375326945,
+      "mc": 809333.1654309243,
+      "n": "Unibot",
+      "pc24h": 0.0592,
+      "plt": "Ethereum",
+      "pltId": 1,
+      "plti": 1027,
+      "pt": "1686576239000",
+      "pu": "0.809333165430924220573088452280894",
+      "s": "UNIBOT",
+      "ts": "1789752227000",
+      "tsup": "1000000",
+      "ut24h": "2",
+      "v24h": 3.2998488667097416,
+      "w": "https://unibot.app/",
+      "x": "https://twitter.com/TeamUnibot"
+     },
+     {
+      "addr": "uniHfuPhEQSrtpzXpJZDCSq53yaejKKpNhFUiKoHKHV",
+      "dec": 8,
+      "fpct": "1779369701000",
+      "fpt": "1779369922000",
+      "l": "https://ipfs.sintral.me/cdn-cgi/image/width=480,quality=100,format=webp/url/https%3A%2F%2Farweave.net%2Fjzfz6jBoNu4QSUsmZGfQ2s98wgmxLoXR7lOINp5ZPtY",
+      "liq": 63118.66356585875,
+      "mc": 548588.2963318845,
+      "n": "Uniswap",
+      "pc24h": 0.1555,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1775570298000",
+      "pu": "8.886409978999371352915216005492081",
+      "s": "UNI",
+      "ts": "1789773584000",
+      "tsup": "61733.39938494",
+      "ut24h": "6156",
+      "v24h": 5534187.370605699
+     },
+     {
+      "addr": "0xc3de830ea07524a0761646a6a4e4be0e114a3c83",
+      "cid": 0,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1713345505000",
+      "fpt": "1739988355000",
+      "l": "https://bin.bnbstatic.com/images/web3-data/public/token/logos/721B0E90B8A7BE7056C6C097D04230FC.jpg",
+      "lf": 0,
+      "liq": 268393.7202718018,
+      "mc": 1229855.15522644,
+      "n": "Uniswap",
+      "pc24h": 0.1428,
+      "plt": "Base",
+      "pltId": 199,
+      "plti": 27716,
+      "pt": "1747195873000",
+      "pu": "8.775128584841911905232456994647053",
+      "s": "UNI",
+      "ts": "1789773477000",
+      "tsup": "140152.379915079764849934",
+      "ut24h": "491",
+      "v24h": 268078.79889751057,
+      "w": "",
+      "x": ""
+     },
+     {
+      "addr": "0x6fd9d7ad17242c41f7131d257212c54a0e816691",
+      "cid": 0,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1637884473000",
+      "fpt": "1740787235000",
+      "l": "https://bin.bnbstatic.com/images/web3-data/public/token/logos/4892111F4365C2DC57551841C6BAEF17.png",
+      "lf": 0,
+      "liq": 106317.5506275646,
+      "mc": 659658.5013668525,
+      "n": "Uniswap",
+      "pc24h": 0.1695,
+      "plt": "Optimism",
+      "pltId": 42,
+      "plti": 11840,
+      "pt": "1755483577000",
+      "pu": "8.811013800960585792947094124775842",
+      "s": "UNI",
+      "ts": "1789773465000",
+      "tsup": "74867.491558682599980046",
+      "ut24h": "168",
+      "v24h": 24834.684971763483,
+      "w": "https://uniswap.org/",
+      "x": "https://twitter.com/Uniswap"
+     },
+     {
+      "addr": "0xc3827a4bc8224ee2d116637023b124ced6db6e90",
+      "cid": 36175,
+      "dec": 8,
+      "ecs": 0,
+      "fpct": "1738902068000",
+      "fpt": "1765553305000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/36175.png",
+      "lf": 1,
+      "liq": 134165.35034644286,
+      "n": "uniBTC",
+      "plt": "Bera Chain",
+      "pltId": 241,
+      "plti": 24647,
+      "pt": "1755612240000",
+      "s": "uniBTC",
+      "ts": "1789758975000",
+      "tsup": "151.62422127",
+      "w": "https://www.bedrock.technology/",
+      "x": "https://twitter.com/Bedrock_DeFi"
+     },
+     {
+      "addr": "0xf764dbfd6999067ac052a8e722ae359bec389bd7dba19ead586801b99b81b075",
+      "cid": 36175,
+      "dec": 8,
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/36175.png",
+      "lf": 1,
+      "liq": 8381.592003374442,
+      "mc": 11627.993457221146,
+      "n": "uniBTC",
+      "pc24h": 0.0,
+      "plt": "Aptos",
+      "pltId": 141,
+      "plti": 21794,
+      "pu": "75487.01066479338244546932141405933",
+      "s": "uniBTC",
+      "ts": "1789562688000",
+      "tsup": "0.15403966",
+      "ut24h": "0",
+      "v24h": 0,
+      "w": "https://www.bedrock.technology/",
+      "x": "https://twitter.com/Bedrock_DeFi"
+     },
+     {
+      "addr": "6FTxERA8GUvmfh1FiQ5AJQETTfibAxpmieDihBWVe8xa",
+      "cid": 33785,
+      "dec": 8,
+      "ecs": 0,
+      "fpct": "1753087903000",
+      "fpt": "1753087936000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/33785.png",
+      "lf": 1,
+      "liq": 4799.168034867709,
+      "mc": 2475.4497695699765,
+      "n": "UNIT0",
+      "pc24h": 0.0001,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1753080508000",
+      "pu": "0.002189302591410038204229687706325102",
+      "s": "UNIT0",
+      "ts": "1789729467000",
+      "tsup": "1182931.44284087",
+      "ut24h": "1",
+      "v24h": 33.15917704949644,
+      "w": "https://units.network/",
+      "x": "https://twitter.com/UnitsNetwork"
+     },
+     {
+      "addr": "0xee571697998ec64e32b57d754d700c4dda2f2a0e",
+      "cid": 0,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1745479120000",
+      "fpt": "1745479328000",
+      "l": "",
+      "lf": 0,
+      "liq": 11336.828433004835,
+      "mc": 52997.848118344475,
+      "n": "Uniswap (Celo native bridge)",
+      "pc24h": 0.1832,
+      "plt": "Celo",
+      "pltId": 35,
+      "plti": 5567,
+      "pu": "8.761361344725709966251474377326081",
+      "s": "UNI",
+      "ts": "1789750855000",
+      "tsup": "6049.042612567153249647",
+      "ut24h": "4",
+      "v24h": 538.3328294113289,
+      "w": "",
+      "x": ""
+     },
+     {
+      "addr": "47rPJgzTJ6n6VdAwjUtgPozzz9BUnUf8Wb8tT8adpump",
+      "dec": 6,
+      "fpt": "1789734519000",
+      "liq": 3583.675562583818,
+      "mc": 7294.991887666146,
+      "n": "uni student life",
+      "pc24h": 1.0389,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789734519000",
+      "pu": "0.000007294991897924976641979076923077",
+      "s": "UNI",
+      "ts": "1789772995000",
+      "tsup": "999999998.593716",
+      "ut24h": "412",
+      "v24h": 50367.35931170271
+     },
+     {
+      "addr": "5HeRFCt9JhTiBVe3XDsqXDHFT7M4gNxvDjh9fSRbc2TK",
+      "dec": 6,
+      "fpct": "1789588693000",
+      "fpt": "1789588693000",
+      "l": "https://bin.bnbstatic.com/images/web3-data/public/token/logos/F213AAA890165172B1851D41025E38E4.jpg",
+      "liq": 7112.900162319698,
+      "lt": "1789588777000",
+      "mc": 5236.590503888402,
+      "n": "INU",
+      "pc24h": -0.3262,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789588693000",
+      "pu": "0.000005236639195068953883811794483495",
+      "s": "UNI",
+      "ts": "1789771032000",
+      "tsup": "999990701.826355",
+      "ut24h": "45",
+      "v24h": 3033.953594741895
+     },
+     {
+      "addr": "68Jyw882wE4UkreUpK3NTG9i5ZKuSj3xLUQshEra9r3s",
+      "cid": 35848,
+      "dec": 2,
+      "ecs": 0,
+      "fpct": "1740072277000",
+      "fpt": "1740784754000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/35848.png",
+      "lf": 1,
+      "liq": 3175.7941926140547,
+      "mc": 3630.5525391721876,
+      "n": "Unitree G1 AI",
+      "pc24h": 0.0372,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1740009600000",
+      "pu": "0.000000000000085185605291003586758096",
+      "s": "UnitreeAI",
+      "ts": "1789740618000",
+      "tsup": "42619319622955226.32",
+      "ut24h": "1",
+      "v24h": 0.03821104967666584,
+      "w": "https://unitreeg1.club/",
+      "x": "https://twitter.com/UnitreeG1"
+     },
+     {
+      "addr": "0xf1376bcef0f78459c0ed0ba5ddce976f1ddf51f4",
+      "cid": 23773,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1682117411000",
+      "fpt": "1740339455000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/23773.png",
+      "lf": 1,
+      "liq": 329.7127343891999,
+      "mc": 16650552.564224856,
+      "n": "Universal ETH",
+      "pc24h": 0.0,
+      "plt": "Ethereum",
+      "pltId": 1,
+      "plti": 1027,
+      "pt": "1747208651000",
+      "pu": "1818.396753783576521243998060824637",
+      "s": "uniETH",
+      "ts": "1788421463000",
+      "tsup": "9007.817472188788278329",
+      "ut24h": "0",
+      "v24h": 0,
+      "w": "https://app.bedrock.technology/unieth,https://www.rockx.com",
+      "x": "https://twitter.com/rockx_official"
+     },
+     {
+      "addr": "0x27ff564707786720c71a2e5c1490a63266683612",
+      "cid": 28420,
+      "dec": 8,
+      "ecs": 0,
+      "fpct": "1756381203000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/28420.png",
+      "lf": 1,
+      "liq": 59.93145564330861,
+      "mc": 2943365973.2525506,
+      "n": "Venus UNI",
+      "pc24h": 0.0,
+      "plt": "BSC",
+      "pltId": 14,
+      "plti": 1839,
+      "pt": "1698648208000",
+      "pu": "1504.7763195000294220",
+      "s": "vUNI",
+      "ts": "1788335327000",
+      "tsup": "1943472.26133648",
+      "ut24h": "0",
+      "v24h": 0,
+      "w": "https://app.venus.io/dashboard"
+     },
+     {
+      "addr": "0x8ebaf22b6f053dffeaf46f4dd9efa95d89ba8580",
+      "cid": 7083,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1627343068000",
+      "fpt": "1628365004000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "lf": 1,
+      "liq": 214.18932580065191,
+      "mc": 39033.242426491655,
+      "n": "Uniswap",
+      "pc24h": 0.2421,
+      "plt": "Avalanche",
+      "pltId": 28,
+      "plti": 5805,
+      "pt": "1600300800000",
+      "pu": "9.154491412289888606679825518029603",
+      "s": "UNI.e",
+      "ts": "1789759948000",
+      "tsup": "4263.835167739585812289",
+      "ut24h": "32",
+      "v24h": 92.07140689863654,
+      "w": "https://uniswap.org/blog/uni/,https://uniswap.org/",
+      "x": "https://twitter.com/Uniswap"
+     },
+     {
+      "addr": "0x93919784c523f39cacaa98ee0a9d96c3f32b593e",
+      "cid": 36175,
+      "dec": 8,
+      "ecs": 0,
+      "fpct": "1741264209000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/36175.png",
+      "lf": 1,
+      "liq": 9085.627512038567,
+      "n": "uniBTC",
+      "plt": "Merlin Chain",
+      "pltId": 212,
+      "plti": 30712,
+      "s": "uniBTC",
+      "ts": "1768462750000",
+      "tsup": "4.77269063",
+      "w": "https://www.bedrock.technology/",
+      "x": "https://twitter.com/Bedrock_DeFi"
+     },
+     {
+      "addr": "0x6b2a01a5f79deb4c2f3c0eda7b01df456fbd726a",
+      "cid": 36175,
+      "dec": 8,
+      "ecs": 0,
+      "fpct": "1726026456000",
+      "fpt": "1735677960000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/36175.png",
+      "lf": 1,
+      "liq": 263.0559682581234,
+      "mc": 85219.74693526443,
+      "n": "uniBTC",
+      "pc24h": 0.0,
+      "plt": "Arbitrum",
+      "pltId": 51,
+      "plti": 11841,
+      "pt": "1752946452000",
+      "pu": "65398.9668338955552759825327510917",
+      "s": "uniBTC",
+      "ts": "1789652944000",
+      "tsup": "1.30307482",
+      "ut24h": "1",
+      "v24h": 0.14976363404962,
+      "w": "https://www.bedrock.technology/",
+      "x": "https://twitter.com/Bedrock_DeFi"
+     },
+     {
+      "addr": "0x6b2a01a5f79deb4c2f3c0eda7b01df456fbd726a",
+      "cid": 36175,
+      "dec": 8,
+      "ecs": 0,
+      "fpct": "1725626813000",
+      "fpt": "1740155604000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/36175.png",
+      "lf": 1,
+      "liq": 61.37422391893594,
+      "mc": 2439767.5080710487,
+      "n": "uniBTC",
+      "pc24h": 0.0,
+      "plt": "BSC",
+      "pltId": 14,
+      "plti": 1839,
+      "pt": "1747130450000",
+      "pu": "13019.39577771249471343425178882639",
+      "s": "uniBTC",
+      "ts": "1789026360000",
+      "tsup": "187.25193879",
+      "ut24h": "0",
+      "v24h": 0,
+      "w": "https://www.bedrock.technology/",
+      "x": "https://twitter.com/Bedrock_DeFi"
+     },
+     {
+      "addr": "0xf39f9671906d8630812f9d9863bbef5d523c84ab",
+      "cid": 0,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1612876887000",
+      "fpt": "1612904858000",
+      "l": "",
+      "lf": 0,
+      "liq": 779.106177703647,
+      "mc": 31534.138064447547,
+      "n": "Uniswap",
+      "pc24h": 0.242,
+      "plt": "Avalanche",
+      "pltId": 28,
+      "plti": 5805,
+      "pt": "1611884818000",
+      "pu": "9.102775819387822837309915462112926",
+      "s": "UNI",
+      "ts": "1789760087000",
+      "tsup": "3464.233184484627959288",
+      "ut24h": "41",
+      "v24h": 117.28834134451333,
+      "w": "",
+      "x": ""
+     },
+     {
+      "addr": "79SS3JcM3icDrY4XSCVCygbAqg4B7C1Xw3GcFH4qdH1",
+      "dec": 6,
+      "fpt": "1789752598000",
+      "l": "https://ipfs.sintral.me/cdn-cgi/image/width=480,quality=100,format=webp/url/https%3A%2F%2Faxiomtrading-v2.axiom-cdn.io%2F9x5aqQW3nTQhcTEyEz2rZ31WydNGPKgUCg8SRtSf1Yz8.webp",
+      "liq": 245.80364398418817,
+      "mc": 2061.7075118177836,
+      "n": "UNIPCS",
+      "pc24h": -0.2161,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789752598000",
+      "pu": "0.000002061707511817783632310339929322",
+      "s": "UNI",
+      "ts": "1789755485000",
+      "tsup": "999998753.258924",
+      "ut24h": "243",
+      "v24h": 46737.64484202161,
+      "w": "",
+      "x": "https://x.com/theunipcs/status/1942679056295628838?s=20"
+     },
+     {
+      "addr": "0x48b847cf774a5710f36f594b11fc10e2e59bba72",
+      "cid": 33785,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1730805131000",
+      "fpt": "1740370799000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/33785.png",
+      "lf": 1,
+      "liq": 33.16196848248116,
+      "mc": 1138430.4722689204,
+      "n": "UNIT0",
+      "pc24h": 0.0,
+      "plt": "Ethereum",
+      "pltId": 1,
+      "plti": 1027,
+      "pt": "1730727383000",
+      "pu": "0.8043109517795836633441580623727657",
+      "s": "UNIT0",
+      "ts": "1788184991000",
+      "tsup": "2737435.492353623588374935",
+      "ut24h": "0",
+      "v24h": 0,
+      "w": "https://units.network/",
+      "x": "https://twitter.com/UnitsNetwork"
+     },
+     {
+      "addr": "0x49210ffc442172463f3177147c1aeaa36c51d152c1b0630f2364c300d4f48ee",
+      "cid": 0,
+      "dec": 18,
+      "ecs": 0,
+      "fpt": "1750602582000",
+      "l": "",
+      "lf": 0,
+      "liq": 290.10809453935036,
+      "mc": 23506.015429476534,
+      "n": "Uniswap",
+      "pc24h": 0.1831,
+      "plt": "Starknet",
+      "pltId": 194,
+      "plti": 22691,
+      "pu": "8.838164753756013428208128898227253",
+      "s": "UNI",
+      "ts": "1789773490000",
+      "tsup": "2659.603671620516678703",
+      "ut24h": "4",
+      "v24h": 371.35499413524497,
+      "w": "",
+      "x": ""
+     },
+     {
+      "addr": "AzaHySaBniBx1RSc4KCNoVhdP3vdrTvAe3VsByhcvofn",
+      "dec": 6,
+      "fpt": "1789731711000",
+      "l": "https://ipfs.sintral.me/cdn-cgi/image/width=480,quality=100,format=webp/url/https%3A%2F%2Fmetadata.j7tracker.io%2Fimages%2FJxY3AFs2cy",
+      "liq": 185.79454675261024,
+      "mc": 2232.844284838251,
+      "n": "UNIPCS",
+      "pc24h": -0.1478,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789731711000",
+      "pu": "0.000002232844284838250979233571478805",
+      "s": "UNI",
+      "ts": "1789732004000",
+      "tsup": "1000000000.000000",
+      "ut24h": "65",
+      "v24h": 12994.668521416444,
+      "w": "",
+      "x": "https://x.com/theunipcs"
+     },
+     {
+      "addr": "9isvj7SnkRnaY81nrLTRPrMio7q1ASFf6twmFyVspump",
+      "dec": 6,
+      "fpt": "1789680951000",
+      "l": "https://bin.bnbstatic.com/images/web3-data/public/token/logos/FAFB7E885F0E19A2BDBAC72EF639E914.jpg",
+      "liq": 317.15653077901254,
+      "mc": 5496.513321752506,
+      "n": "uni",
+      "pc24h": 0.1376,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789680951000",
+      "pu": "0.000005556638073871660506374159064276",
+      "s": "uni",
+      "ts": "1789768790000",
+      "tsup": "989179652.998839",
+      "ut24h": "14",
+      "v24h": 256.4946983740635,
+      "w": "https://uni-on-sol.com/",
+      "x": "https://x.com/PumpFun711/status/2100699846256525466"
+     },
+     {
+      "addr": "0x6b2a01a5f79deb4c2f3c0eda7b01df456fbd726a",
+      "cid": 36175,
+      "dec": 8,
+      "ecs": 0,
+      "fpct": "1731230051000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/36175.png",
+      "lf": 1,
+      "liq": 43.1288286972478,
+      "mc": 13276.643953155793,
+      "n": "uniBTC",
+      "pc24h": 0.0,
+      "plt": "Mode",
+      "pltId": 218,
+      "plti": 31016,
+      "pt": "1747130450000",
+      "pu": "71817.94197999642474772356623736264",
+      "s": "uniBTC",
+      "ts": "1789752635000",
+      "tsup": "0.18486528",
+      "ut24h": "1",
+      "v24h": 0.1307086544035935,
+      "w": "https://www.bedrock.technology/",
+      "x": "https://twitter.com/Bedrock_DeFi"
+     },
+     {
+      "addr": "0x03dbc70a0f4f141591e7925976f35b3bf794b18c",
+      "cid": 33785,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1740476937000",
+      "fpt": "1740476991000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/33785.png",
+      "lf": 1,
+      "liq": 0.04949886561263687,
+      "mc": 752209338835.8654,
+      "n": "UNIT0",
+      "pc24h": 0.0,
+      "plt": "Base",
+      "pltId": 199,
+      "plti": 27716,
+      "pt": "1740461761000",
+      "pu": "200092891.9490213034012403280998909",
+      "s": "UNIT0",
+      "ts": "1789302127000",
+      "tsup": "3759.300650357482958334",
+      "ut24h": "0",
+      "v24h": 0,
+      "w": "https://units.network/",
+      "x": "https://twitter.com/UnitsNetwork"
+     },
+     {
+      "addr": "Hcbm5rRvMex5UAdLHCgP8aNCio7XZWCbVWugGWqNSTNK",
+      "dec": 6,
+      "fpt": "1789752608000",
+      "l": "https://ipfs.sintral.me/cdn-cgi/image/width=480,quality=100,format=webp/url/https%3A%2F%2Fedge.uxento.io%2Fimage%2F9x5aqQW3nTQhcTEyEz2rZ31WydNGPKgUCg8SRtSf1Yz8",
+      "liq": 89.2430160021277,
+      "mc": 3125.7808853551664,
+      "n": "UNIPCS",
+      "pc24h": -0.1038,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789752608000",
+      "pu": "0.000003125780885355166357714021931962",
+      "s": "UNI",
+      "ts": "1789752938000",
+      "tsup": "1000000000.000000",
+      "ut24h": "19",
+      "v24h": 5137.0924932703265,
+      "x": "https://x.com/theunipcs/status/1942679056295628838?s=20"
+     },
+     {
+      "addr": "A8jQRDu55uj8VmDo5JkdEwccbK5jkH869mZ7N4Zkd4zp",
+      "dec": 6,
+      "fpt": "1789742221000",
+      "l": "https://ipfs.sintral.me/cdn-cgi/image/width=480,quality=100,format=webp/url/https%3A%2F%2Fm.rapidlaunch.io%2Fimages%2F1SVqfd26s.jpg",
+      "liq": 66.26458198424841,
+      "mc": 3117.57650553885,
+      "n": "uni",
+      "pc24h": -0.0332,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789742221000",
+      "pu": "0.000003117576505538850073049481767569",
+      "s": "uni",
+      "ts": "1789742303000",
+      "tsup": "1000000000.000000",
+      "ut24h": "16",
+      "v24h": 2416.9648039942363,
+      "x": "https://x.com/00cap0/status/2100956867589525599"
+     },
+     {
+      "addr": "0x2fb960611bdc322a9a4a994252658cae9fe2eea1",
+      "cid": 0,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1738360709000",
+      "fpt": "1755121902000",
+      "l": "",
+      "lf": 0,
+      "liq": 99.18561308843609,
+      "mc": 11185.831895495272,
+      "n": "Uniswap",
+      "pc24h": 0.1298,
+      "plt": "Sonic",
+      "pltId": 237,
+      "plti": 32684,
+      "pt": "1752751063000",
+      "pu": "8.975460798132206747718043579716041",
+      "s": "UNI",
+      "ts": "1789771204000",
+      "tsup": "1246.268258207204681182",
+      "ut24h": "2",
+      "v24h": 112.2137341080166,
+      "w": "",
+      "x": ""
+     },
+     {
+      "addr": "5FmDD65weQJrRyFLorLK19QHjRM1hcTiPbuTytm3zkDr",
+      "dec": 6,
+      "fpt": "1789746853000",
+      "l": "https://ipfs.sintral.me/cdn-cgi/image/width=480,quality=100,format=webp/url/https%3A%2F%2Fmetadata.j7tracker.io%2Fimages%2F5159bb8c0a504dde",
+      "liq": 44.13392743299152,
+      "mc": 2043.2400905592865,
+      "n": "\u3046\u306b\u3061\u3083\u3093",
+      "pc24h": -0.1492,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789746853000",
+      "pu": "0.000002043240090559286435074238542651",
+      "s": "Uni",
+      "ts": "1789746955000",
+      "tsup": "1000000000.000000",
+      "ut24h": "40",
+      "v24h": 7639.744936740912,
+      "w": "https://instagram.com/p/CdshsiAPJ9q/",
+      "x": "https://x.com/banesthemane/status/2100976694198767642"
+     },
+     {
+      "addr": "CxcXqUQg7KQJNPq9sn4dYcBXw6U2g9k4pzqov3UDUpia",
+      "dec": 6,
+      "fpt": "1789726394000",
+      "l": "https://ipfs.sintral.me/cdn-cgi/image/width=480,quality=100,format=webp/url/https%3A%2F%2Fusepaid.app%2Fapi%2Flaunch%2Fimage%2F2e6be6b7-3765-4415-b3c5-38a2fc86d0f4",
+      "liq": 48.66625279956816,
+      "mc": 3173.6834203642866,
+      "n": "Unicef",
+      "pc24h": 0.0481,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789726394000",
+      "pu": "0.000003173683420364286359650689228751",
+      "s": "UNI",
+      "ts": "1789746647000",
+      "tsup": "1000000000.000000",
+      "ut24h": "4",
+      "v24h": 549.554090965502,
+      "w": "https://usepaid.app/t/q858ykzs",
+      "x": "https://x.com/unicef"
+     },
+     {
+      "addr": "0x01aac2b594f7bdbec740f0f1aa22910ebb4b74ab",
+      "cid": 32984,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1732165199000",
+      "fpt": "1740409979000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/32984.png",
+      "lf": 1,
+      "liq": 0.9650278987112828,
+      "mc": 51098.61335963812,
+      "n": "Unio Coin",
+      "pc24h": 0.0,
+      "plt": "Ethereum",
+      "pltId": 1,
+      "plti": 1027,
+      "pt": "1712921759000",
+      "pu": "0.000017536489028448400938",
+      "s": "UNIO",
+      "ts": "1776993515000",
+      "tsup": "2913845141.792287200846728705",
+      "ut24h": "0",
+      "v24h": 0,
+      "w": "https://uniocoin.io/,https://www.unioverse.com/",
+      "x": "https://twitter.com/unio_coin"
+     },
+     {
+      "addr": "GzvXXSqtJrA2TTPQKMpsQWw7EirysNJtarXtGFJgcSbL",
+      "dec": 6,
+      "fpct": "1789733953000",
+      "fpt": "1789733953000",
+      "l": "https://ipfs.sintral.me/cdn-cgi/image/width=480,quality=100,format=webp/url/https%3A%2F%2Faxiomtrading-v2.axiom-cdn.io%2FHANE6NAj4dpzt9HXyz25aitnV4gz6aHcoANkGp8qpump.webp",
+      "liq": 8.422257732515513,
+      "mc": 2297.4085538886825,
+      "n": "UNI",
+      "pc24h": -0.0444,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789733953000",
+      "pu": "0.000002297408553888682368666583795240",
+      "s": "UNI",
+      "ts": "1789734245000",
+      "tsup": "1000000000.000000",
+      "ut24h": "5",
+      "v24h": 1685.7655158839286,
+      "w": "",
+      "x": "https://x.com/7aneski/status/2100922290943009010"
+     },
+     {
+      "addr": "J664ip3Tai7WLENEsjqtMVGg3jgu9Tsx93WiP2adwJ2B",
+      "dec": 6,
+      "fpct": "1789746963000",
+      "fpt": "1789746963000",
+      "l": "https://ipfs.sintral.me/cdn-cgi/image/width=480,quality=100,format=webp/url/https%3A%2F%2Fmetadata.j7tracker.io%2Fimages%2Fdo9Am8b7QI",
+      "liq": 7.75696428294584,
+      "mc": 2016.5801871076844,
+      "n": "\u3046\u306b\u3061\u3083\u3093",
+      "pc24h": -0.1586,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789746963000",
+      "pu": "0.000002016580187107684382617419482413",
+      "s": "Uni",
+      "ts": "1789747102000",
+      "tsup": "1000000000.000000",
+      "ut24h": "8",
+      "v24h": 1547.1350124574465,
+      "w": "https://instagram.com/p/CdshsiAPJ9q/",
+      "x": "https://x.com/banesthemane/status/2100976694198767642"
+     },
+     {
+      "addr": "0xba13c087f81166d0b56f006a7a2504847ef9da05",
+      "cid": 33785,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1747925431000",
+      "fpt": "1747932386000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/33785.png",
+      "lf": 1,
+      "liq": 1.4804310699327028,
+      "mc": 182.2550458948661,
+      "n": "UNIT0",
+      "pc24h": 0.0,
+      "plt": "BSC",
+      "pltId": 14,
+      "plti": 1839,
+      "pt": "1747922541000",
+      "pu": "0.09030297749265995876",
+      "s": "UNIT0",
+      "ts": "1770023341000",
+      "tsup": "1607.333550399494264262",
+      "ut24h": "0",
+      "v24h": 0,
+      "w": "https://units.network/",
+      "x": "https://twitter.com/UnitsNetwork"
+     },
+     {
+      "addr": "uniBKsEV37qLRFZD7v3Z9drX6voyiCM8WcaePqeSSLc",
+      "cid": 36175,
+      "dec": 8,
+      "fpct": "1760690540000",
+      "fpt": "1765543807000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/36175.png",
+      "lf": 1,
+      "liq": 6.1533746511338565,
+      "n": "uniBTC",
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1756836218000",
+      "s": "uniBTC",
+      "ts": "1766775066000",
+      "tsup": "7.57326742",
+      "w": "https://www.bedrock.technology/",
+      "x": "https://twitter.com/Bedrock_DeFi"
+     },
+     {
+      "addr": "9Gor5hxGVGp1nwshaoFfB6n1jmeS5ecGdexDHdTPinfM",
+      "dec": 6,
+      "fpt": "1789746957000",
+      "l": "https://ipfs.sintral.me/cdn-cgi/image/width=480,quality=100,format=webp/url/https%3A%2F%2Fmetadata.j7tracker.io%2Fimages%2Fdab43c116ffc466a",
+      "liq": 9.767131236152691,
+      "n": "\u3046\u306b\u3061\u3083\u3093",
+      "pc24h": -0.1512,
+      "plt": "Solana",
+      "pltId": 16,
+      "plti": 5426,
+      "pt": "1789746957000",
+      "pu": "0.000002026232761821264378653876831467",
+      "s": "Uni",
+      "ts": "1789746969000",
+      "tsup": "1000000000.000000",
+      "ut24h": "7",
+      "v24h": 1938.2671617470294,
+      "w": "https://instagram.com/p/CdshsiAPJ9q/",
+      "x": "https://x.com/banesthemane/status/2100976694198767642"
+     }
+    ],
+    "total": 50
+   },
+   "status": {
+    "credit_count": 1,
+    "elapsed": 170,
+    "error_code": "0",
+    "error_message": "",
+    "timestamp": "2026-09-18T23:21:31.352Z"
+   }
+  },
+  "94cf0a63215f8fc8a2007ba3fc02ae214091d5422bcda3d84c904779f6f53986": {
+   "data": {
+    "7083": {
+     "category": "token",
+     "contract_address": [
+      {
+       "contract_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+       "platform": {
+        "coin": {
+         "id": "1027",
+         "name": "Ethereum",
+         "slug": "ethereum",
+         "symbol": "ETH"
+        },
+        "name": "Ethereum"
+       }
+      },
+      {
+       "contract_address": "0xbf5140a22578168fd562dccf235e5d43a02ce9b1",
+       "platform": {
+        "coin": {
+         "id": "1839",
+         "name": "BNB",
+         "slug": "bnb",
+         "symbol": "BNB"
+        },
+        "name": "BNB Smart Chain (BEP20)"
+       }
+      },
+      {
+       "contract_address": "0x22c54ce8321a4015740ee1109d9cbc25815c46e6",
+       "platform": {
+        "coin": {
+         "id": "2502",
+         "name": "Huobi Token",
+         "slug": "htx-token",
+         "symbol": "HT"
+        },
+        "name": "HECO"
+       }
+      },
+      {
+       "contract_address": "0x4537e328bf7e4efa29d05caea260d7fe26af9d74",
+       "platform": {
+        "coin": {
+         "id": "1659",
+         "name": "Gnosis",
+         "slug": "gnosis-gno",
+         "symbol": "GNO"
+        },
+        "name": "Gnosis Chain"
+       }
+      },
+      {
+       "contract_address": "0xb33eaad8d922b1083446dc23f610c2567fb5180f",
+       "platform": {
+        "coin": {
+         "id": "28321",
+         "name": "Polygon (prev. MATIC)",
+         "slug": "polygon-ecosystem-token",
+         "symbol": "POL"
+        },
+        "name": "Polygon"
+       }
+      },
+      {
+       "contract_address": "0x009be848df92a400da2f217256c88d1a9b1a0304f9b3e90991a67418e1d3b08c",
+       "platform": {
+        "coin": {
+         "id": "5802",
+         "name": "SORA",
+         "slug": "sora",
+         "symbol": "XOR"
+        },
+        "name": "Sora"
+       }
+      },
+      {
+       "contract_address": "0x8eBAf22B6F053dFFeaf46f4Dd9eFA95D89ba8580",
+       "platform": {
+        "coin": {
+         "id": "5805",
+         "name": "Avalanche",
+         "slug": "avalanche",
+         "symbol": "AVAX"
+        },
+        "name": "Avalanche C-Chain"
+       }
+      },
+      {
+       "contract_address": "8FU95xFJhUUkyyCLU13HSzDLs7oC4QZdXQHL6SCeab36",
+       "platform": {
+        "coin": {
+         "id": "5426",
+         "name": "Solana",
+         "slug": "solana",
+         "symbol": "SOL"
+        },
+        "name": "Solana"
+       }
+      },
+      {
+       "contract_address": "terra1wyxkuy5jq545fn7xfn3enpvs5zg9f9dghf6gxf",
+       "platform": {
+        "coin": {
+         "id": "4172",
+         "name": "Terra Classic",
+         "slug": "terra-luna",
+         "symbol": "LUNC"
+        },
+        "name": "Terra Classic"
+       }
+      },
+      {
+       "contract_address": "0x1fc14e78612edc54e36506c4a11a1a3be4fe48af",
+       "platform": {
+        "coin": {
+         "id": "15165",
+         "name": "Hoo Smart Chain",
+         "slug": "hoo-smart-chain",
+         "symbol": "HSC"
+        },
+        "name": "Hoo Smart Chain"
+       }
+      },
+      {
+       "contract_address": "0xFa7F8980b0f1E64A2062791cc3b0871572f1F7f0",
+       "platform": {
+        "coin": {
+         "id": "11841",
+         "name": "Arbitrum",
+         "slug": "arbitrum",
+         "symbol": "ARB"
+        },
+        "name": "Arbitrum"
+       }
+      },
+      {
+       "contract_address": "1f9840a85d5af5bf1d1762f925bdaddc4201f984.factory.bridge.near",
+       "platform": {
+        "coin": {
+         "id": "6535",
+         "name": "NEAR Protocol",
+         "slug": "near-protocol",
+         "symbol": "NEAR"
+        },
+        "name": "Near"
+       }
+      },
+      {
+       "contract_address": "0x8f187aA05619a017077f5308904739877ce9eA21",
+       "platform": {
+        "coin": {
+         "id": "7083",
+         "name": "Uniswap",
+         "slug": "uniswap",
+         "symbol": "UNI"
+        },
+        "name": "Unichain"
+       }
+      }
+     ],
+     "date_added": "2020-09-17T00:00:00.000Z",
+     "date_launched": "2020-09-17T00:00:00.000Z",
+     "description": "Uniswap (UNI) is a cryptocurrency launched in 2020and operates on the Ethereum platform. Uniswap has a current supply of 888,242,418.91631008 with 620,994,422.61047506 in circulation. The last known price of Uniswap is 8.84052949 USD and is up 15.12 over the last 24 hours. It is currently trading on 1494 active market(s) with $2,130,691,455.33 traded over the last 24 hours. More information can be found at https://uniswap.org/blog/uni/.",
+     "id": 7083,
+     "infinite_supply": false,
+     "is_hidden": 0,
+     "logo": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+     "name": "Uniswap",
+     "notice": "",
+     "platform": {
+      "id": "1027",
+      "name": "Ethereum",
+      "slug": "ethereum",
+      "symbol": "ETH",
+      "token_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
+     },
+     "slug": "uniswap",
+     "subreddit": "Uniswap",
+     "symbol": "UNI",
+     "tag-groups": [
+      "CATEGORY",
+      "CATEGORY",
+      "CATEGORY",
+      "PLATFORM",
+      "CATEGORY",
+      "CATEGORY",
+      "CATEGORY",
+      "CATEGORY",
+      "CATEGORY",
+      "PLATFORM",
+      "PLATFORM",
+      "PLATFORM",
+      "CATEGORY",
+      "CATEGORY",
+      "CATEGORY",
+      "CATEGORY",
+      "CATEGORY",
+      "CATEGORY",
+      "CATEGORY",
+      "PLATFORM",
+      "PLATFORM",
+      "PLATFORM",
+      "PLATFORM",
+      "CATEGORY",
+      "PLATFORM",
+      "PLATFORM",
+      "PLATFORM",
+      "CATEGORY",
+      "CATEGORY",
+      "CATEGORY",
+      "PLATFORM",
+      "PLATFORM"
+     ],
+     "tag-names": [
+      "Decentralized Exchange (DEX) Token",
+      "DeFi",
+      "DAO",
+      "Ethereum Ecosystem",
+      "Yield Farming",
+      "AMM",
+      "Coinbase Ventures Portfolio",
+      "Three Arrows Capital Portfolio",
+      "Governance",
+      "HECO Ecosystem",
+      "Avalanche Ecosystem",
+      "Solana Ecosystem",
+      "Blockchain Capital Portfolio",
+      "DeFiance Capital Portfolio",
+      "Alameda Research Portfolio",
+      "a16z Portfolio",
+      "Pantera Capital Portfolio",
+      "ParaFi Capital",
+      "Paradigm Portfolio",
+      "Polygon Ecosystem",
+      "Terra Ecosystem",
+      "Near Protocol Ecosystem",
+      "Arbitrum Ecosystem",
+      "CMC Crypto Awards 2024",
+      "Gnosis Chain Ecosystem",
+      "Sora Ecosystem",
+      "Hoo Smart Chain Ecosystem",
+      "Made in America",
+      "Binance Ecosystem",
+      "Binance Listing",
+      "Etherlink Ecosystem",
+      "Unichain Ecosystem"
+     ],
+     "tags": [
+      "decentralized-exchange-dex-token",
+      "defi",
+      "dao",
+      "ethereum-ecosystem",
+      "yield-farming",
+      "amm",
+      "coinbase-ventures-portfolio",
+      "three-arrows-capital-portfolio",
+      "governance",
+      "heco-ecosystem",
+      "avalanche-ecosystem",
+      "solana-ecosystem",
+      "blockchain-capital-portfolio",
+      "defiance-capital-portfolio",
+      "alameda-research-portfolio",
+      "a16z-portfolio",
+      "pantera-capital-portfolio",
+      "parafi-capital",
+      "paradigm-portfolio",
+      "polygon-ecosystem",
+      "terra-ecosystem",
+      "near-protocol-ecosystem",
+      "arbitrum-ecosystem",
+      "cmc-crypto-awards-2024",
+      "gnosis-chain-ecosystem",
+      "sora-ecosystem",
+      "hoo-smart-chain-ecosystem",
+      "made-in-america",
+      "binance-ecosystem",
+      "binance-listing",
+      "etherlink-ecosystem",
+      "unichain-ecosystem"
+     ],
+     "twitter_username": "Uniswap",
+     "urls": {
+      "announcement": [],
+      "chat": [
+       "https://discord.gg/FCfyBSbCU5"
+      ],
+      "explorer": [
+       "https://etherscan.io/token/0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+       "https://solscan.io/token/8FU95xFJhUUkyyCLU13HSzDLs7oC4QZdXQHL6SCeab36",
+       "https://nearblocks.io/token/1f9840a85d5af5bf1d1762f925bdaddc4201f984.factory.bridge.near"
+      ],
+      "facebook": [],
+      "message_board": [
+       "https://uniswap.org/blog/"
+      ],
+      "reddit": [
+       "https://reddit.com/r/Uniswap"
+      ],
+      "source_code": [],
+      "technical_doc": [],
+      "twitter": [
+       "https://twitter.com/Uniswap"
+      ],
+      "website": [
+       "https://uniswap.org/blog/uni/",
+       "https://uniswap.org/"
+      ]
+     }
+    }
+   },
+   "status": {
+    "credit_count": 1,
+    "elapsed": 4,
+    "error_code": 0,
+    "error_message": null,
+    "notice": null,
+    "timestamp": "2026-09-18T23:21:33.648Z"
+   }
+  },
+  "9657184d412549c3dfb67993e8a9b89653e90852ee63dfff7640d69d2c28998e": {
+   "data": {
+    "tks": [
+     {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "cid": 7083,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1600302037000",
+      "fpt": "1740319967000",
+      "l": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "lf": 1,
+      "liq": 42084583.15347957,
+      "mc": 8795037084.054344,
+      "n": "Uniswap",
+      "pc24h": 0.1521,
+      "plt": "Ethereum",
+      "pltId": 1,
+      "plti": 1027,
+      "pt": "1600107086000",
+      "pu": "8.795037084054344197400125270169183",
+      "s": "UNI",
+      "ssc": 2.0,
+      "ts": "1789770767000",
+      "tsup": "1000000000",
+      "ut24h": "2028",
+      "v24h": 30808138.8072966,
+      "w": "https://uniswap.org/blog/uni/,https://uniswap.org/",
+      "x": "https://twitter.com/Uniswap"
+     },
+     {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "cid": 0,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1684682705000",
+      "l": "",
+      "lf": 0,
+      "liq": 1188.8476674793108,
+      "mc": 3983130.586773564,
+      "n": "Uniswap",
+      "pc24h": 0.0,
+      "plt": "PulseChain",
+      "pltId": 189,
+      "plti": 11145,
+      "pu": "0.0039831305867735639956",
+      "s": "UNI",
+      "ssc": 2.0,
+      "ts": "1773083065000",
+      "tsup": "1000000000",
+      "ut24h": "0",
+      "v24h": 0,
+      "w": "",
+      "x": ""
+     },
+     {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "cid": 0,
+      "dec": 18,
+      "ecs": 0,
+      "fpct": "1665295422000",
+      "l": "",
+      "lf": 0,
+      "liq": 847193.4820154322,
+      "mc": 360682105.20583487,
+      "n": "Uniswap",
+      "pc24h": 0.0,
+      "plt": "EthereumPoW",
+      "pltId": 140,
+      "plti": 21296,
+      "pu": "0.3606821052058348398398748785219134",
+      "s": "UNI",
+      "ssc": 2.0,
+      "ts": "1787819985000",
+      "tsup": "1000000000",
+      "ut24h": "0",
+      "v24h": 0,
+      "w": "",
+      "x": ""
+     },
+     {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "dec": 18,
+      "ecs": 0,
+      "n": "Uniswap",
+      "plt": "Unichain",
+      "pltId": 246,
+      "plti": 7083,
+      "pt": "1765188160000",
+      "s": "UNI",
+      "ssc": 2.0,
+      "tsup": "1000000000"
+     }
+    ],
+    "total": 4
+   },
+   "status": {
+    "credit_count": 1,
+    "elapsed": 170,
+    "error_code": "0",
+    "error_message": "",
+    "timestamp": "2026-09-18T23:21:28.425Z"
+   }
+  },
+  "9a11dd095b944821c4cdc84141262b0e2b2ab04c4ccd9e25eb5f54dd929a22ed": {
+   "data": [
+    {
+     "base_asset_contract_address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+     "base_asset_id": null,
+     "base_asset_name": "Uniswap",
+     "base_asset_symbol": "UNI",
+     "base_asset_ucid": "7083",
+     "contract_address": "0xd0fc8ba7e267f2bc56044a7715a489d851dc6d78",
+     "created_at": null,
+     "dex_id": "1348",
+     "dex_slug": "uniswap-v3",
+     "last_updated": "2026-09-18T23:15:47.000Z",
+     "name": "UNI/USDC",
+     "network_id": "1",
+     "network_slug": "Ethereum",
+     "quote": [
+      {
+       "convert_id": "2781",
+       "fully_diluted_value": 8897487588.221964,
+       "last_updated": "2026-09-18T23:16:08.113Z",
+       "liquidity": 1371641.033584328,
+       "percent_change_price_1h": -0.0034,
+       "percent_change_price_24h": 0.1538,
+       "price": 8.897487588221964,
+       "price_by_quote_asset": 8.89869127381518,
+       "volume_24h": 1604157.946259026
+      }
+     ],
+     "quote_asset_contract_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+     "quote_asset_id": null,
+     "quote_asset_name": "USD Coin",
+     "quote_asset_symbol": "USDC",
+     "quote_asset_ucid": "3408"
+    }
+   ],
+   "status": {
+    "credit_count": 1,
+    "elapsed": 350,
+    "error_code": "0",
+    "error_message": "",
+    "timestamp": "2026-09-18T23:21:49.329Z"
+   }
+  },
+  "a22fc3d4465f962600bb6c432966d6fe13fd86826b57706fa4515e96f64d5f99": {
+   "data": [
+    {
+     "addr": "0x8626be23f128f5985a5d76359b10bf3db84a7306",
+     "bidx": 1,
+     "exid": 32396,
+     "exn": "Ring Exchange (Ethereum)",
+     "fa": "0xeb2a625b704d73e82946d8d026e1f588eed06416",
+     "liqUsd": "102239395.000180256703457906",
+     "mi": false,
+     "pubAt": "1720249247000",
+     "t0": {
+      "addr": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png",
+      "liq": "20754.256410748286907402",
+      "liqUsd": "51196430.80351276373160386",
+      "n": "Wrapped Ether",
+      "sym": "WETH"
+     },
+     "t1": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "7060275.728510509110243523",
+      "liqUsd": "51042964.196667492971854046",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "top": true,
+     "v24": "0"
+    },
+    {
+     "addr": "0x1d42064fc4beb5f8aaf85f4617ae8b3b5b8bd801",
+     "bidx": 0,
+     "exid": 1348,
+     "exn": "Uniswap v3 (Ethereum)",
+     "fa": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+     "liqUsd": "16591843.911480545941138778",
+     "mi": false,
+     "pubAt": "1620157956000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "1192312.014238213324391713",
+      "liqUsd": "10616289.976992285459747587",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png",
+      "liq": "2279.377729518004210686",
+      "liqUsd": "5975553.934488260481391191",
+      "n": "Wrapped Ether",
+      "sym": "WETH"
+     },
+     "top": true,
+     "v24": "15876831.31027358984827586"
+    },
+    {
+     "addr": "0x9a5c1d2f4a7a7962a63259de6fcc1afb1d0aa1abdf5d19c23d22fd78953c5167",
+     "bidx": 0,
+     "exid": 11955,
+     "exn": "Uniswap v4 (Ethereum)",
+     "fa": "0x000000000004444c5dc75cb358380d2e3de08a90",
+     "liqUsd": "6672349.712935641124502669",
+     "mi": false,
+     "pubAt": "1738173491000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "480236.919512382637295754",
+      "liqUsd": "4272785.27916938435823793",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png",
+      "liq": "2399889.05587",
+      "liqUsd": "2399564.43376625676626474",
+      "n": "USD Coin",
+      "sym": "USDC"
+     },
+     "top": true,
+     "v24": "2601631.750607499133671891"
+    },
+    {
+     "addr": "0x053f6a47ccba79e7d5d623173ed6dd5a31cf19c28bae0fb8276f4506295f90da",
+     "bidx": 1,
+     "exid": 11955,
+     "exn": "Uniswap v4 (Ethereum)",
+     "fa": "0x000000000004444c5dc75cb358380d2e3de08a90",
+     "liqUsd": "5793608.858172437885333536",
+     "mi": false,
+     "pubAt": "1738173059000",
+     "t0": {
+      "addr": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
+      "liq": "1325.725808034282251921",
+      "liqUsd": "3470440.867583776979003968",
+      "n": "Ethereum",
+      "sym": "ETH"
+     },
+     "t1": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "261151.255180852278696038",
+      "liqUsd": "2323167.990588660906329569",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "top": true,
+     "v24": "4264289.384997666276122768"
+    },
+    {
+     "addr": "0x360b9726186c0f62cc719450685ce70280774dc8",
+     "bidx": 0,
+     "exid": 1348,
+     "exn": "Uniswap v3 (Ethereum)",
+     "fa": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+     "liqUsd": "5344675.528726462001145134",
+     "mi": false,
+     "pubAt": "1620245030000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "604776.759415100628413846",
+      "liqUsd": "5325521.921812534117993788",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png",
+      "liq": "7.281238523705444132",
+      "liqUsd": "19153.606913927883151346",
+      "n": "Wrapped Ether",
+      "sym": "WETH"
+     },
+     "top": true,
+     "v24": "1221663.802892006248244387"
+    },
+    {
+     "addr": "0xd3d2e2692501a5c9ca623199d38826e513033a17",
+     "bidx": 0,
+     "exid": 1069,
+     "exn": "Uniswap v2",
+     "fa": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+     "liqUsd": "4376950.313445606732254361",
+     "mi": false,
+     "pubAt": "1600302037000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "246019.872029449781789909",
+      "liqUsd": "2191670.03894632315020399",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png",
+      "liq": "833.576141234382793725",
+      "liqUsd": "2185280.274499283582050371",
+      "n": "Wrapped Ether",
+      "sym": "WETH"
+     },
+     "top": true,
+     "v24": "1645155.168874384254107615"
+    },
+    {
+     "addr": "0xd0fc8ba7e267f2bc56044a7715a489d851dc6d78",
+     "bidx": 0,
+     "exid": 1348,
+     "exn": "Uniswap v3 (Ethereum)",
+     "fa": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+     "liqUsd": "1371641.033584327806825452",
+     "mi": false,
+     "pubAt": "1620273020000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "137356.441574853601647967",
+      "liqUsd": "1222127.234074595271572088",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png",
+      "liq": "149534.026299",
+      "liqUsd": "149513.799509732535253365",
+      "n": "USD Coin",
+      "sym": "USDC"
+     },
+     "top": true,
+     "v24": "1604157.946259025916899575"
+    },
+    {
+     "addr": "0x769e91db8fd7a01802909e8ca8de65275bd04bc7b3640d093bca453f15912f0f",
+     "bidx": 1,
+     "exid": 11955,
+     "exn": "Uniswap v4 (Ethereum)",
+     "fa": "0x000000000004444c5dc75cb358380d2e3de08a90",
+     "liqUsd": "925840.276058583430504348",
+     "mi": false,
+     "pubAt": "1739788187000",
+     "t0": {
+      "addr": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
+      "liq": "0.583882983425841421",
+      "liqUsd": "1533.017639663828005162",
+      "n": "Ethereum",
+      "sym": "ETH"
+     },
+     "t1": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "100159.582939913714133044",
+      "liqUsd": "924307.258418919602499187",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "top": true,
+     "v24": "247026.779417276978231269"
+    },
+    {
+     "addr": "0x3470447f3cecffac709d3e783a307790b0208d60",
+     "bidx": 0,
+     "exid": 1348,
+     "exn": "Uniswap v3 (Ethereum)",
+     "fa": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+     "liqUsd": "640234.992058535573026185",
+     "mi": false,
+     "pubAt": "1620278221000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "23939.59688426604124527",
+      "liqUsd": "213167.09084562166885149",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png",
+      "liq": "427165.696461",
+      "liqUsd": "427067.901212913904174696",
+      "n": "Tether USD",
+      "sym": "USDT"
+     },
+     "top": true,
+     "v24": "2561490.50301227973886466"
+    },
+    {
+     "addr": "0xfaa318479b7755b2dbfdd34dc306cb28b420ad12",
+     "bidx": 0,
+     "exid": 1348,
+     "exn": "Uniswap v3 (Ethereum)",
+     "fa": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+     "liqUsd": "555668.542106795429044324",
+     "mi": false,
+     "pubAt": "1620243088000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "10179.691291904848019518",
+      "liqUsd": "90592.880844568030663449",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png",
+      "liq": "177.417904317523996715",
+      "liqUsd": "465075.661262227398380875",
+      "n": "Wrapped Ether",
+      "sym": "WETH"
+     },
+     "top": true,
+     "v24": "997393.515720032250020714"
+    },
+    {
+     "addr": "0x35e583c682e51556d479ab35df3d8274c4afa1f4",
+     "bidx": 0,
+     "exid": 32396,
+     "exn": "Ring Exchange (Ethereum)",
+     "fa": "0xeb2a625b704d73e82946d8d026e1f588eed06416",
+     "liqUsd": "5988664.4588073001013",
+     "mi": false,
+     "pubAt": "1744092839000",
+     "t0": {
+      "addr": "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/32994.png",
+      "liq": "48.72733139",
+      "liqUsd": "2998610.19178258807",
+      "n": "Coinbase Wrapped BTC",
+      "sym": "cbBTC"
+     },
+     "t1": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "1210153.35435360796608899",
+      "liqUsd": "2990054.2670247120313",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "v24": "0"
+    },
+    {
+     "addr": "0xcd019866bb9876e0c3f135bc5fe856a0566d490c1b2fcca97e8205ee25048e6f",
+     "bidx": 0,
+     "exid": 11955,
+     "exn": "Uniswap v4 (Ethereum)",
+     "fa": "0x000000000004444c5dc75cb358380d2e3de08a90",
+     "liqUsd": "3445595.584480788818070346",
+     "mi": false,
+     "pubAt": "1738435163000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "87841.121758451531729243",
+      "liqUsd": "781603.507655385010455291",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7278.png",
+      "liq": "19149.345485827449166335",
+      "liqUsd": "2663992.076825403807615056",
+      "n": "Aave Token",
+      "sym": "AAVE"
+     },
+     "v24": "2197787.608819636784425892"
+    },
+    {
+     "addr": "0x339d4e50b7eb4aad7eab94db04be1c684ea42555ef189ce9c488964bdb91d4e9",
+     "bidx": 0,
+     "exid": 11955,
+     "exn": "Uniswap v4 (Ethereum)",
+     "fa": "0x000000000004444c5dc75cb358380d2e3de08a90",
+     "liqUsd": "1604446.957852056885578995",
+     "mi": false,
+     "pubAt": "1747183547000",
+     "t0": {
+      "addr": "0x111111111117dc0aa78b770fa6a738034120c302",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/8104.png",
+      "liq": "17028153.402872226969139599",
+      "liqUsd": "1489497.224358005931478643",
+      "n": "1INCH Token",
+      "sym": "1INCH"
+     },
+     "t1": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "18004.110973590379216321",
+      "liqUsd": "114949.733494050954100352",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "v24": "0"
+    },
+    {
+     "addr": "0xf35243109b97696363d12ea4d05b60b49d1461ab",
+     "bidx": 0,
+     "exid": 32396,
+     "exn": "Ring Exchange (Ethereum)",
+     "fa": "0xeb2a625b704d73e82946d8d026e1f588eed06416",
+     "liqUsd": "1433392.5368755143255",
+     "mi": false,
+     "pubAt": "1744090499000",
+     "t0": {
+      "addr": "0xdef1ca1fb7fbcdc777520aa7f396b4e015f497ab",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/19269.png",
+      "liq": "4071303.509760544923516131",
+      "liqUsd": "713018.99724342150146",
+      "n": "CoW Protocol Token",
+      "sym": "COW"
+     },
+     "t1": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "206345.202561104131065756",
+      "liqUsd": "720373.53963209282404",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "v24": "0"
+    },
+    {
+     "addr": "0x769937ccd47b53c021b41e00fd48701276d87b30",
+     "bidx": 0,
+     "exid": 1069,
+     "exn": "Uniswap v2",
+     "fa": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+     "liqUsd": "565379.011239251282858766",
+     "mi": false,
+     "pubAt": "1788045323000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "32620.408994530343728219",
+      "liqUsd": "282307.034113836234494613",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0x9d9e7a29e2b8e169ddcf2a596a6fd93cb2eb9851",
+      "liq": "33651969.320987156166240836",
+      "liqUsd": "283071.977125415048364154",
+      "n": "sUNI",
+      "sym": "sUNI"
+     },
+     "v24": "15752.458132998049202066"
+    },
+    {
+     "addr": "0x35a69205bed8888653505ba8bdb26c07682efb3a2ac907fd9a481018e2bcbdeb",
+     "bidx": 0,
+     "exid": 11955,
+     "exn": "Uniswap v4 (Ethereum)",
+     "fa": "0x000000000004444c5dc75cb358380d2e3de08a90",
+     "liqUsd": "558433.237645678985450594",
+     "mi": false,
+     "pubAt": "1768507571000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "20118.555539116573902142",
+      "liqUsd": "178619.634518925581693103",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0x808507121b80c02388fad14726482e061b8da827",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/9481.png",
+      "liq": "145933.831385901258771095",
+      "liqUsd": "379813.603126753403757492",
+      "n": "Pendle",
+      "sym": "PENDLE"
+     },
+     "v24": "198790.215809206745470719"
+    },
+    {
+     "addr": "0x8f0cb37cdff37e004e0088f563e5fe39e05ccc5b",
+     "bidx": 0,
+     "exid": 1348,
+     "exn": "Uniswap v3 (Ethereum)",
+     "fa": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+     "liqUsd": "431863.54577349332618732",
+     "mi": false,
+     "pubAt": "1620382281000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "6795.847705094922550413",
+      "liqUsd": "60442.004892204426044396",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/3717.png",
+      "liq": "4.57998766",
+      "liqUsd": "371421.540881288900142924",
+      "n": "Wrapped BTC",
+      "sym": "WBTC"
+     },
+     "v24": "151903.380286475023702479"
+    },
+    {
+     "addr": "0xa20defd792341526615afff100c79c27a635e8693d0cb13c8864a3e04180175a",
+     "bidx": 0,
+     "exid": 11955,
+     "exn": "Uniswap v4 (Ethereum)",
+     "fa": "0x000000000004444c5dc75cb358380d2e3de08a90",
+     "liqUsd": "326199.608177484050371328",
+     "mi": false,
+     "pubAt": "1738725347000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "12246.598633694082909178",
+      "liqUsd": "108948.638830366469491538",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png",
+      "liq": "217295.725091",
+      "liqUsd": "217250.96934711758087979",
+      "n": "Tether USD",
+      "sym": "USDT"
+     },
+     "v24": "210044.408695071628546507"
+    },
+    {
+     "addr": "0x5426d0204b4e97d2dadaff6c07a712e5755651e8e2e06b46822199dd7e7ac665",
+     "bidx": 0,
+     "exid": 11955,
+     "exn": "Uniswap v4 (Ethereum)",
+     "fa": "0x000000000004444c5dc75cb358380d2e3de08a90",
+     "liqUsd": "318491.04072334937119",
+     "mi": false,
+     "pubAt": "1754427899000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "38860.124341376016729749",
+      "liqUsd": "186937.90004920303116",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0x808507121b80c02388fad14726482e061b8da827",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/9481.png",
+      "liq": "65857.039705282562643077",
+      "liqUsd": "131553.14067414634003",
+      "n": "Pendle",
+      "sym": "PENDLE"
+     },
+     "v24": "0"
+    },
+    {
+     "addr": "0x59c38b6775ded821f010dbd30ecabdcf84e04756",
+     "bidx": 0,
+     "exid": 1348,
+     "exn": "Uniswap v3 (Ethereum)",
+     "fa": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+     "liqUsd": "262458.00388722987629118",
+     "mi": false,
+     "pubAt": "1621951885000",
+     "t0": {
+      "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+      "liq": "10694.994411980351784232",
+      "liqUsd": "95020.540524853036307785",
+      "n": "Uniswap",
+      "sym": "UNI"
+     },
+     "t1": {
+      "addr": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+      "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7278.png",
+      "liq": "1204.408999452320660626",
+      "liqUsd": "167437.463362376839983396",
+      "n": "Aave Token",
+      "sym": "AAVE"
+     },
+     "v24": "125753.29331787072194468"
+    }
+   ],
+   "status": {
+    "credit_count": 1,
+    "elapsed": 196,
+    "error_code": "0",
+    "error_message": "",
+    "timestamp": "2026-09-18T23:21:25.722Z"
+   }
+  },
+  "ca1e38e606597e9e8b499c0221dca9b4e06df4a77348260bc1bee95ef3cf3a4e": {
+   "data": {
+    "lcs": [],
+    "lpc": "8",
+    "tlu": 357015.5031959016
+   },
+   "status": {
+    "credit_count": 1,
+    "elapsed": 207,
+    "error_code": "0",
+    "error_message": "",
+    "timestamp": "2026-09-18T23:21:44.028Z"
+   }
+  },
+  "d118b9bf0993e175ef6c25942bcbb48072f2bae7b1f6bff585e923dd2ee5a79a": {
+   "data": {
+    "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+    "cexs": [
+     {
+      "cat": [
+       "DERIVATIVES"
+      ],
+      "id": 1110,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1110.png",
+      "n": "PrimeXBT",
+      "slug": "primexbt",
+      "wst": "https://primexbt.com/"
+     },
+     {
+      "cat": [
+       "DERIVATIVES"
+      ],
+      "id": 10783,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/10783.png",
+      "n": "HyperPay Futures",
+      "slug": "hyperpay-futures",
+      "wst": "https://www.hyperpay.io/futures/"
+     },
+     {
+      "cat": [
+       "DERIVATIVES"
+      ],
+      "id": 7845,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/7845.png",
+      "n": "Coincall",
+      "slug": "coincall",
+      "wst": "https://www.coincall.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 270,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/270.png",
+      "n": "Binance",
+      "slug": "binance",
+      "wst": "https://www.binance.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 89,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/89.png",
+      "n": "Coinbase Exchange",
+      "slug": "coinbase-exchange",
+      "wst": "https://coinbase.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 351,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/351.png",
+      "n": "Upbit",
+      "slug": "upbit",
+      "wst": "https://upbit.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 294,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/294.png",
+      "n": "OKX",
+      "slug": "okx",
+      "wst": "https://www.okx.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 521,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/521.png",
+      "n": "Bybit",
+      "slug": "bybit",
+      "wst": "http://www.bybit.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 513,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/513.png",
+      "n": "Bitget",
+      "slug": "bitget",
+      "wst": "https://www.bitget.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 302,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/302.png",
+      "n": "Gate",
+      "slug": "gate",
+      "wst": "https://www.gate.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 311,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/311.png",
+      "n": "KuCoin",
+      "slug": "kucoin",
+      "wst": "https://www.kucoin.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 544,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/544.png",
+      "n": "MEXC",
+      "slug": "mexc",
+      "wst": "https://www.mexc.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 102,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/102.png",
+      "n": "HTX",
+      "slug": "htx",
+      "wst": "https://www.htx.com/en-us/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 1149,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1149.png",
+      "n": "Crypto.com Exchange",
+      "slug": "crypto-com-exchange",
+      "wst": "https://crypto.com/exchange"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 37,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/37.png",
+      "n": "Bitfinex",
+      "slug": "bitfinex",
+      "wst": "https://www.bitfinex.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 1064,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1064.png",
+      "n": "BingX",
+      "slug": "bingx",
+      "wst": "https://www.bingx.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 24,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/24.png",
+      "n": "Kraken",
+      "slug": "kraken",
+      "wst": "https://www.kraken.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1375,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1375.png",
+      "n": "Binance TR",
+      "slug": "binance-tr",
+      "wst": "https://www.binance.tr/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 333,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/333.png",
+      "n": "LBank",
+      "slug": "lbank",
+      "wst": "https://www.lbank.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 70,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/70.png",
+      "n": "Bitstamp by Robinhood",
+      "slug": "bitstamp",
+      "wst": "https://www.bitstamp.net"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 200,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/200.png",
+      "n": "Bithumb",
+      "slug": "bithumb",
+      "wst": "https://www.bithumb.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 525,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/525.png",
+      "n": "XT.COM",
+      "slug": "xt",
+      "wst": "https://www.xt.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 710,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/710.png",
+      "n": "Tokocrypto",
+      "slug": "tokocrypto",
+      "wst": "https://www.tokocrypto.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 630,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/630.png",
+      "n": "Binance.US",
+      "slug": "binance-us",
+      "wst": "https://www.binance.us/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 151,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/151.png",
+      "n": "Gemini",
+      "slug": "gemini",
+      "wst": "https://www.gemini.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 790,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/790.png",
+      "n": "Pionex",
+      "slug": "pionex",
+      "wst": "https://www.pionex.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 6137,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/6137.png",
+      "n": "Toobit",
+      "slug": "toobit",
+      "wst": "https://www.toobit.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 10153,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/10153.png",
+      "n": "Ourbit",
+      "slug": "ourbit",
+      "wst": "https://www.ourbit.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 517,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/517.png",
+      "n": "CoinW",
+      "slug": "coinw",
+      "wst": "https://www.coinw.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 21,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/21.png",
+      "n": "BTCC",
+      "slug": "btcc",
+      "wst": "https://www.btcc.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 1182,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1182.png",
+      "n": "Deepcoin",
+      "slug": "deepcoin",
+      "wst": "https://www.deepcoin.com/cmc"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 9662,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9662.png",
+      "n": "Binance TH",
+      "slug": "binance-th",
+      "wst": "https://www.binance.th/en/markets"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 501,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/501.png",
+      "n": "WhiteBIT",
+      "slug": "whitebit",
+      "wst": "https://whitebit.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 937,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/937.png",
+      "n": "Biconomy.com",
+      "slug": "biconomy",
+      "wst": "https://www.biconomy.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 943,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/943.png",
+      "n": "Hotcoin",
+      "slug": "hotcoin-global",
+      "wst": "https://www.hotcoin.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 5751,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/5751.png",
+      "n": "WEEX",
+      "slug": "weex",
+      "wst": "http://www.weex.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 10922,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/10922.png",
+      "n": "MGBX",
+      "slug": "mgbx",
+      "wst": "https://mgbx.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 7302,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/7302.png",
+      "n": "Bitunix",
+      "slug": "bitunix",
+      "wst": "https://www.bitunix.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 9449,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9449.png",
+      "n": "Echobit",
+      "slug": "echobit",
+      "wst": "https://www.echobit.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 16,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/16.png",
+      "n": "Poloniex",
+      "slug": "poloniex",
+      "wst": "https://poloniex.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 330,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/330.png",
+      "n": "BigONE",
+      "slug": "bigone",
+      "wst": "https://big.one/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 6637,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/6637.png",
+      "n": "BloFin",
+      "slug": "blofin",
+      "wst": "https://blofin.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 9218,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9218.png",
+      "n": "Hibt",
+      "slug": "hibt",
+      "wst": "https://www.hibt.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 8125,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/8125.png",
+      "n": "OrangeX",
+      "slug": "orangex",
+      "wst": "https://www.orangex.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 11339,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/11339.png",
+      "n": "YUBIT",
+      "slug": "yubit",
+      "wst": "https://www.yubit.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 9606,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9606.png",
+      "n": "BiFinance",
+      "slug": "bifinance-exchange",
+      "wst": "https://www.bifinance.com/quotes"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 520,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/520.png",
+      "n": "Bitvavo",
+      "slug": "bitvavo",
+      "wst": "https://bitvavo.com/en"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 7618,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/7618.png",
+      "n": "BVOX",
+      "slug": "bvox",
+      "wst": "https://www.bvox.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 1247,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1247.png",
+      "n": "FameEX",
+      "slug": "fameex",
+      "wst": "https://www.fameex.com/en-US/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 1645,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1645.png",
+      "n": "Tapbit",
+      "slug": "tapbit",
+      "wst": "https://www.tapbit.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1117,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1117.png",
+      "n": "Azbit",
+      "slug": "azbit",
+      "wst": "https://azbit.com/exchange"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 955,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/955.png",
+      "n": "Phemex",
+      "slug": "phemex",
+      "wst": "https://phemex.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 9181,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9181.png",
+      "n": "UZX",
+      "slug": "uzx",
+      "wst": "https://uzx.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 433,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/433.png",
+      "n": "Bitrue",
+      "slug": "bitrue",
+      "wst": "https://www.bitrue.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 7699,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/7699.png",
+      "n": "CoinChief",
+      "slug": "coinchief",
+      "wst": "https://www.coinchief.live/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 9015,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9015.png",
+      "n": "Websea",
+      "slug": "websea",
+      "wst": "https://www.websea.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 33662,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33662.png",
+      "n": "Bitbase",
+      "slug": "bitbase-com",
+      "wst": "https://www.bitbase.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 9867,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9867.png",
+      "n": "KCEX",
+      "slug": "kcex",
+      "wst": "https://www.kcex.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 174,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/174.png",
+      "n": "Coinone",
+      "slug": "coinone",
+      "wst": "https://coinone.co.kr/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 125,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/125.png",
+      "n": "Bitso",
+      "slug": "bitso",
+      "wst": "https://bitso.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 33206,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33206.png",
+      "n": "CrypFine",
+      "slug": "crypfine",
+      "wst": "https://www.crypfine.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 658,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/658.png",
+      "n": "BTSE",
+      "slug": "btse",
+      "wst": "https://www.btse.com/en/home"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 795,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/795.png",
+      "n": "HashKey Exchange",
+      "slug": "hashkey-exchange",
+      "wst": "https://www.hashkey.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 9452,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9452.png",
+      "n": "Backpack Exchange",
+      "slug": "backpack-exchange",
+      "wst": "https://backpack.exchange/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 243,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/243.png",
+      "n": "BtcTurk | Kripto",
+      "slug": "btcturk-kripto",
+      "wst": "https://kripto.btcturk.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 436,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/436.png",
+      "n": "Bitkub",
+      "slug": "bitkub",
+      "wst": "https://www.bitkub.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 10361,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/10361.png",
+      "n": "CoinUp.io",
+      "slug": "coinup-io",
+      "wst": "https://www.coinup.io/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1199,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1199.png",
+      "n": "PointPay",
+      "slug": "pointpay",
+      "wst": "https://exchange.pointpay.io/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 11090,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/11090.png",
+      "n": "x.me Exchange",
+      "slug": "voox-exchange",
+      "wst": "https://x.me"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1561,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1561.png",
+      "n": "Bit2Me",
+      "slug": "bit2me",
+      "wst": "https://bit2me.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 258,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/258.png",
+      "n": "Mercado Bitcoin",
+      "slug": "mercado-bitcoin",
+      "wst": "https://www.mercadobitcoin.com.br/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 36,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/36.png",
+      "n": "CEX.IO",
+      "slug": "cex-io",
+      "wst": "https://cex.io"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 194,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/194.png",
+      "n": "Korbit",
+      "slug": "korbit",
+      "wst": "https://www.korbit.co.kr"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 68,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/68.png",
+      "n": "Indodax",
+      "slug": "indodax",
+      "wst": "https://indodax.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 225,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/225.png",
+      "n": "Paribu",
+      "slug": "paribu",
+      "wst": "https://www.paribu.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 564,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/564.png",
+      "n": "SecondBTC",
+      "slug": "secondbtc",
+      "wst": "https://secondbtc.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 1653,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1653.png",
+      "n": "Zoomex",
+      "slug": "zoomex",
+      "wst": "https://www.zoomex.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 9717,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9717.png",
+      "n": "Koinbay",
+      "slug": "koinbay",
+      "wst": "https://www.koinbay.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 1289,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1289.png",
+      "n": "WOO X",
+      "slug": "woox",
+      "wst": "https://woox.io/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1234,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1234.png",
+      "n": "Venus",
+      "slug": "venus",
+      "wst": "https://app.venus.io"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1411,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1411.png",
+      "n": "Coinstore",
+      "slug": "coinstore",
+      "wst": "https://www.coinstore.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 12099,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12099.png",
+      "n": "AstralX",
+      "slug": "astralx",
+      "wst": "https://www.astralx.com/en-us"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 407,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/407.png",
+      "n": "DigiFinex",
+      "slug": "digifinex",
+      "wst": "https://www.digifinex.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1601,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1601.png",
+      "n": "Bullish",
+      "slug": "bullish",
+      "wst": "https://bullish.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1215,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1215.png",
+      "n": "Foxbit",
+      "slug": "foxbit",
+      "wst": "https://foxbit.com.br/grafico-bitcoin/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 42,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/42.png",
+      "n": "HitBTC",
+      "slug": "hitbtc",
+      "wst": "https://hitbtc.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 224,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/224.png",
+      "n": "BTC Markets",
+      "slug": "btc-markets",
+      "wst": "https://btcmarkets.net/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 440,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/440.png",
+      "n": "Tothemoon",
+      "slug": "tothemoon",
+      "wst": "https://tothemoon.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 166,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/166.png",
+      "n": "Independent Reserve",
+      "slug": "independent-reserve",
+      "wst": "https://www.independentreserve.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 10963,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/10963.png",
+      "n": "BITmarkets",
+      "slug": "bitmarkets",
+      "wst": "https://bitmarkets.com/en"
+     },
+     {
+      "cat": [
+       "DERIVATIVES"
+      ],
+      "id": 1379,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1379.png",
+      "n": "Batonex",
+      "slug": "wisebitcoin",
+      "wst": "https://www.batonex.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 5344,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/5344.png",
+      "n": "Coins.ph",
+      "slug": "coins-pro",
+      "wst": "https://www.pro.coins.ph/en-ph/trade/BTC/PHP/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 657,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/657.png",
+      "n": "CoinJar",
+      "slug": "coinjar",
+      "wst": "https://www.coinjar.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 857,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/857.png",
+      "n": "FMFW.io",
+      "slug": "bitcoin-com-exchange",
+      "wst": "https://fmfw.io/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 9384,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9384.png",
+      "n": "BitDelta",
+      "slug": "bitdelta",
+      "wst": "https://bitdelta.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 1133,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1133.png",
+      "n": "TruBit Pro Exchange",
+      "slug": "trubit-exchange",
+      "wst": "https://www.trubit.com/pro"
+     },
+     {
+      "cat": [
+       "DERIVATIVES"
+      ],
+      "id": 6472,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/6472.png",
+      "n": "Flipster",
+      "slug": "flipster",
+      "wst": "https://flipster.io/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1173,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1173.png",
+      "n": "LMAX Digital",
+      "slug": "lmax-digital",
+      "wst": "https://www.lmaxdigital.com/overview/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1029,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1029.png",
+      "n": "CoinZoom",
+      "slug": "coinzoom",
+      "wst": "https://www.coinzoom.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1100,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1100.png",
+      "n": "Ripio",
+      "slug": "ripio",
+      "wst": "https://ripio.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 3735,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/3735.png",
+      "n": "ICRYPEX",
+      "slug": "icrypex",
+      "wst": "https://www.icrypex.com/en"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 8304,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/8304.png",
+      "n": "Nonkyc.io Exchange",
+      "slug": "nonkyc",
+      "wst": "https://nonkyc.io/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 488,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/488.png",
+      "n": "Coinmetro",
+      "slug": "coinmetro",
+      "wst": "https://coinmetro.com/"
+     },
+     {
+      "cat": [
+       "DERIVATIVES"
+      ],
+      "id": 12131,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12131.png",
+      "n": "BitradeX",
+      "slug": "bitradex",
+      "wst": "https://www.bitradex.ai/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 1188,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1188.png",
+      "n": "BYDFi",
+      "slug": "bydfi",
+      "wst": "https://www.bydfi.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 949,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/949.png",
+      "n": "CoinDCX",
+      "slug": "coindcx",
+      "wst": "https://coindcx.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 7850,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/7850.png",
+      "n": "Bitcastle",
+      "slug": "bitcastle",
+      "wst": "https://bitcastle.io/en"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 370,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/370.png",
+      "n": "ZebPay",
+      "slug": "zebpay",
+      "wst": "https://www.zebpay.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1009,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1009.png",
+      "n": "Giottus",
+      "slug": "giottus",
+      "wst": "https://www.giottus.com/tradeview"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 5319,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/5319.png",
+      "n": "SuperEx",
+      "slug": "superex",
+      "wst": "https://www.superex.com/index"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 10109,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/10109.png",
+      "n": "Niza.io",
+      "slug": "niza-global",
+      "wst": "https://niza.io/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 9665,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9665.png",
+      "n": "ZKE",
+      "slug": "zke",
+      "wst": "https://www.zke.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 633,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/633.png",
+      "n": "Mandala Exchange",
+      "slug": "mandala",
+      "wst": "https://mandala.exchange/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 802,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/802.png",
+      "n": "digitalexchange.id",
+      "slug": "digitalexchange-id",
+      "wst": "https://digitalexchange.id/market"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 567,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/567.png",
+      "n": "Remitano",
+      "slug": "remitano",
+      "wst": "https://remitano.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 9202,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9202.png",
+      "n": "4E",
+      "slug": "4e",
+      "wst": "https://www.eeee.com/"
+     },
+     {
+      "cat": [
+       "DERIVATIVES"
+      ],
+      "id": 10946,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/10946.png",
+      "n": "BitxEX",
+      "slug": "xex",
+      "wst": "https://bitxex.io/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 10992,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/10992.png",
+      "n": "AIA Exchange",
+      "slug": "aia-exchange",
+      "wst": "https://aianalysisexchange.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 10962,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/10962.png",
+      "n": "BASEKX",
+      "slug": "ekbit",
+      "wst": "https://www.basekx.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 376,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/376.png",
+      "n": "Bitbns",
+      "slug": "bitbns",
+      "wst": "https://bitbns.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1131,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1131.png",
+      "n": "Bitcoiva",
+      "slug": "bitcoiva",
+      "wst": "https://www.bitcoiva.com/markets"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 12456,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12456.png",
+      "n": "Bitbaby",
+      "slug": "bitbabyexchange",
+      "wst": "https://www.bitbaby.com"
+     },
+     {
+      "cat": [
+       "DERIVATIVES"
+      ],
+      "id": 1222,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1222.png",
+      "n": "Gleec BTC",
+      "slug": "gleec-btc",
+      "wst": "https://exchange.gleec.com/"
+     },
+     {
+      "cat": [
+       "DERIVATIVES"
+      ],
+      "id": 1371,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1371.png",
+      "n": "Globe Derivative Exchange",
+      "slug": "globe-derivative-exchange",
+      "wst": "https://globe.exchange/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 1277,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1277.png",
+      "n": "Blockfinex",
+      "slug": "blockfinex",
+      "wst": "https://www.blockfinex.com/en_US/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 9298,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9298.png",
+      "n": "BiKing",
+      "slug": "biking",
+      "wst": "https://www.bikingex.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 350,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/350.png",
+      "n": "CoinEx",
+      "slug": "coinex",
+      "wst": "https://www.coinex.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 34398,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/34398.png",
+      "n": "Revolut X",
+      "slug": "revolut-x",
+      "wst": "https://exchange.revolut.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 12386,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12386.png",
+      "n": "BitTap",
+      "slug": "bittap",
+      "wst": "https://www.bittap.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 11664,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/11664.png",
+      "n": "Cryptomus",
+      "slug": "cryptomus",
+      "wst": "https://cryptomus.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 11136,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/11136.png",
+      "n": "IBIT Global",
+      "slug": "ibit-global",
+      "wst": "https://www.ibitglobal.ai/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 32437,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/32437.png",
+      "n": "Bybit EU",
+      "slug": "bybit-eu",
+      "wst": "https://www.bybit.eu/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 11135,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/11135.png",
+      "n": "TRIV",
+      "slug": "triv",
+      "wst": "https://triv.co.id/id/markets/BTC_IDR"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 12596,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12596.png",
+      "n": "WOO X Pro",
+      "slug": "wooxpro"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 11989,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/11989.png",
+      "n": "LeveX",
+      "slug": "levex",
+      "wst": "https://levex.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 33201,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33201.png",
+      "n": "GudangKripto",
+      "slug": "gudangkripto",
+      "wst": "https://market.gudangkripto.id/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 32688,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/32688.png",
+      "n": "OneBullEx",
+      "slug": "onebullex",
+      "wst": "https://onebullex.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 32784,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/32784.png",
+      "n": "Picol",
+      "slug": "picol",
+      "wst": "https://www.picol.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 33080,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33080.png",
+      "n": "OneEx",
+      "slug": "oneex",
+      "wst": "https://www.oneex.vip/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 32534,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/32534.png",
+      "n": "Gate US",
+      "slug": "gate-us",
+      "wst": "https://www.gate.com/en-us/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 12030,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12030.png",
+      "n": "CoinP",
+      "slug": "coinp",
+      "wst": "https://www.coinp.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 11385,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/11385.png",
+      "n": "BitKan",
+      "slug": "bitkan",
+      "wst": "https://www.bitkan.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1518,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1518.png",
+      "n": "CoinCola",
+      "slug": "coincola",
+      "wst": "https://www.coincola.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 5590,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/5590.png",
+      "n": "CoinTR",
+      "slug": "cointr",
+      "wst": "https://www.cointr.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 12404,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12404.png",
+      "n": "Aivora Exchange",
+      "slug": "aivora-exchange",
+      "wst": "https://www.aivora.com/en_US/market"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 11665,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/11665.png",
+      "n": "Dzengi",
+      "slug": "dzengi-com",
+      "wst": "https://dzengi.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 11124,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/11124.png",
+      "n": "Blynex",
+      "slug": "blynex",
+      "wst": "https://blynex.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 7391,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/7391.png",
+      "n": "Young Platform",
+      "slug": "young-platform",
+      "wst": "https://youngplatform.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 33355,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33355.png",
+      "n": "idax exchange",
+      "slug": "idax-exchange",
+      "wst": "https://www.idax.exchange/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1273,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1273.png",
+      "n": "Kanga Exchange",
+      "slug": "kanga-exchange",
+      "wst": "https://kanga.exchange"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1323,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1323.png",
+      "n": "Kinesis Money",
+      "slug": "kinesis-money",
+      "wst": "https://kinesis.money/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 12578,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12578.png",
+      "n": "EasiCoin",
+      "slug": "easicoin",
+      "wst": "https://www.easicoin.io"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 9217,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9217.png",
+      "n": "GroveX",
+      "slug": "grovex",
+      "wst": "https://www.grovex.io/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 12467,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12467.png",
+      "n": "Gems Trade",
+      "slug": "gems-trade",
+      "wst": "https://www.gems.trade/advanceTrading/btcusdt"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 33260,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33260.png",
+      "n": "BitGW Exchange",
+      "slug": "bitgw-exchange",
+      "wst": "https://www.bitgw.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 11806,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/11806.png",
+      "n": "XBO.com",
+      "slug": "xbo-com",
+      "wst": "https://www.xbo.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 6406,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/6406.png",
+      "n": "Bitlo",
+      "slug": "bitlo",
+      "wst": "https://www.bitlo.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 12218,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12218.png",
+      "n": "XXKK",
+      "slug": "xxkk",
+      "wst": "https://www.xxkk.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 33569,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33569.png",
+      "n": "CoinMy",
+      "slug": "coinmy",
+      "wst": "https://www.coinmy.com/en-us"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 33595,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33595.png",
+      "n": "AEGET",
+      "slug": "aeget",
+      "wst": "https://www.aeget.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 32929,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/32929.png",
+      "n": "Tebbit",
+      "slug": "tebbit",
+      "wst": "https://tebbit.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 12779,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12779.png",
+      "n": "Cofinex",
+      "slug": "cofinex",
+      "wst": "https://cofinex.io/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 33113,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33113.png",
+      "n": "KTX",
+      "slug": "ktx",
+      "wst": "https://www.ktx.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1124,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1124.png",
+      "n": "Bitazza",
+      "slug": "bitazza",
+      "wst": "https://www.bitazza.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 28370,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/28370.png",
+      "n": "CRMClick",
+      "slug": "crmclick",
+      "wst": "https://crmclick.io/#/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 9108,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9108.png",
+      "n": "ChangeNOW",
+      "slug": "changenow",
+      "wst": "https://changenow.io/currencies"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 12266,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12266.png",
+      "n": "BlockFin",
+      "slug": "blockfin",
+      "wst": "https://blockfin.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1531,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1531.png",
+      "n": "NexDAX",
+      "slug": "nexdax",
+      "wst": "https://nexdax.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 12108,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12108.png",
+      "n": "CriptoSwaps",
+      "slug": "criptoswaps",
+      "wst": "https://www.criptoswaps.com/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1250,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1250.png",
+      "n": "Tokpie",
+      "slug": "tokpie",
+      "wst": "https://tokpie.io/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 33228,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33228.png",
+      "n": "WHXEX",
+      "slug": "whxex",
+      "wst": "https://www.whxex.com"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 32686,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/32686.png",
+      "n": "SunX",
+      "slug": "sunx",
+      "wst": "https://sunx.vip/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 7373,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/7373.png",
+      "n": "Koinpark",
+      "slug": "koinpark",
+      "wst": "https://www.koinpark.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 12855,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12855.png",
+      "n": "NEX Exchange",
+      "slug": "all-inx",
+      "wst": "https://n-exchange.io/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 34033,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/34033.png",
+      "n": "Binibit",
+      "slug": "binibit",
+      "wst": "https://binibit.com/en"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 378,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/378.png",
+      "n": "Unocoin",
+      "slug": "unocoin",
+      "wst": "https://www.unocoin.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 12544,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12544.png",
+      "n": "YEX",
+      "slug": "yex",
+      "wst": "https://www.yex.io/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 33178,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33178.png",
+      "n": "ASTX",
+      "slug": "astx",
+      "wst": "https://www.astx.io/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 33326,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/33326.png",
+      "n": "Ulink",
+      "slug": "ulink",
+      "wst": "https://ulinkex.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 11608,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/11608.png",
+      "n": "CEEX exchange",
+      "slug": "ceex-exchange",
+      "wst": "https://www.ceex.com/en-us/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 12155,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/12155.png",
+      "n": "Figure Markets",
+      "slug": "figure-markets",
+      "wst": "https://www.figuremarkets.com/exchange/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 1043,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/1043.png",
+      "n": "Ndax",
+      "slug": "ndax",
+      "wst": "https://ndax.io/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 9786,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9786.png",
+      "n": "CoinLion",
+      "slug": "coinlion",
+      "wst": "https://www.coinlion.com/crypto-markets/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 8961,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/8961.png",
+      "n": "BlueBit",
+      "slug": "bluebit",
+      "wst": "https://bluebit.io/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 9584,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/9584.png",
+      "n": "B2Z Exchange",
+      "slug": "b2z-exchange",
+      "wst": "https://www.b2z.exchange/"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 7729,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/7729.png",
+      "n": "5DAX",
+      "slug": "5dax",
+      "wst": "https://5dax.com/"
+     },
+     {
+      "cat": [
+       "SPOT",
+       "DERIVATIVES"
+      ],
+      "id": 406,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/406.png",
+      "n": "BitMart",
+      "slug": "bitmart",
+      "wst": "https://bitmart.com"
+     },
+     {
+      "cat": [
+       "SPOT"
+      ],
+      "id": 425,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/425.png",
+      "n": "WazirX",
+      "slug": "wazirx",
+      "wst": "https://wazirx.com/"
+     },
+     {
+      "cat": [
+       "DERIVATIVES"
+      ],
+      "id": 7893,
+      "lg": "https://s2.coinmarketcap.com/static/img/exchanges/64x64/7893.png",
+      "n": "Coinbase International Exchange",
+      "slug": "coinbase-international-exchange",
+      "wst": "https://international.coinbase.com/"
+     }
+    ],
+    "cid": 7083,
+    "crt": "0x41653c7d61609d856f29355e404f310ec4142cfb",
+    "dec": 18,
+    "ecs": 0,
+    "fpct": "1600302037000",
+    "fpt": "1740319967000",
+    "hld": "0",
+    "la": 0,
+    "lf": 1,
+    "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+    "liqUsd": "41346752.816541823037457912",
+    "lmc": "5511589517.730780345488672929",
+    "lsmc": "5511589517.730780345488672929",
+    "ltcs": "620994422.61047505988571",
+    "ltda": "1600300800000",
+    "mcap": "8904372612.294181957177129351",
+    "n": "Uniswap",
+    "nps": "10",
+    "own": "",
+    "p": "8.904372612294181957177129350391884",
+    "pcid": 1027,
+    "pdex": "Ethereum",
+    "ph24h": "9.426387415634577261138461531274349644",
+    "pid": 1,
+    "pl24h": "7.631140939554566322391352131169146690",
+    "pls": [
+     {
+      "addr": "0x8626be23f128f5985a5d76359b10bf3db84a7306",
+      "bidx": 1,
+      "exid": 32396,
+      "exn": "Ring Exchange (Ethereum)",
+      "fa": "0xeb2a625b704d73e82946d8d026e1f588eed06416",
+      "liqUsd": "102239395.000180256703457906",
+      "mi": false,
+      "pubAt": "1720249247000",
+      "t0": {
+       "addr": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+       "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png",
+       "liq": "20754.256410748286907402",
+       "liqUsd": "51196430.80351276373160386",
+       "n": "Wrapped Ether",
+       "sym": "WETH"
+      },
+      "t1": {
+       "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+       "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+       "liq": "7060275.728510509110243523",
+       "liqUsd": "51042964.196667492971854046",
+       "n": "Uniswap",
+       "sym": "UNI"
+      },
+      "v24": "0"
+     },
+     {
+      "addr": "0x1d42064fc4beb5f8aaf85f4617ae8b3b5b8bd801",
+      "bidx": 0,
+      "exid": 1348,
+      "exn": "Uniswap v3 (Ethereum)",
+      "fa": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+      "liqUsd": "16591843.911480545941138778",
+      "mi": false,
+      "pubAt": "1620157956000",
+      "t0": {
+       "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+       "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+       "liq": "1192312.014238213324391713",
+       "liqUsd": "10616289.976992285459747587",
+       "n": "Uniswap",
+       "sym": "UNI"
+      },
+      "t1": {
+       "addr": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+       "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png",
+       "liq": "2279.377729518004210686",
+       "liqUsd": "5975553.934488260481391191",
+       "n": "Wrapped Ether",
+       "sym": "WETH"
+      },
+      "v24": "15876831.31027358984827586"
+     },
+     {
+      "addr": "0x9a5c1d2f4a7a7962a63259de6fcc1afb1d0aa1abdf5d19c23d22fd78953c5167",
+      "bidx": 0,
+      "exid": 11955,
+      "exn": "Uniswap v4 (Ethereum)",
+      "fa": "0x000000000004444c5dc75cb358380d2e3de08a90",
+      "liqUsd": "6672349.712935641124502669",
+      "mi": false,
+      "pubAt": "1738173491000",
+      "t0": {
+       "addr": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+       "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png",
+       "liq": "480236.919512382637295754",
+       "liqUsd": "4272785.27916938435823793",
+       "n": "Uniswap",
+       "sym": "UNI"
+      },
+      "t1": {
+       "addr": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+       "lg": "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png",
+       "liq": "2399889.05587",
+       "liqUsd": "2399564.43376625676626474",
+       "n": "USD Coin",
+       "sym": "USDC"
+      },
+      "v24": "2601631.750607499133671891"
+     }
+    ],
+    "plt": "Ethereum",
+    "pt": "1789773539000",
+    "pubAt": "1600107086000",
+    "rl": "safe",
+    "sts": [
+     {
+      "but": "8",
+      "bvu": "27900.395694569141734789",
+      "nb": "20",
+      "ns": "15",
+      "pc": 0.0017,
+      "sut": "13",
+      "svu": "640.689328756462842875",
+      "tp": "5m",
+      "txs": "35",
+      "ut": "21",
+      "vu": "28541.085023325604577663"
+     },
+     {
+      "but": "140",
+      "bvu": "374417.649488461200742794",
+      "nb": "334",
+      "ns": "241",
+      "pc": -0.002,
+      "sut": "136",
+      "svu": "499157.403509218513336747",
+      "tp": "1h",
+      "txs": "575",
+      "ut": "223",
+      "vu": "873575.05299767971407954"
+     },
+     {
+      "but": "259",
+      "bvu": "1221041.558873210491940035",
+      "nb": "775",
+      "ns": "674",
+      "pc": 0.0029,
+      "sut": "282",
+      "svu": "1254833.138507963431402968",
+      "tp": "4h",
+      "txs": "1449",
+      "ut": "419",
+      "vu": "2475874.697381173923343003"
+     },
+     {
+      "but": "1086",
+      "bvu": "16272067.163572513845099613",
+      "nb": "6590",
+      "ns": "7109",
+      "pc": 0.1608,
+      "sut": "1451",
+      "svu": "14798723.922921520385591623",
+      "tp": "24h",
+      "txs": "13699",
+      "ut": "1992",
+      "vu": "31070791.086494034230691235"
+     },
+     {
+      "but": "2",
+      "bvu": "356.978659143361291295",
+      "nb": "2",
+      "ns": "0",
+      "pc": 0.0002,
+      "sut": "0",
+      "svu": "0",
+      "tp": "1m",
+      "txs": "2",
+      "ut": "2",
+      "vu": "356.978659143361291295"
+     }
+    ],
+    "sym": "UNI",
+    "tg": "",
+    "ts": "1000000000.000000000000000000",
+    "turl": "https://ring.exchange/#/swap",
+    "tw": "https://twitter.com/Uniswap",
+    "web": "https://uniswap.org/blog/uni/,https://uniswap.org/"
+   },
+   "status": {
+    "credit_count": 1,
+    "elapsed": 185,
+    "error_code": "0",
+    "error_message": "",
+    "timestamp": "2026-09-18T23:21:20.416Z"
+   }
+  }
+ },
+ "selection_rule": "the removal named by --txn",
+ "verdict": {
+  "adjudication": {
+   "adds_counted": 1,
+   "complete": true,
+   "elapsed_s": 252,
+   "kind": "MIGRATION",
+   "other_pools_usd": 2918987.6118409373,
+   "other_removals_in_window": 0,
+   "other_removals_usd": 0,
+   "other_share": 0.9990678120669403,
+   "recovered_share": 0.9990678120669403,
+   "recovered_usd": 2918987.6118409373,
+   "removed_usd": 2921711.1957615116,
+   "same_pool_usd": 0.0,
+   "same_share": 0.0,
+   "severity": "amber",
+   "total_share": 0.9990678120669403
+  },
+  "destination": {
+   "added_usd": 2918987.6118409373,
+   "addr": "0x9a5c1d2f4a7a7962a63259de6fcc1afb1d0aa1abdf5d19c23d22fd78953c5167",
+   "fee_tiers_collapsed": 1,
+   "first_add_ms": 1789702595000,
+   "identity": [
+    "ethereum",
+    "0x000000000004444c5dc75cb358380d2e3de08a90",
+    [
+     "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+     "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+    ]
+   ],
+   "liquidity_now_usd": 6672349.712935641,
+   "pair": "UNI/USDC",
+   "platform": "ethereum",
+   "pubAt_ms": 1738173491000,
+   "venue": "Uniswap v4 (Ethereum)"
+  },
+  "elapsed_s": 252,
+  "evidence": [
+   {
+    "platform": "ethereum",
+    "row": {
+     "a0": -342774.9807839334,
+     "a1": 0,
+     "eid": 1348,
+     "en": "Uniswap v3 (Ethereum)",
+     "f": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+     "h": "26001712",
+     "lgid": "185",
+     "m": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+     "t0a": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+     "t0s": "UNI",
+     "t1a": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+     "t1s": "USDC",
+     "tp": "remove",
+     "ts": "1789702343000",
+     "tu": -2921711.1957615116,
+     "txId": "28",
+     "txn": "0xf560f13928f2e654062a38be2725efd92dc4d56c5071a103927cf92b92074793"
+    }
+   },
+   {
+    "platform": "ethereum",
+    "row": {
+     "a0": 342774.9807839334,
+     "a1": 0,
+     "eid": 11955,
+     "en": "Uniswap v4 (Ethereum)",
+     "f": "0x000000000004444c5dc75cb358380d2e3de08a90",
+     "h": "26001733",
+     "lgid": "241",
+     "m": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+     "t0a": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+     "t0s": "UNI",
+     "t1a": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+     "t1s": "USDC",
+     "tp": "add",
+     "ts": "1789702595000",
+     "tu": 2918987.6118409373,
+     "txId": "241",
+     "txn": "0x0b8c0bdbada121485d7c4009ca87b22ba5c5d284afc8751277d00036f8f89fb0"
+    }
+   }
+  ],
+  "follows": [
+   {
+    "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+    "complete": true,
+    "error": null,
+    "jit_dropped": 0,
+    "pages": 1,
+    "platform": "ethereum",
+    "reached_window_start": true,
+    "rows_in_window": 2,
+    "rows_total": 6,
+    "throttled": false
+   },
+   {
+    "address": "0xbf5140a22578168fd562dccf235e5d43a02ce9b1",
+    "complete": true,
+    "error": null,
+    "jit_dropped": 0,
+    "pages": 1,
+    "platform": "bsc",
+    "reached_window_start": true,
+    "rows_in_window": 0,
+    "rows_total": 0,
+    "throttled": false
+   },
+   {
+    "address": "0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0",
+    "complete": true,
+    "error": null,
+    "jit_dropped": 0,
+    "pages": 1,
+    "platform": "arbitrum",
+    "reached_window_start": true,
+    "rows_in_window": 0,
+    "rows_total": 0,
+    "throttled": false
+   },
+   {
+    "address": "0x8f187aa05619a017077f5308904739877ce9ea21",
+    "complete": true,
+    "error": null,
+    "jit_dropped": 0,
+    "pages": 1,
+    "platform": "unichain",
+    "reached_window_start": true,
+    "rows_in_window": 0,
+    "rows_total": 0,
+    "throttled": false
+   },
+   {
+    "address": "0xb33eaad8d922b1083446dc23f610c2567fb5180f",
+    "complete": true,
+    "error": null,
+    "jit_dropped": 0,
+    "pages": 1,
+    "platform": "polygon",
+    "reached_window_start": true,
+    "rows_in_window": 0,
+    "rows_total": 0,
+    "throttled": false
+   }
+  ],
+  "kind": "MIGRATION",
+  "notes": [],
+  "recovered_share": 0.9990678120669403,
+  "recovered_usd": 2918987.6118409373,
+  "refused": [
+   "Solana: 8FU95xFJ\u2026Ceab36 is not an EVM address \u2014 a maker there cannot be this wallet",
+   "Gnosis: 0x4537e3\u2026af9d74 holds $239 of DEX liquidity \u2014 below the $10,000 floor, not followed",
+   "HECO: 0x22c54c\u20265c46e6 holds $0 of DEX liquidity \u2014 below the $10,000 floor, not followed",
+   "Avalanche: 0x8ebaf2\u2026ba8580 holds $214 of DEX liquidity \u2014 below the $10,000 floor, not followed"
+  ],
+  "removal": {
+   "a0": -342774.9807839334,
+   "a1": 0,
+   "eid": 1348,
+   "en": "Uniswap v3 (Ethereum)",
+   "f": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+   "h": "26001712",
+   "lgid": "185",
+   "m": "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56",
+   "t0a": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+   "t0s": "UNI",
+   "t1a": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+   "t1s": "USDC",
+   "tp": "remove",
+   "ts": "1789702343000",
+   "tu": -2921711.1957615116,
+   "txId": "28",
+   "txn": "0xf560f13928f2e654062a38be2725efd92dc4d56c5071a103927cf92b92074793"
+  },
+  "removal_share_of_pool": 0.6805197989093666,
+  "removed_usd": 2921711.1957615116,
+  "rule": {
+   "full": 0.7,
+   "partial_min": 0.1
+  },
+  "severity": "amber",
+  "source_pool": {
+   "addr": "0xd0fc8ba7e267f2bc56044a7715a489d851dc6d78",
+   "fee_tiers": 1,
+   "identity": [
+    "ethereum",
+    "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+    [
+     "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+     "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+    ]
+   ],
+   "liqUsd": 1371641.033584328,
+   "liquidity_now_usd": 1371641.033584328,
+   "pair": "UNI/USDC",
+   "pubAt_ms": 1620273020000,
+   "venue": "Uniswap v3 (Ethereum)"
+  },
+  "token": {
+   "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+   "cid": 7083,
+   "liqUsd": 41346752.81654182,
+   "name": "Uniswap",
+   "platform": "ethereum",
+   "sym": "UNI"
+  },
+  "window_h": {
+   "back": 6.0,
+   "fwd": 6.0
+  }
+ },
+ "wall_clock_s": 29.38
+}

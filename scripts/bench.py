@@ -83,7 +83,11 @@ def main():
     out = {"iterations": a.iterations, "mode": "replay" if a.replay else "live"}
 
     if a.replay:
-        names = [n for n in ("hero", "exit", "rebalance") if (PROOF / f"{n}.json").exists()]
+        names = [
+            n
+            for n in ("hero", "runner_up", "exit", "rebalance", "uni_v3_v4")
+            if (PROOF / f"{n}.json").exists()
+        ]
         if not names:
             sys.exit("no receipts in docs/proof — run: python3 scripts/seed.py")
         print(f"replay — adjudicate() over {', '.join(names)}, no network\n")
@@ -134,7 +138,10 @@ def main():
                 throttled += 1
                 continue
             inv_s.append(time.perf_counter() - t)
-            calls.append(len(c.calls))
+            n_calls = len(c.calls)
+            calls.append(n_calls)
+            # a call that backed off and then answered is recorded once, with its attempts
+            throttled += sum(max(0, x.get("attempts", 1) - 1) for x in c.calls)
             throttled += sum(1 for x in c.calls if x["status"] in (429, 500, 0))
             t = time.perf_counter()
             rows, meta = follow_maker(c, platform, address, maker, t0_ms=ts_ms(v.removal))
@@ -144,7 +151,7 @@ def main():
             adj_ms.append((time.perf_counter() - t) * 1000)
             print(
                 f"  iteration {i + 1}: {v.kind} {v.recovered_share * 100:.1f}% · "
-                f"{len(c.calls)} calls · {inv_s[-1]:.1f} s"
+                f"{n_calls} calls · {inv_s[-1]:.1f} s"
             )
         if not inv_s:
             sys.exit("every iteration failed — the anonymous tier is rate-limiting")
