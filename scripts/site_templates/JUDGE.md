@@ -65,7 +65,7 @@ Full annotated transcript with the receipt: **[DEMO.md](DEMO.md)**.
 | **Credits used** | **0** — every endpoint is on the keyless `/public-api` surface |
 | Credentials | none; run with every CMC env var unset |
 | Base rate | **{{base.n}}** removals ≥ ${{base.min_usd}} followed one wallet at a time: {{base.summary}} — **{{base.put_back_pct}}% were the same wallet putting liquidity back within 6 h** |
-| Tests | **{{tests}}** offline + {{tests_live}} live · **{{property_cases}} property cases, 0 failing** |
+| Tests | **{{tests}}** offline tests + {{tests_live}} live · **{{property_cases}} property cases, 0 failing** |
 | Latency | adjudicate replay p50 **{{bench.replay_p50}} ms** (n={{bench.replay_n}}) · live investigation p50 **{{bench.live_p50}} s**, p95 {{bench.live_p95}} s (n={{bench.live_n}}) |
 | Raw receipts | [`hero.json`](docs/proof/hero.json) · [`exit.json`](docs/proof/exit.json) · [`rebalance.json`](docs/proof/rebalance.json) · [`jit.json`](docs/proof/jit.json) · [`base_rate.json`](docs/proof/base_rate.json) · [`live_run.json`](docs/proof/live_run.json) · [`bench_live.json`](docs/proof/bench_live.json) · [`bench_replay.json`](docs/proof/bench_replay.json) · [`spike_maker.json`](docs/proof/spike_maker.json) |
 
