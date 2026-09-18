@@ -20,7 +20,7 @@ it is not the product.
 **27 s is the clean-path time** (p50 of 5 live runs, [`bench_live.json`](docs/proof/bench_live.json)):
 11–14 keyless calls at 2 s spacing. The endpoint is CoinMarketCap's shared anonymous tier,
 rate-limited per IP. If it is throttling when you run, the script backs off (15 s, 30 s, 60 s)
-and says so — the run below hit exactly one such backoff and took 51 s — and if the quota from
+and says so — the run below hit exactly one such backoff and took 50.6 s — and if the quota from
 your IP is exhausted outright it stops with a message that names the two ways through: wait a
 minute, or export a free key from [coinmarketcap.com/api](https://coinmarketcap.com/api) as
 `CMC_API_KEY`, which moves the identical calls to the keyed endpoint. The key is an escape hatch,
@@ -29,11 +29,11 @@ announces itself on its first line, its last line and in its receipt, so it can 
 one. An exhausted quota exits **75** (`EX_TEMPFAIL`); "nothing qualified" exits **3**; a verdict
 exits **0**.
 
-## Receipt — live run, 2026-09-18T23:06:35Z
+## Receipt — live run, 2026-09-18T23:36:32Z
 
 | | |
 |---|---|
-| **Wall clock** | **51.0 s**, cold start to final line — including one 15 s backoff on the first call (the receipt records it as `attempts: 2`) |
+| **Wall clock** | **50.6 s**, cold start to final line — including one 15 s backoff on the first call (the receipt records it as `attempts: 2`) |
 | **Token** | UNI on Ethereum, `0x1f9840a85d5af5bf1d1762f925bdaddc4201f984` |
 | **Rows scanned** | 300 (3 pages × 100, `minVolume=100000`) — 150 non-JIT removals, 0 JIT transactions, 0 implausible rows |
 | **The removal** | **−$21,330,275** out of Ring Exchange (Ethereum) · UNI/WBTC, 2026-09-02 03:59:11 UTC, maker `0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9` |
@@ -47,20 +47,20 @@ exits **0**.
 forwarding address — keyless · ethereum · 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984
 
   following the wallet
-    GET /v1/dex/token                    platform=ethereum address=0x1f9840…01f984                  200  1175 ms
-    GET /v1/dex/liquidity-change/list    platform=ethereum address=0x1f9840…01f984 minVolume=100000 200   909 ms  100 rows
-    GET /v1/dex/liquidity-change/list    platform=ethereum address=0x1f9840…01f984 minVolume=100000 lastId=AVd6RTNP…E9PQ== 200  1072 ms  100 rows
-    GET /v1/dex/liquidity-change/list    platform=ethereum address=0x1f9840…01f984 minVolume=100000 lastId=AVd6RTNP…YwPQ== 200   606 ms  100 rows
-    GET /v1/dex/token/pools              platform=ethereum address=0x1f9840…01f984 size=20          200   494 ms  20 items
-    GET /v1/dex/liquidity-change/list    platform=ethereum address=0x1f9840…01f984 maker=0x4f0aa5…8bb9a9 200   735 ms  2 rows
-    GET /v1/dex/search                   q=0x1f9840…01f984                                          200   928 ms  4 tokens
-    GET /v1/dex/search                   q=UNI                                                      200   479 ms  50 tokens
-    GET /v2/cryptocurrency/info          id=7083                                                    200   294 ms
-    GET /v1/dex/liquidity-change/list    platform=bsc address=0xbf5140…2ce9b1 maker=0x4f0aa5…8bb9a9 200   550 ms  0 rows
-    GET /v1/dex/liquidity-change/list    platform=arbitrum address=0xfa7f89…f1f7f0 maker=0x4f0aa5…8bb9a9 200   538 ms  0 rows
-    GET /v1/dex/liquidity-change/list    platform=unichain address=0x8f187a…e9ea21 maker=0x4f0aa5…8bb9a9 200   580 ms  0 rows
-    GET /v1/dex/liquidity-change/list    platform=polygon address=0xb33eaa…b5180f maker=0x4f0aa5…8bb9a9 200   543 ms  0 rows
-    GET /v4/dex/pairs/quotes/latest      network_slug=ethereum contract_address=0x8626be…4a7306     200   694 ms  1 items
+    GET /v1/dex/token                    platform=ethereum address=0x1f9840…01f984                  200   487 ms 
+    GET /v1/dex/liquidity-change/list    platform=ethereum address=0x1f9840…01f984 minVolume=100000 200  1004 ms  100 rows
+    GET /v1/dex/liquidity-change/list    platform=ethereum address=0x1f9840…01f984 minVolume=100000 lastId=AVd6RTNP…E9PQ== 200   641 ms  100 rows
+    GET /v1/dex/liquidity-change/list    platform=ethereum address=0x1f9840…01f984 minVolume=100000 lastId=AVd6RTNP…YwPQ== 200   573 ms  100 rows
+    GET /v1/dex/token/pools              platform=ethereum address=0x1f9840…01f984 size=20          200   516 ms  20 items
+    GET /v1/dex/liquidity-change/list    platform=ethereum address=0x1f9840…01f984 maker=0x4f0aa5…8bb9a9 200   806 ms  2 rows
+    GET /v1/dex/search                   q=0x1f9840…01f984                                          200   466 ms  4 tokens
+    GET /v1/dex/search                   q=UNI                                                      200  1180 ms  50 tokens
+    GET /v2/cryptocurrency/info          id=7083                                                    200   297 ms 
+    GET /v1/dex/liquidity-change/list    platform=bsc address=0xbf5140…2ce9b1 maker=0x4f0aa5…8bb9a9 200   522 ms  0 rows
+    GET /v1/dex/liquidity-change/list    platform=arbitrum address=0xfa7f89…f1f7f0 maker=0x4f0aa5…8bb9a9 200   501 ms  0 rows
+    GET /v1/dex/liquidity-change/list    platform=unichain address=0x8f187a…e9ea21 maker=0x4f0aa5…8bb9a9 200   541 ms  0 rows
+    GET /v1/dex/liquidity-change/list    platform=polygon address=0xb33eaa…b5180f maker=0x4f0aa5…8bb9a9 200   955 ms  0 rows
+    GET /v4/dex/pairs/quotes/latest      network_slug=ethereum contract_address=0x8626be…4a7306     200   647 ms  1 items
 
   ● LP REMOVED  −$21,330,275   Ring Exchange (Ethereum) · UNI/WBTC   2026-09-02 03:59:11 UTC
     maker 0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9 · share of pool unknown · txn 0x5081d9…dcd495
@@ -83,14 +83,13 @@ forwarding address — keyless · ethereum · 0x1f9840a85d5af5bf1d1762f925bdaddc
   notes
     · share of pool unknown — the pool is not in the token's pool list (20 returned), so its depth now is not known
 
-  14 calls · 14 × 200 · 0 credits · 51.0 s · keyless
+  14 calls · 14 × 200 · 0 credits · 50.6 s · keyless
   wrote docs/proof/live_run.json
 ```
 
 (The first line of the actual terminal output was the backoff notice on stderr —
 `throttled (HTTP 429 (error 1022): You've reached the limit for anonymous access…) — waiting 15s
-(attempt 1/3)` — which is why 51 s, not 27. The notes line above is the wording the current
-build prints; the committed receipt has the earlier phrasing of the same note.)
+(attempt 1/3)` — which is why 50.6 s, not 27.)
 
 ### Read the two rows the way an LP would
 
@@ -186,6 +185,9 @@ the anonymous tier's 2 s spacing plus network. The replay was byte-identical 1,0
 times (invariant I4).
 
 ## Tests
+
+`make test` runs **117** offline tests in about ten seconds; `make test-live` runs 8 more
+against the real contract.
 
 | | Count |
 |---|---|
