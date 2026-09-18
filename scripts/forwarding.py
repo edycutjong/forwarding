@@ -958,7 +958,7 @@ def watch(
     webhook=None,
     cross_chain=True,
     client=None,
-    out=sys.stdout,
+    out=None,
     sleep=time.sleep,
 ):
     """Poll each watched token; every NEW qualifying removal is investigated as it lands.
@@ -968,6 +968,7 @@ def watch(
     cycles=1, where the newest qualifying removal on each token IS the demo.
     """
     c = client or Client()
+    out = out or sys.stdout
     seen = {}
     fired = []
     n = 0
@@ -1054,8 +1055,9 @@ def post_webhook(url, verdict):
 # ── CLI ───────────────────────────────────────────────────────────────────────────────────────
 
 
-def print_trace_line(receipt_, body, out=sys.stdout):
+def print_trace_line(receipt_, body, out=None):
     """One line per call: endpoint, params, status, ms, what came back. The trace IS the proof."""
+    out = out or sys.stdout
     p = receipt_["params"]
     what = " ".join(
         f"{k}={short(v, 6) if len(str(v)) > 24 else v}" for k, v in p.items() if k != "limit"
@@ -1076,7 +1078,8 @@ def print_trace_line(receipt_, body, out=sys.stdout):
     )
 
 
-def print_verdict(v, out=sys.stdout):
+def print_verdict(v, out=None):
+    out = out or sys.stdout
     r = v.removal
     print(file=out)
     print(
