@@ -148,7 +148,10 @@ def main():
         "cid": hit[0].get("cid") if hit else None,
         "response": body,
     }
-    print(f"   status {st}, {len(tks)} rows, exact hit: {bool(hit)}, cid {hit[0].get('cid') if hit else None}")
+    print(
+        f"   status {st}, {len(tks)} rows, exact hit: {bool(hit)}, "
+        f"cid {hit[0].get('cid') if hit else None}"
+    )
 
     out["calls"] = CALLS
     evm = re.compile(r"^0x[0-9a-f]{40}$")
