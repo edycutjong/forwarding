@@ -638,9 +638,20 @@ def adjudicate(removal, adds, *, source_platform, complete=True, pools=None):
     if dest and kind in ("MIGRATION", "CONSOLIDATION", "PARTIAL"):
         elapsed = (dest["first_add_ms"] - ts_ms(removal)) // 1000
     elif kind == "REBALANCE":
-        same_rows = [a["row"] for a in adds if (a["platform"], pool_id(a["row"])) == src]
-        if same_rows:
-            elapsed = (min(ts_ms(r) for r in same_rows) - ts_ms(removal)) // 1000
+        # the first ADD back into the pool — never the removal row itself, which is also in
+        # the window (live 2026-09-19: LINK printed "0 s later" for a 7-minute re-add)
+        same_adds = [
+            a["row"]
+            for a in adds
+            if a["row"].get("tp") == "add" and (a["platform"], pool_id(a["row"])) == src
+        ]
+        if same_adds:
+            elapsed = (min(ts_ms(r) for r in same_adds) - ts_ms(removal)) // 1000
+    other_removes = [
+        a["row"]
+        for a in adds
+        if a["row"].get("tp") == "remove" and a["row"].get("txn") != removal.get("txn")
+    ]
     return {
         "kind": kind,
         "severity": SEVERITY[kind],
@@ -656,6 +667,10 @@ def adjudicate(removal, adds, *, source_platform, complete=True, pools=None):
         "elapsed_s": elapsed,
         "complete": complete,
         "adds_counted": sum(1 for a in adds if a["row"].get("tp") == "add"),
+        # the same wallet's OTHER removals inside the window: when there are any, the adds are
+        # attributed to the whole window, not to this removal alone, and the share can exceed 1
+        "other_removals_in_window": len(other_removes),
+        "other_removals_usd": sum(usd(r) for r in other_removes),
     }
 
 
@@ -852,6 +867,12 @@ def investigate(
     complete = all(f["complete"] for f in follows)
     keyed_pools = {(platform, k): v for k, v in pools.items()}
     a = adjudicate(removal, adds, source_platform=platform, complete=complete, pools=keyed_pools)
+    if a["other_removals_in_window"]:
+        notes.append(
+            f"this wallet made {a['other_removals_in_window']} other removal(s) totalling "
+            f"${a['other_removals_usd']:,.0f} inside the ±{back_h:.0f} h window — the adds are "
+            "attributed to the whole window, so the share is over all of them, not this one alone"
+        )
     dest = a["destination"]
     if dest and dest["platform"] != platform and dest["addr"] is None:
         # a cross-chain destination: name it from that chain's pool list (one more call)

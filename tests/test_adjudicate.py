@@ -256,3 +256,27 @@ def test_the_maker_field_never_enters_the_arithmetic_only_the_join():
     """A row by ANOTHER wallet must not be handed to adjudicate — follow_maker keys on `m`,
     adjudicate trusts its input. This pins that the fixture rows all carry the hero maker."""
     assert HERO_REMOVE["m"] == HERO_ADD["m"] == MAKER
+
+
+def test_a_rebalance_measures_elapsed_to_the_first_add_not_to_the_removal_itself():
+    """LINK, live 2026-09-19: the removal row is inside its own window, and the elapsed time
+    was taken from it — '0 s later' for a re-add that came 7 minutes after."""
+    out = row("remove", -861881.14, t1a=WETH, t1s="WETH", txn="0xdc88")
+    back = row("add", 855061.09, ts=T0 + 420_000, t1a=WETH, t1s="WETH", txn="0xcce0")
+    a = adjudicate(out, adds(out, back), source_platform="ethereum")
+    assert a["kind"] == "REBALANCE"
+    assert a["elapsed_s"] == 420
+
+
+def test_a_wallet_that_cycled_twice_in_the_window_is_disclosed_not_hidden():
+    """LINK, live 2026-09-19: two remove/re-add cycles 4.5 h apart, both inside ±6 h — the
+    adds sum to 200% of one removal. The number stands; the other removals are counted."""
+    out1 = row("remove", -861881.14, t1a=WETH, t1s="WETH", txn="0xdc88")
+    add1 = row("add", 855061.09, ts=T0 + 420_000, t1a=WETH, t1s="WETH", txn="0xcce0")
+    out2 = row("remove", -861585.51, ts=T0 + 16_224_000, t1a=WETH, t1s="WETH", txn="0x16b6")
+    add2 = row("add", 854072.22, ts=T0 + 16_560_000, t1a=WETH, t1s="WETH", txn="0xba25")
+    a = adjudicate(out1, adds(out1, add1, out2, add2), source_platform="ethereum")
+    assert a["kind"] == "REBALANCE"
+    assert a["recovered_share"] > 1.9
+    assert a["other_removals_in_window"] == 1
+    assert abs(a["other_removals_usd"] - 861585.51) < 1e-6
