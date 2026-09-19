@@ -167,6 +167,7 @@ footer{margin:64px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px soli
     <a href="{{repo}}/blob/main/JUDGE.md" target="_blank" rel="noopener noreferrer">For judges</a>
     <a href="{{repo}}/blob/main/DEMO.md" target="_blank" rel="noopener noreferrer">Demo &amp; receipt</a>
     <a href="{{repo}}/blob/main/FEEDBACK.md" target="_blank" rel="noopener noreferrer">API feedback</a>
+    <a href="pitch/">Pitch deck</a>
     <a href="#live">Run it live</a>
   </nav>
 </header>
@@ -297,7 +298,7 @@ footer{margin:64px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px soli
 </section>
 
 <footer>
-  <span>{{tests}} tests · {{property_cases}} property cases, 0 failing · adjudicate replay p50 {{bench.replay_p50}} ms · <a href="{{repo}}" target="_blank" rel="noopener noreferrer">source (MIT)</a></span>
+  <span>{{tests}} tests · {{property_cases}} property cases, 0 failing · adjudicate replay p50 {{bench.replay_p50}} ms · <a href="{{repo}}" target="_blank" rel="noopener noreferrer">source (MIT)</a> · <a href="{{repo}}/releases/latest" target="_blank" rel="noopener noreferrer">latest release</a> · <a href="pitch/">pitch deck</a></span>
   <span>Built for the <a href="{{event}}" target="_blank" rel="noopener noreferrer">Build with CMC: API Hackathon</a> · AI Agents &amp; Automation · rendered {{rendered_utc}} from <span class="mono">docs/proof/*.json</span></span>
 </footer>
 
@@ -325,6 +326,10 @@ footer{margin:64px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px soli
   document.querySelectorAll('button.copy').forEach(function(b){b.addEventListener('click',function(){var pre=document.getElementById(b.dataset.copy);var text=Array.prototype.filter.call(pre.childNodes,function(n){return !(n.classList&&(n.classList.contains('c')||n.tagName==='BUTTON'));}).map(function(n){return n.textContent;}).join('').trim();navigator.clipboard&&navigator.clipboard.writeText(text).then(function(){b.textContent='copied';setTimeout(function(){b.textContent='copy';},1200);});});});
   document.querySelectorAll('.trace .sha').forEach(function(s){s.addEventListener('click',function(){s.textContent=s.textContent.length>8?s.dataset.short:s.dataset.full;});});
 
+  // The proxy lives on Vercel. Served from there the call is same-origin; served from GitHub Pages
+  // ({{pages_host}}) or a local copy it is cross-origin, and api/lookup.py answers with
+  // Access-Control-Allow-Origin: * and a 204 to the preflight, so the same page works from both hosts.
+  var API=/\.vercel\.app$/.test(location.hostname)?'':'{{site_url}}';
   var form=document.getElementById('live-form'),out=document.getElementById('live-out'),go=document.getElementById('go');
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
@@ -349,7 +354,7 @@ footer{margin:64px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px soli
     var platform=document.getElementById('platform').value,address=document.getElementById('address').value.trim();
     go.disabled=true;go.textContent='following…';
     out.innerHTML='<p class="note">following the wallet — up to 8 keyless calls at 0.4 s spacing, usually 5–10 s…</p>';
-    fetch('/api/lookup?platform='+encodeURIComponent(platform)+'&address='+encodeURIComponent(address)).then(function(r){return r.json();}).then(render).catch(function(err){out.innerHTML='<div class="card"><p class="sub">This copy of the page has no proxy behind it (<span class="mono">/api/lookup</span> did not answer: '+esc(err.message)+'). The live surface is the Vercel deployment; from a clone, run the CLI.</p></div>';}).finally(function(){go.disabled=false;go.textContent='Follow the wallet';});
+    fetch(API+'/api/lookup?platform='+encodeURIComponent(platform)+'&address='+encodeURIComponent(address)).then(function(r){return r.json();}).then(render).catch(function(err){out.innerHTML='<div class="card"><p class="sub">The proxy did not answer (<span class="mono">'+esc(API||location.origin)+'/api/lookup</span>: '+esc(err.message)+'). The live surface is the Vercel deployment; from a clone, run the CLI.</p></div>';}).finally(function(){go.disabled=false;go.textContent='Follow the wallet';});
   });
 })();
 </script>
