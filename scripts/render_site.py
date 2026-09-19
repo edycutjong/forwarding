@@ -1146,6 +1146,8 @@ def findings_ctx(live_run, bench_live):
         "find.jit_by": esc(", ".join(f"{n} on {s}" for s, n in jit_by)),
         "find.backoffs": str(sum(1 for c in live_run["calls"] if (c.get("attempts") or 1) > 1)),
         "find.backoff_s": str(forwarding.BACKOFF_S),
+        # the schedule the code runs (BACKOFF_S doubling RETRIES times), never typed: "15 / 30 / 60"
+        "find.backoff_schedule": " / ".join(str(forwarding.BACKOFF_S * 2**i) for i in range(forwarding.RETRIES)),
         "find.live_wall": f"{live_run['wall_clock_s']:.1f}",
         "find.sane_usd": compact_money(forwarding.SANE_USD).replace(".00", ""),
     }
@@ -1438,6 +1440,8 @@ def context():
         "jit.sym": esc(jit["sym"]) if jit else "—",
         "jit.usd": f"{jit['usd']:,.0f}" if jit else "—",
         "endpoints.count": str(len(ENDPOINTS)),
+        "endpoints.others": str(len(ENDPOINTS) - 1),  # "the other N endpoints" in the API lede, counted with the h2
+        "trigger.rows": str(forwarding.TRIGGER_PAGES * forwarding.PAGE),  # the trigger's depth: 3 pages × 100 rows
         "endpoints.rows": "\n".join(
             f'        <tr><td class="mono">{esc(p)}</td><td>{esc(what).replace("`maker=`", "<span class=mono>maker=</span>")}</td><td class="ok-t">yes · 0 credits</td></tr>'
             for p, what in ENDPOINTS

@@ -597,7 +597,7 @@ footer .bottom .ver{color:var(--accent)}
   <div class="wrap">
     <div class="kicker reveal">The API</div>
     <h2 class="reveal d1">6 keyless endpoints. One parameter is the whole join.</h2>
-    <p class="lede reveal d2" style="margin-top:16px">CoinMarketCap publishes, per liquidity event and with no key, the <b>maker's own wallet</b>, the pool's venue and pair, both amounts and the transaction — and <span class="mono">/v1/dex/liquidity-change/list</span> accepts <b><span class="mono">maker=</span></b> as a server-side filter. One call returns that wallet's adds and removes across every pool of the token; the other five endpoints say which pools exist, which contract on which other chain is the same asset, and whether the depth actually arrived.</p>
+    <p class="lede reveal d2" style="margin-top:16px">Per liquidity event, keyless, CoinMarketCap publishes the <b>maker's own wallet</b> — and <span class="mono">/v1/dex/liquidity-change/list</span> accepts <b><span class="mono">maker=</span></b> as a server-side filter: one call returns that wallet's adds and removes across every pool of the token. The other 5 endpoints supply the pools, the cross-chain identity, the depth and the card's header.</p>
     <div class="card reveal" style="margin-top:32px;padding:0 24px">
       <div class="scroll-x">
       <table class="api">
@@ -619,8 +619,8 @@ footer .bottom .ver{color:var(--accent)}
       </div>
       <div class="card finding reveal d2">
         <div class="k">finding 3 · the throttle</div>
-        <div class="v">p50 27.0 s · p95 28.0 s</div>
-        <p>5 keyless investigations end to end, one IP. The transcript below took 50.6 s because <b>the anonymous tier reports its per-IP limit as error 1022, 1011 or a plain 500</b> with no Retry-After; the run hit 1 such backoff of 15 s. The tool backs off 15 / 30 / 60 s, records every retry, and exits 75 when the quota is spent.</p>
+        <div class="v">p50 27.0&nbsp;s · p95 28.0&nbsp;s</div>
+        <p>5 keyless investigations, one IP. The transcript below took 50.6&nbsp;s: <b>the anonymous tier reports its per-IP limit as error 1022, 1011 or 500</b> with no Retry-After, and the run hit 1 backoff of 15&nbsp;s. The tool backs off 15 / 30 / 60&nbsp;s, records every retry, and exits 75 when the quota is spent.</p>
       </div>
     </div>
     <p class="note reveal" style="margin-top:18px">12 dated, evidenced findings for the CoinMarketCap team — and what is worth protecting — in <a href="https://github.com/edycutjong/forwarding/blob/main/FEEDBACK.md" target="_blank" rel="noopener noreferrer">FEEDBACK.md<span class="arrow arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>. Every endpoint the code calls is named above; the render of this page aborts if <span class="mono">scripts/forwarding.py</span> ever calls one it does not.</p>
@@ -631,7 +631,7 @@ footer .bottom .ver{color:var(--accent)}
   <div class="wrap">
     <div class="kicker reveal">Run it before you score it</div>
     <h2 class="reveal d1">No key. No install. About half a minute.</h2>
-    <p class="lede reveal d2" style="margin-top:16px">The judged capability is a stdlib-only script against the keyless surface. With no flags it takes the largest non-JIT removal in the token's last 300 rows, follows the wallet on every chain the asset trades on, and rewrites the alert. The transcript is the bare command's own output, replayed from the receipt it wrote.</p>
+    <p class="lede reveal d2" style="margin-top:16px">The judged capability is a stdlib-only script against the keyless surface. With no flags it takes the largest non-JIT removal in the token's last 300 rows, follows the wallet on every chain the asset trades on, and rewrites the alert. The transcript is the command's output, replayed from its receipt.</p>
     <div class="term reveal">
       <div class="bar"><i></i><i></i><i></i><span>forwarding — keyless</span><button class="copy" id="copy-cmd" type="button" data-copy="git clone https://github.com/edycutjong/forwarding.git &amp;&amp; cd forwarding &amp;&amp; python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984" aria-label="Copy the command">copy</button></div>
       <pre id="cmd"><span class="p">$</span> <span class="cmd">git clone https://github.com/edycutjong/forwarding.git &amp;&amp; cd forwarding</span>

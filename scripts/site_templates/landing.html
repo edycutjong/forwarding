@@ -504,7 +504,7 @@ footer .bottom .ver{color:var(--accent)}
 
     <form class="paste card" id="live" autocomplete="off" aria-labelledby="paste-h">
       <h3 id="paste-h">Paste any token — the same engine, live, keyless</h3>
-      <p class="note">The largest removal in the token's newest 100 rows, followed on this chain through a keyless proxy (CoinMarketCap sends no CORS header, so the browser cannot call it directly). The proxy shares one IP across every visitor against a per-IP anonymous limit, so a 429 is shown as a 429, with the command to run instead — the CLI follows 300 rows and every sibling chain, on a quota of your own.</p>
+      <p class="note">The largest removal in the token's newest 100 rows, followed on this chain through a keyless proxy (CoinMarketCap sends no CORS header, so the browser cannot call it directly). The proxy shares one IP across every visitor against a per-IP anonymous limit, so a 429 is shown as a 429, with the command to run instead — the CLI follows {{trigger.rows}} rows and every sibling chain, on a quota of your own.</p>
       <div class="paste-row">
         <label class="sr-only" for="addr">token contract address</label>
         <input id="addr" name="address" value="0x1f9840a85d5af5bf1d1762f925bdaddc4201f984" placeholder="0x… token contract" spellcheck="false">
@@ -552,7 +552,7 @@ footer .bottom .ver{color:var(--accent)}
   <div class="wrap">
     <div class="kicker reveal">The API</div>
     <h2 class="reveal d1">{{endpoints.count}} keyless endpoints. One parameter is the whole join.</h2>
-    <p class="lede reveal d2" style="margin-top:16px">CoinMarketCap publishes, per liquidity event and with no key, the <b>maker's own wallet</b>, the pool's venue and pair, both amounts and the transaction — and <span class="mono">/v1/dex/liquidity-change/list</span> accepts <b><span class="mono">maker=</span></b> as a server-side filter. One call returns that wallet's adds and removes across every pool of the token; the other five endpoints say which pools exist, which contract on which other chain is the same asset, and whether the depth actually arrived.</p>
+    <p class="lede reveal d2" style="margin-top:16px">Per liquidity event, keyless, CoinMarketCap publishes the <b>maker's own wallet</b> — and <span class="mono">/v1/dex/liquidity-change/list</span> accepts <b><span class="mono">maker=</span></b> as a server-side filter: one call returns that wallet's adds and removes across every pool of the token. The other {{endpoints.others}} endpoints supply the pools, the cross-chain identity, the depth and the card's header.</p>
     <div class="card reveal" style="margin-top:32px;padding:0 24px">
       <div class="scroll-x">
       <table class="api">
@@ -574,8 +574,8 @@ footer .bottom .ver{color:var(--accent)}
       </div>
       <div class="card finding reveal d2">
         <div class="k">finding 3 · the throttle</div>
-        <div class="v">p50 {{bench.live_p50}} s · p95 {{bench.live_p95}} s</div>
-        <p>{{bench.live_n}} keyless investigations end to end, one IP. The transcript below took {{find.live_wall}} s because <b>the anonymous tier reports its per-IP limit as error 1022, 1011 or a plain 500</b> with no Retry-After; the run hit {{find.backoffs}} such backoff of {{find.backoff_s}} s. The tool backs off 15 / 30 / 60 s, records every retry, and exits 75 when the quota is spent.</p>
+        <div class="v">p50 {{bench.live_p50}}&nbsp;s · p95 {{bench.live_p95}}&nbsp;s</div>
+        <p>{{bench.live_n}} keyless investigations, one IP. The transcript below took {{find.live_wall}}&nbsp;s: <b>the anonymous tier reports its per-IP limit as error 1022, 1011 or 500</b> with no Retry-After, and the run hit {{find.backoffs}} backoff of {{find.backoff_s}}&nbsp;s. The tool backs off {{find.backoff_schedule}}&nbsp;s, records every retry, and exits 75 when the quota is spent.</p>
       </div>
     </div>
     <p class="note reveal" style="margin-top:18px">{{feedback.n}} dated, evidenced findings for the CoinMarketCap team — and what is worth protecting — in <a href="{{repo}}/blob/main/FEEDBACK.md" target="_blank" rel="noopener noreferrer">FEEDBACK.md<span class="arrow arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>. Every endpoint the code calls is named above; the render of this page aborts if <span class="mono">scripts/forwarding.py</span> ever calls one it does not.</p>
@@ -586,7 +586,7 @@ footer .bottom .ver{color:var(--accent)}
   <div class="wrap">
     <div class="kicker reveal">Run it before you score it</div>
     <h2 class="reveal d1">No key. No install. About half a minute.</h2>
-    <p class="lede reveal d2" style="margin-top:16px">The judged capability is a stdlib-only script against the keyless surface. With no flags it takes the largest non-JIT removal in the token's last 300 rows, follows the wallet on every chain the asset trades on, and rewrites the alert. The transcript is the bare command's own output, replayed from the receipt it wrote.</p>
+    <p class="lede reveal d2" style="margin-top:16px">The judged capability is a stdlib-only script against the keyless surface. With no flags it takes the largest non-JIT removal in the token's last {{trigger.rows}} rows, follows the wallet on every chain the asset trades on, and rewrites the alert. The transcript is the command's output, replayed from its receipt.</p>
     <div class="term reveal">
       <div class="bar"><i></i><i></i><i></i><span>forwarding — keyless</span><button class="copy" id="copy-cmd" type="button" data-copy="{{clone_cmd}}" aria-label="Copy the command">copy</button></div>
       <pre id="cmd">{{term}}</pre>
@@ -741,7 +741,7 @@ footer .bottom .ver{color:var(--accent)}
       ['captured', '<span class="mono">live, just now</span> · ' + esc(d.wall_clock_s || '') + ' s wall clock' + (d.cached ? ' · served from the proxy\'s 60 s cache' : '')],
       ['first page sha256', '<span class="mono">' + esc(jc.sha256 || '—') + '</span>'],
       ['first request', '<a class="mono" href="' + esc(callUrl(jc)) + '" target="_blank" rel="noopener noreferrer">' + esc(callUrl(jc)) + '</a>'],
-      ['re-derive', '<span class="mono">' + esc(CLI.replace(/--platform \S+ --address \S+/, '--platform ' + $('platform').value + ' --address ' + $('addr').value.trim())) + '</span> · the CLI follows 300 rows and every sibling chain · <a href="#calls">every call ↓</a>'],
+      ['re-derive', '<span class="mono">' + esc(CLI.replace(/--platform \S+ --address \S+/, '--platform ' + $('platform').value + ' --address ' + $('addr').value.trim())) + '</span> · the CLI follows {{trigger.rows}} rows and every sibling chain · <a href="#calls">every call ↓</a>'],
     ];
     return items.map(([k, v]) => '<div><div class="k">' + k + '</div><div class="v">' + v + '</div></div>').join('');
   }
@@ -818,7 +818,7 @@ footer .bottom .ver{color:var(--accent)}
         pills.forEach((x) => x.setAttribute('aria-pressed', 'false'));
         apply(liveSlots(d, platform, address));
         setMode('live · keyless', 'ok');
-        status.innerHTML = (d.verdict ? 'Rendered from a live run, same-chain. ' : '') + 'For 300 rows and every sibling chain:<span class="cmd">' + esc(cmd) + '</span>';
+        status.innerHTML = (d.verdict ? 'Rendered from a live run, same-chain. ' : '') + 'For {{trigger.rows}} rows and every sibling chain:<span class="cmd">' + esc(cmd) + '</span>';
       })
       .catch((err) => { setMode('no answer', 'err'); status.innerHTML = 'The proxy did not answer (<span class="mono">' + esc((API || location.origin) + '/api/lookup') + '</span>: ' + esc(err.message) + '). The live surface is the Vercel deployment; from a clone, run the CLI:<span class="cmd">' + esc(cmd) + '</span>'; })
       .finally(() => { go.disabled = false; });
