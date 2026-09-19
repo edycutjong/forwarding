@@ -189,16 +189,16 @@ written up for the CMC team, with dates and receipts, in **[FEEDBACK.md](FEEDBAC
 
 | | |
 |---|---|
-| Offline tests (`make test`) | **117** offline tests, ~5 s, no network |
-| Live tests (`make test-live`) | 8, against the real contract: `maker=` returns only that wallet, the hero reproduces from a fresh fetch to six decimals, the sibling-chain slugs answer |
+| Offline tests (`make test`) | **126** offline tests, ~10 s, no network |
+| Live tests (`make test-live`) | 10, against the real contract and the deployment: `maker=` returns only that wallet, the hero reproduces from a fresh fetch to six decimals, the sibling-chain slugs answer |
 | Regression tests named for the live defect they pin | 12 |
 | Property-based verification of `adjudicate()` | **2,000 generated investigations, 0 failing** — invariants I1–I6 never violated |
 | `make verify` | replays every committed receipt, asserts the invariants, checks every evidence row is verbatim inside a stored response, and fails if the page drifted from the receipts |
 | Benchmarks ([`bench_live.json`](docs/proof/bench_live.json), [`bench_replay.json`](docs/proof/bench_replay.json)) | live investigation p50 **27.0 s** (11 calls at 2 s spacing), adjudication replay p50 **0.004 ms**, byte-identical 1,000/1,000 |
 
 ```bash
-make test         # 117 offline tests
-make test-live    # 8 tests against the real CoinMarketCap contract
+make test         # 126 offline tests
+make test-live    # 10 tests against the real CoinMarketCap contract and the deployment
 make verify       # replay every receipt, I1–I6, chain of custody, page drift
 make demo         # the judged capability, live, zero config
 ```
