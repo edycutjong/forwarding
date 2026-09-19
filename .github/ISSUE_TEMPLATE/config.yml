@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Where the API got in the way
+    url: https://github.com/edycutjong/forwarding/blob/main/FEEDBACK.md
+    about: Dated, evidenced findings for the CoinMarketCap team — read before filing an API issue here.
