@@ -2,7 +2,7 @@
 # stdlib and needs none of this; a judge runs it with a bare python3.
 pytest>=8.1
 pytest-cov>=7.1
-hypothesis>=6.100
+hypothesis>=6.168.0
 ruff>=0.15
 mypy>=1.14
 pip-audit>=2.9
