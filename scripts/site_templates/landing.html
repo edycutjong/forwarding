@@ -272,9 +272,10 @@ details.calls .rowlist td:last-child{overflow-wrap:anywhere;white-space:normal;m
 .paste .note{margin:0 0 14px}
 .paste-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .paste input{flex:1 1 360px;min-width:0;font:.95rem var(--font-mono);color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px;transition:border-color var(--t-fast)}
-.paste input:focus{border-color:var(--data)}
+.paste input:hover,.paste select:hover{border-color:#3a4a63}
+.paste input:focus,.paste input:focus:hover{border-color:var(--data)}
 .paste select{font:.95rem var(--font-body);color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px;transition:border-color var(--t-fast)}
-.paste select:focus{border-color:var(--data)}
+.paste select:focus,.paste select:focus:hover{border-color:var(--data)}
 .paste .btn{padding:12px 20px}
 #status{flex:1 1 100%;font-size:.92rem;color:var(--muted);min-height:1.4em;margin-top:8px}
 #status .cmd{display:block;margin-top:8px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);font:.82rem var(--font-mono);color:var(--text);user-select:all;word-break:break-all}
