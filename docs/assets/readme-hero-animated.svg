@@ -75,15 +75,17 @@
   <use href="#t-tech" x="56" y="304" fill="#5E6C80"/>
 
   <!-- ══ right column: the alert card, and what the agent does to it ═══════════ -->
-  <rect x="612" y="40" width="612" height="280" rx="16" fill="#141A24" stroke="#FFB020" stroke-width="2">
-    <animate attributeName="stroke" values="#FFB020;#FFB020;#FF5C5C;#FF5C5C;#FFB020;#FFB020" keyTimes="0;0.1;0.18;0.58;0.66;1" dur="8s" repeatCount="indefinite"/>
-  </rect>
-  <rect x="612" y="40" width="612" height="280" rx="16" fill="none" stroke="#FFB020" stroke-width="10" opacity=".12">
-    <animate attributeName="stroke" values="#FFB020;#FFB020;#FF5C5C;#FF5C5C;#FFB020;#FFB020" keyTimes="0;0.1;0.18;0.58;0.66;1" dur="8s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values=".12;.12;.12;.26;.12;.12;.12" keyTimes="0;0.1;0.22;0.26;0.3;0.66;1" dur="8s" repeatCount="indefinite"/>
-  </rect>
+  <rect x="612" y="40" width="612" height="280" rx="16" fill="#141A24"/>
   <g class="anim">
-<g data-story="beat-2" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.14;0.18;0.58;0.66;1" dur="8s" repeatCount="indefinite"/>
+    <!-- the card's edge: the severity. Lives in the story layers so reduced motion gets a still amber edge. -->
+    <rect x="612" y="40" width="612" height="280" rx="16" fill="none" stroke="#FFB020" stroke-width="2">
+      <animate attributeName="stroke" values="#FFB020;#FFB020;#FF5C5C;#FF5C5C;#FFB020;#FFB020" keyTimes="0;0.1;0.18;0.58;0.66;1" dur="8s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="612" y="40" width="612" height="280" rx="16" fill="none" stroke="#FFB020" stroke-width="10" opacity=".12">
+      <animate attributeName="stroke" values="#FFB020;#FFB020;#FF5C5C;#FF5C5C;#FFB020;#FFB020" keyTimes="0;0.1;0.18;0.58;0.66;1" dur="8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".12;.12;.12;.26;.12;.12;.12" keyTimes="0;0.1;0.22;0.26;0.3;0.66;1" dur="8s" repeatCount="indefinite"/>
+    </rect>
+    <g data-story="beat-2" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.14;0.18;0.58;0.66;1" dur="8s" repeatCount="indefinite"/>
       <circle cx="664" cy="72" r="6" fill="#FF5C5C"/>
       <use href="#t-hA1" x="680" y="79" fill="#FF5C5C"/>
       <use href="#t-hA2" x="829.5" y="79" fill="#E6EDF3"/>
@@ -162,7 +164,12 @@
     </g>
   </g>
   <g class="still" display="none">
-<g display="none">
+    <!-- the card's edge: the severity. Lives in the story layers so reduced motion gets a still amber edge. -->
+    <rect x="612" y="40" width="612" height="280" rx="16" fill="none" stroke="#FFB020" stroke-width="2">
+    </rect>
+    <rect x="612" y="40" width="612" height="280" rx="16" fill="none" stroke="#FFB020" stroke-width="10" opacity=".12">
+    </rect>
+    <g display="none">
       <circle cx="664" cy="72" r="6" fill="#FF5C5C"/>
       <use href="#t-hA1" x="680" y="79" fill="#FF5C5C"/>
       <use href="#t-hA2" x="829.5" y="79" fill="#E6EDF3"/>
