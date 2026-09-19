@@ -6,29 +6,36 @@
 <title>For judges — Forwarding Address</title>
 <meta name="description" content="The 30-second path, the live receipt, the reproduce command and the honest limitations of Forwarding Address — one page, no setup, no key, no account.">
 <meta name="author" content="{{author}}">
-<meta name="robots" content="noindex">
+<meta name="robots" content="index,follow">
 <meta name="theme-color" content="#0B0E14">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/inter-tight-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/jetbrains-mono-latin-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="canonical" href="{{site_url}}/judge">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Forwarding Address">
 <meta property="og:title" content="For judges — Forwarding Address">
-<meta property="og:description" content="The 30-second path, the live receipt, the reproduce command and the honest limitations — one page, no setup, no key, no account.">
+<meta property="og:description" content="The 30-second path, the live receipt, the reproduce command and the honest limits — one page, no setup, no key, no account.">
 <meta property="og:url" content="{{site_url}}/judge">
 {{og.meta}}
 <meta name="twitter:title" content="For judges — Forwarding Address">
-<meta name="twitter:description" content="The 30-second path, the live receipt, the reproduce command and the honest limitations — one page, no setup, no key, no account.">
+<meta name="twitter:description" content="The 30-second path, the live receipt, the reproduce command and the honest limits — one page, no setup, no key, no account.">
 <meta name="twitter:creator" content="{{x_handle}}">
 <style>
 @font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-latin-var.woff2) format("woff2")}
 @font-face{font-family:"Inter Tight";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-tight-latin-var.woff2) format("woff2")}
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:100 800;font-display:swap;src:url(assets/fonts/jetbrains-mono-latin-var.woff2) format("woff2")}
+/* metric-matched local fallbacks (width ratios measured in Chromium) so the swap to the web font moves nothing */
+@font-face{font-family:"Inter Fallback";src:local("Arial"),local("Liberation Sans"),local("Helvetica");size-adjust:107%;ascent-override:97%;descent-override:24%;line-gap-override:0%}
+@font-face{font-family:"Inter Tight Fallback";src:local("Arial"),local("Liberation Sans"),local("Helvetica");size-adjust:98%;ascent-override:97%;descent-override:24%;line-gap-override:0%}
+@font-face{font-family:"JetBrains Mono Fallback";src:local("Courier New"),local("Liberation Mono"),local("Menlo");size-adjust:100%;ascent-override:102%;descent-override:30%;line-gap-override:0%}
 :root{
   --bg:#0B0E14;--surface:#141A24;--surface-2:#1A2230;--border:#243044;--text:#E6EDF3;--muted:#8B98A9;
   --exit:#FF5C5C;--migration:#FFB020;--partial:#FF8A3D;--rebalance:#8B98A9;--maker:#4C9AFF;--ok:#3DDC97;
-  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --display:"Inter Tight","Inter",system-ui,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:"Inter","Inter Fallback",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --display:"Inter Tight","Inter Tight Fallback",system-ui,sans-serif;
+  --mono:"JetBrains Mono","JetBrains Mono Fallback",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -37,6 +44,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);fon
 a{color:var(--maker);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .15s}
 a:hover,a:focus-visible{border-bottom-color:currentColor;outline:none}
 a:focus-visible{outline:2px solid var(--maker);outline-offset:3px;border-radius:2px}
+article a,footer a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em;text-decoration-color:rgba(76,154,255,.65);border-bottom:0}
+article a:hover,footer a:hover,article a:focus-visible,footer a:focus-visible{text-decoration-color:currentColor}
 .wrap{max-width:880px;margin:0 auto;padding:0 24px 64px}
 header.top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:28px 0 8px;flex-wrap:wrap}
 .brand{font-family:var(--display);font-weight:800;letter-spacing:.14em;font-size:.95rem;text-transform:uppercase}

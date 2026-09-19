@@ -4,15 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Forwarding Address — where the pulled liquidity went</title>
-<meta name="description" content="An LP pulled $21,330,275 from Ring Exchange (Ethereum) UNI/WBTC. The same wallet put 99.8% of it into Ring Exchange (Ethereum) 2 min 12 s later. Follow the wallet behind any large removal — keyless, live, from CoinMarketCap&#x27;s DEX API.">
+<meta name="description" content="$21,330,275 left UNI/WBTC; the same wallet re-added 99.8% 2 min 12 s later. Follow the wallet — keyless, live, CoinMarketCap.">
 <meta name="author" content="Edy Cu">
 <meta name="theme-color" content="#0B0E14">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/inter-tight-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/jetbrains-mono-latin-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="canonical" href="https://forwarding-cmc.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Forwarding Address">
 <meta property="og:title" content="Forwarding Address — where the pulled liquidity went">
-<meta property="og:description" content="An LP pulled $21,330,275 from Ring Exchange (Ethereum) UNI/WBTC. The same wallet put 99.8% of it into Ring Exchange (Ethereum) 2 min 12 s later. Follow the wallet behind any large removal — keyless, live, from CoinMarketCap&#x27;s DEX API.">
+<meta property="og:description" content="$21,330,275 left UNI/WBTC; the same wallet re-added 99.8% 2 min 12 s later. Follow the wallet — keyless, live, CoinMarketCap.">
 <meta property="og:url" content="https://forwarding-cmc.vercel.app/">
 <meta property="og:image" content="https://forwarding-cmc.vercel.app/assets/og-image.png?v=80c18a88">
 <meta property="og:image:width" content="1200">
@@ -21,18 +24,22 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://forwarding-cmc.vercel.app/assets/og-image.png?v=80c18a88">
 <meta name="twitter:title" content="Forwarding Address — where the pulled liquidity went">
-<meta name="twitter:description" content="An LP pulled $21,330,275 from Ring Exchange (Ethereum) UNI/WBTC. The same wallet put 99.8% of it into Ring Exchange (Ethereum) 2 min 12 s later. Follow the wallet behind any large removal — keyless, live, from CoinMarketCap&#x27;s DEX API.">
+<meta name="twitter:description" content="$21,330,275 left UNI/WBTC; the same wallet re-added 99.8% 2 min 12 s later. Follow the wallet — keyless, live, CoinMarketCap.">
 <meta name="twitter:creator" content="@edycutjong">
 <style>
 @font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-latin-var.woff2) format("woff2")}
 @font-face{font-family:"Inter Tight";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-tight-latin-var.woff2) format("woff2")}
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:100 800;font-display:swap;src:url(assets/fonts/jetbrains-mono-latin-var.woff2) format("woff2")}
+/* metric-matched local fallbacks (width ratios measured in Chromium) so the swap to the web font moves nothing */
+@font-face{font-family:"Inter Fallback";src:local("Arial"),local("Liberation Sans"),local("Helvetica");size-adjust:107%;ascent-override:97%;descent-override:24%;line-gap-override:0%}
+@font-face{font-family:"Inter Tight Fallback";src:local("Arial"),local("Liberation Sans"),local("Helvetica");size-adjust:98%;ascent-override:97%;descent-override:24%;line-gap-override:0%}
+@font-face{font-family:"JetBrains Mono Fallback";src:local("Courier New"),local("Liberation Mono"),local("Menlo");size-adjust:100%;ascent-override:102%;descent-override:30%;line-gap-override:0%}
 :root{
   --bg:#0B0E14;--surface:#141A24;--surface-2:#1A2230;--border:#243044;--text:#E6EDF3;--muted:#8B98A9;
   --exit:#FF5C5C;--migration:#FFB020;--partial:#FF8A3D;--rebalance:#8B98A9;--maker:#4C9AFF;--ok:#3DDC97;
-  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --display:"Inter Tight","Inter",system-ui,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:"Inter","Inter Fallback",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --display:"Inter Tight","Inter Tight Fallback",system-ui,sans-serif;
+  --mono:"JetBrains Mono","JetBrains Mono Fallback",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -41,6 +48,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);fon
 a{color:var(--maker);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .15s}
 a:hover,a:focus-visible{border-bottom-color:currentColor;outline:none}
 a:focus-visible{outline:2px solid var(--maker);outline-offset:3px;border-radius:2px}
+p a,li a,td a,footer a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em;text-decoration-color:rgba(76,154,255,.65);border-bottom:0}
+p a:hover,li a:hover,td a:hover,footer a:hover,p a:focus-visible,li a:focus-visible,td a:focus-visible,footer a:focus-visible{text-decoration-color:currentColor}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 header.top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:28px 0 8px;flex-wrap:wrap}
 .brand{font-family:var(--display);font-weight:800;letter-spacing:.14em;font-size:.95rem;text-transform:uppercase}
@@ -74,11 +83,11 @@ h2{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:.
 .sub b{color:var(--text);font-weight:600}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .addr{font-family:var(--mono);color:var(--maker);word-break:break-all}
-.phase{display:none}
-.card.alert .phase-red{display:block}
-.card.alert.flipped .phase-red{display:none}
-.card.alert.flipped .phase-verdict{display:block}
-.card.alert.static .phase-red,.card.alert.static .phase-verdict{display:block}
+.phases{display:grid}
+.phase{grid-area:1/1;visibility:hidden}
+.card.alert .phase-red{visibility:visible}
+.card.alert.flipped .phase-red{visibility:hidden}
+.card.alert.flipped .phase-verdict{visibility:visible}
 .trace{margin:10px 0 0;padding:0;list-style:none;font-family:var(--mono);font-size:.85rem}
 .trace li{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto;gap:14px;padding:7px 0;border-top:1px solid var(--border);align-items:baseline;opacity:0;transform:translateY(4px);animation:rowin .35s ease forwards}
 .trace li:first-child{border-top:0}
@@ -88,14 +97,14 @@ h2{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:.
 .trace .ms,.trace .cr,.trace .sha{color:var(--muted);font-size:.8rem;white-space:nowrap}
 .trace .sha{cursor:pointer;border-bottom:1px dotted var(--muted)}
 @keyframes rowin{to{opacity:1;transform:none}}
-.rows{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.rows{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
 .json{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 18px;font-family:var(--mono);font-size:.84rem;line-height:1.6;overflow-x:auto;white-space:pre;margin:0}
 .json .k{color:var(--muted)}
 .json .m{color:var(--maker);font-weight:600}
 .json .tu-r{color:var(--exit);font-weight:600}
 .json .tu-a{color:var(--migration);font-weight:600}
 .json .hl{color:var(--text);font-weight:600}
-.json .dim{color:#5E6C80}
+.json .dim{color:#768399}
 .json-title{font-family:var(--display);letter-spacing:.1em;text-transform:uppercase;font-size:.8rem;color:var(--muted);margin:0 0 8px}
 .division{font-family:var(--mono);font-size:1.1rem;margin:18px 0 0;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
 .division b{color:var(--migration)}
@@ -103,7 +112,7 @@ h2{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:.
 .bar div{height:100%;transition:width .6s ease}
 .legend{display:flex;gap:20px;flex-wrap:wrap;color:var(--muted);font-size:.95rem}
 .legend i{display:inline-block;width:.75em;height:.75em;border-radius:3px;margin-right:.45em;vertical-align:-.05em}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .mini{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;border-top:3px solid var(--border)}
 .mini.red{border-top-color:var(--exit)}.mini.grey{border-top-color:var(--rebalance)}.mini.amber{border-top-color:var(--migration)}
 .mini h3{font-family:var(--display);font-size:1rem;letter-spacing:.08em;text-transform:uppercase;margin:0 0 6px}
@@ -134,13 +143,13 @@ td.ok-t{white-space:nowrap}
 ul.plain{margin:0;padding-left:1.2em;color:var(--muted)}
 ul.plain li{margin:6px 0}
 ul.plain b{color:var(--text);font-weight:600}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
 footer{margin:64px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .hatched{background:repeating-linear-gradient(135deg,transparent 0 8px,rgba(255,92,92,.12) 8px 16px)}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 @media (max-width:760px){
-  .rows,.grid3,.two{grid-template-columns:1fr}
-  .live{grid-template-columns:1fr}
+  .rows,.grid3,.two{grid-template-columns:minmax(0,1fr)}
+  .live{grid-template-columns:minmax(0,1fr)}
   .trace li{grid-template-columns:1fr auto;row-gap:2px}
   .trace .ms,.trace .cr,.trace .sha{display:none}
   .card{padding:20px}
@@ -171,6 +180,7 @@ footer{margin:64px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px soli
 
 <section id="hero" aria-label="The verdict">
   <div class="card alert" id="alert-card" data-severity="amber">
+    <div class="phases">
     <div class="phase phase-red">
       <div class="state"><span><span class="dot"></span><span class="red-t">LP removed</span> <span class="mono">−$21,330,275</span></span><span class="sev">Ring Exchange (Ethereum) · UNI/WBTC · 2026-09-02 03:59:11 UTC</span></div>
       <div class="big red-t">−$21,330,275</div>
@@ -181,6 +191,7 @@ footer{margin:64px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px soli
       <div class="big amber-t"><span id="share" data-target="99.8">99.8</span>%<small>recovered</small></div>
       <p class="sub"><b>+$21,287,255</b> into <b>Ring Exchange (Ethereum) · UNI/WETH</b> — <b>2 min 12 s</b> later</p>
       <p class="sub">same wallet <span class="addr">0x4f0a…b9a9</span> · same <b>1,962,475.54 UNI</b> to ten decimals · the pool now holds <b>$102.24M</b> · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/hero.json" target="_blank" rel="noopener noreferrer">receipt ↗</a></p>
+    </div>
     </div>
     <p class="json-title" style="margin-top:18px">the agent's trace — every call, as made · endpoint · status · ms · credit_count · sha256 of the bytes</p>
     <ol class="trace" id="trace" aria-label="API calls the agent made">

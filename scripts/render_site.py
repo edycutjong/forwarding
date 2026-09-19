@@ -107,6 +107,33 @@ def png_size(path):
     return struct.unpack(">II", head[16:24])
 
 
+DESC_MAX = 125  # og:description ceiling; the <meta name=description> window is 50-160
+
+
+def meta_description(v, r, dest, elapsed_s):
+    """One sentence of the hero receipt plus the pitch, kept under the social-card ceiling.
+    The venue is the first thing dropped when a long DEX name would push it over — every
+    number stays."""
+    pitch = " Follow the wallet — keyless, live, CoinMarketCap."
+    pct = f"{v['recovered_share'] * 100:.1f}%"
+    later = f"{fmt_elapsed(elapsed_s)} later"
+    candidates = [
+        f"{money(v['removed_usd'])} left {pair(r)} on {venue(r)}; the same wallet put {pct} into "
+        f"{dest.get('venue', '')} {later}.",
+        f"{money(v['removed_usd'])} left {pair(r)}; the same wallet re-added {pct} {later}.",
+        f"{money(v['removed_usd'])} removed; the same wallet re-added {pct} {later}.",
+    ]
+    for lead in candidates:
+        if len(lead + pitch) <= DESC_MAX:
+            desc = lead + pitch
+            break
+    else:
+        desc = candidates[-1] + pitch
+    if not 50 <= len(desc) <= DESC_MAX:
+        sys.exit(f"meta description is {len(desc)} chars; want 50-{DESC_MAX}")
+    return desc
+
+
 def og_meta(verdict):
     """The social-card tags, only when the image exists at exactly 1200x630 — never a dead link.
     The alt text is derived from the hero receipt like every other number on the page."""
@@ -520,11 +547,7 @@ def context():
         for n, d in others
     )
     elapsed_s = v["elapsed_s"] or 0
-    desc = (
-        f"An LP pulled {money(v['removed_usd'])} from {venue(r)} {pair(r)}. The same wallet put "
-        f"{v['recovered_share'] * 100:.1f}% of it into {dest.get('venue', '')} {fmt_elapsed(elapsed_s)} later. "
-        "Follow the wallet behind any large removal — keyless, live, from CoinMarketCap's DEX API."
-    )
+    desc = meta_description(v, r, dest, elapsed_s)
     ctx = {
         "repo": REPO,
         "site_url": SITE_URL,
@@ -533,7 +556,7 @@ def context():
         "author": AUTHOR,
         "x_handle": X_HANDLE,
         "og.meta": og_meta(v),
-        "meta.description": esc(desc[:300]),
+        "meta.description": esc(desc),
         "cli_cmd": CLI_CMD,
         "mcp_cmd": MCP_CMD,
         "tests": str(offline),
