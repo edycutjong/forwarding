@@ -298,6 +298,10 @@ a throttled follow an Exit, and produced the same bytes on a second run.
   `test_a_rebalance_measures_elapsed_to_the_first_add_not_to_the_removal_itself`.
 - **2026-09-19 — a $10⁴² “removal” topped the sweep.** The feed carries rows no market produced;
   the rule now refuses them and names them, and the finding went to CMC.
+- **2026-09-19 — the landing and judge pages printed “0.0% of the pool”** for a removal whose
+  share is unknown (its pool is not among the 20 the API returns). A number no row supports was on
+  the judged surface. The renderer now says “an unknown share”, and `make check` refuses the page
+  otherwise.
 - **2026-09-19 — six committed receipts tripped the secret scanner.** CMC's info endpoint labels
   a contract address `token_address`, and gitleaks read the word beside 40 hex characters as a
   key. The allowlist admits exactly a 20-byte EVM address and nothing else; a real key beside
@@ -398,6 +402,7 @@ forwarding/
 ├── site/                             generated: the landing page (/) and the judge page (/judge)
 ├── docs/proof/                       hero · runner_up · exit · rebalance · uni_v3_v4 · jit · base_rate · live_run · benchmarks · spike · MCP session
 ├── docs/SPEC.md                      the rule: thresholds, state machine, invariants I1–I6
+├── docs/COMPARISON.md · docs/screenshots/   the field, by name; the product, as captured
 ├── JUDGE.md · DEMO.md · ARCHITECTURE.md · FEEDBACK.md
 └── README.md                         you are here
 ```
@@ -430,6 +435,8 @@ forwarding/
 | **The agent, for real** | [`docs/proof/mcp_session.md`](docs/proof/mcp_session.md) — a Claude Code session: three tool calls, the JIT refusal, every figure from a tool result |
 | **How it works** | [ARCHITECTURE.md](ARCHITECTURE.md) · [docs/SPEC.md](docs/SPEC.md) |
 | **API feedback for CMC** | [FEEDBACK.md](FEEDBACK.md) — where the API got in the way, with dates and receipts |
+| **How it differs from the other entries** | [docs/COMPARISON.md](docs/COMPARISON.md) — the six closest entries in this hackathon, by name, with the exact boundary to each |
+| **Screenshots** | [docs/screenshots/](docs/screenshots/) — the live page, the two rows, the base rate, the judge page, and a real keyless run captured 2026-09-19 |
 
 ---
 
