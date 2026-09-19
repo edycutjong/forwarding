@@ -145,7 +145,7 @@ header.top.scrolled{border-bottom-color:var(--border);background:rgba(11,14,20,.
 .lead h1{margin-top:18px}
 .lead h1 .line1{display:block;color:var(--muted);font-weight:700}
 .lead h1 .line2{display:block}
-.lead h1 .big{color:var(--accent);font-feature-settings:var(--num);display:inline-block;min-width:3.6ch;text-align:left}
+.lead h1 .big{color:var(--accent);font-feature-settings:var(--num);display:inline-block;min-width:4.44ch;text-align:left}   /* 4.44ch = the measured width of "99.8%" — 3.6ch was one digit short and moved the line at 10.0% */
 .lead .lede{margin:22px 0 30px;max-width:52ch}
 .cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .hero-viz{margin-top:clamp(36px,5vw,64px);background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:clamp(16px,2.6vw,32px);position:relative;overflow:hidden}
@@ -284,6 +284,7 @@ details.calls .rowlist td:last-child{overflow-wrap:anywhere;white-space:normal;m
 .stat{background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--border);border-radius:var(--r-md);padding:20px 14px;text-align:center;min-width:0}
 .stat-v{display:block;font-family:var(--font-display);font-size:2.15rem;font-weight:800;letter-spacing:-.02em;line-height:1;color:var(--text);font-feature-settings:var(--num)}
 .stat-l{display:block;color:var(--muted);font-size:.86rem;margin-top:8px;line-height:1.35}
+.stat-v.orange{color:var(--accent)}.stat-v.blue{color:var(--data)}.stat-v.green{color:var(--verdict)}.stat-v.red{color:var(--flag)}.stat-v.amberred{color:var(--partial)}   /* compound, after .stat-v: the bare hue utilities above lose to it at equal specificity */
 .receipt{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px 22px;margin-top:32px;font-size:.92rem}
 .receipt .k{font-family:var(--font-mono);color:var(--muted);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
 .receipt .v{margin-top:3px;overflow-wrap:anywhere}
@@ -916,9 +917,10 @@ footer .bottom .ver{color:var(--accent)}
   if (top) { const onScroll = () => top.classList.toggle('scrolled', window.scrollY > 8); window.addEventListener('scroll', onScroll, { passive: true }); requestAnimationFrame(onScroll); }
   const io = 'IntersectionObserver' in window ? new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }) : null;
   document.querySelectorAll('.reveal').forEach((el) => { if (io) io.observe(el); else el.classList.add('in'); });
-  const block = document.querySelector('svg.block');
-  setTimeout(() => { document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in', 'now')); if (block) block.classList.add('go'); }, 2500);
-  if (block) { if (reduce || !('IntersectionObserver' in window)) block.classList.add('go'); else { const bo = new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting) { block.classList.add('go'); bo.disconnect(); } }); }, { threshold: 0.35 }); bo.observe(block); } }
+  const blocks = [...document.querySelectorAll('svg.block')], block = blocks.find((b) => b.getClientRects().length) || blocks[0];
+  const release = () => blocks.forEach((b) => b.classList.add('go'));
+  setTimeout(() => { document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in', 'now')); if (block) release(); }, 2500);
+  if (block) { if (reduce || !('IntersectionObserver' in window)) release(); else { const bo = new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting) { release(); bo.disconnect(); } }); }, { threshold: 0.35 }); bo.observe(block); } }
   const big = document.querySelector('h1 [data-count]');
   if (big && !reduce && 'IntersectionObserver' in window) {
     const target = parseFloat(big.dataset.count), suffix = big.textContent.replace(/^[0-9.]+/, ''), dec = (big.dataset.count.split('.')[1] || '').length;
