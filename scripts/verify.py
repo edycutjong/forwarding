@@ -12,7 +12,8 @@ For each of docs/proof/{hero,runner_up,exit,rebalance,uni_v3_v4}.json this
        under the sha256 the trace cites, and every evidence row appears VERBATIM inside the
        maker-follow response it was taken from — a row cannot have been typed in.
 It then checks docs/proof/jit.json is a refusal, docs/proof/base_rate.json adds up, and that
-site/index.html, site/judge.html and JUDGE.md are what the receipts render (render_site.py --check).
+site/index.html, site/judge.html, site/pitch/index.html and JUDGE.md are what the receipts
+render (render_site.py --check).
 
 This is a CI gate, not the demo. `make demo` is the live keyless run.
 """
@@ -248,7 +249,8 @@ def verify_site(failures):
     )
     check(
         r.returncode == 0,
-        "site/index.html, site/judge.html and JUDGE.md are what the receipts render",
+        "site/index.html, site/judge.html, site/pitch/index.html and JUDGE.md are what the "
+        "receipts render",
         failures,
         (r.stdout + r.stderr).strip()[:200],
     )

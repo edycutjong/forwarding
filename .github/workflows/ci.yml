@@ -63,8 +63,9 @@ jobs:
       # An unfilled address, a fake video link, a TODO, a template token, a stale test count or
       # a killer number the README states but hero.json does not hold — any of them fails here.
       - run: python3 scripts/check_submission_readiness.py
-      # site/index.html, site/judge.html and JUDGE.md are rendered from docs/proof/*.json. If the
-      # committed output is not what the generator produces, a number was edited by hand — fail.
+      # site/index.html, site/judge.html, site/pitch/index.html and JUDGE.md are rendered from
+      # docs/proof/*.json. If the committed output is not what the generator produces, a number
+      # was edited by hand — fail.
       - run: python3 scripts/render_site.py --check
 
   verify:

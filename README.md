@@ -24,6 +24,7 @@ was not. <a href="DEMO.md">Receipt →</a></p>
 
 [![Judge Guide](https://img.shields.io/badge/⚖️_Start-Here-06b6d4?style=for-the-badge)](https://forwarding-cmc.vercel.app/judge)
 [![Landing page](https://img.shields.io/badge/↪_forwarding--cmc.vercel.app-Live-0B0E14?style=for-the-badge)](https://forwarding-cmc.vercel.app)
+[![Pitch deck](https://img.shields.io/badge/📊_Pitch-Deck-FFB020?style=for-the-badge)](https://forwarding-cmc.vercel.app/pitch/)
 [![MCP session](https://img.shields.io/badge/🤖_Claude_Code-MCP_session-FFB020?style=for-the-badge)](docs/proof/mcp_session.md)
 [![API Feedback](https://img.shields.io/badge/📮_CMC_API-Feedback-4C9AFF?style=for-the-badge)](FEEDBACK.md)
 [![Built for Build with CMC](https://img.shields.io/badge/DoraHacks-Build_with_CMC-8b5cf6?style=for-the-badge)](https://dorahacks.io/hackathon/coinmarketcap-api-202609/detail)
@@ -221,7 +222,8 @@ dates and receipts, in **[FEEDBACK.md](FEEDBACK.md)**.
 | | |
 |---|---|
 | **For judges** | [forwarding-cmc.vercel.app/judge](https://forwarding-cmc.vercel.app/judge) — the claim, the 30-second path, the receipt, the reproduce command, the limitations. No auth, no cookie, no redirect. The same page as [JUDGE.md](JUDGE.md), rendered from the same receipts. |
-| **Landing page** | [forwarding-cmc.vercel.app](https://forwarding-cmc.vercel.app) — the receipt, the red-to-amber flip, the two rows, the base rate, and a live box |
+| **Landing page** | [forwarding-cmc.vercel.app](https://forwarding-cmc.vercel.app) — the receipt, the red-to-amber flip, the two rows, the base rate, and a live box. The same `site/` also deploys to GitHub Pages at **[forwarding.edycu.dev](https://forwarding.edycu.dev)** (`site/CNAME`, `.github/workflows/pages.yml`) once the repository is public; its live box calls the Vercel function cross-origin |
+| **Pitch deck** | [forwarding-cmc.vercel.app/pitch](https://forwarding-cmc.vercel.app/pitch/) — 11 slides, arrow keys, `P` for notes, `Cmd+P` for a PDF; rendered from the same receipts as this page |
 | **Live proxy** | `GET /api/lookup?platform=ethereum&address=0x…` — the same-chain investigation through a keyless CORS proxy (CMC sends no CORS header, so a browser cannot call it directly). Holds no secret because no endpoint needs one. |
 | **Health** | [`/api/health`](https://forwarding-cmc.vercel.app/api/health) — the engine, the rule, the receipts' ages, and `key_exported: false` |
 
@@ -377,8 +379,8 @@ CMC changes the contract, it breaks in CI rather than in front of a judge; if CM
 shared runner IP, the job says so as a warning rather than reporting someone else's traffic as
 our breakage.
 
-**The landing page, the judge page and JUDGE.md are generated, never hand-edited.**
-`scripts/render_site.py` renders all three from the receipts in `docs/proof/`; every figure is a
+**The landing page, the judge page, the pitch deck and JUDGE.md are generated, never hand-edited.**
+`scripts/render_site.py` renders all four from the receipts in `docs/proof/`; every figure is a
 slot filled from a committed JSON, the render aborts if any slot is unfilled, and CI re-renders
 and fails on any diff. The test counts on this page are checked against `pytest --collect-only`
 by the same gate.
@@ -395,11 +397,11 @@ forwarding/
 │   ├── seed.py · base_rate.py        capture the receipts and the 335-removal base rate (live, keyless)
 │   ├── bench.py                      p50/p95, live and replay, timed apart
 │   ├── verify.py                     replay every receipt: I1–I6, chain of custody, page drift
-│   ├── render_site.py                docs/proof/*.json → site/index.html · site/judge.html · JUDGE.md
+│   ├── render_site.py                docs/proof/*.json → site/index.html · site/judge.html · site/pitch/index.html · JUDGE.md
 │   └── check_submission_readiness.py placeholder, stale-count and stale-number scanner
 ├── api/lookup.py · api/health.py     the Vercel functions — keyless, same-chain, CORS
 ├── tests/                            126 offline + 10 live; boundary · property · regressions named for defects
-├── site/                             generated: the landing page (/) and the judge page (/judge)
+├── site/                             generated: the landing page (/), the judge page (/judge), the deck (/pitch); CNAME for GitHub Pages
 ├── docs/proof/                       hero · runner_up · exit · rebalance · uni_v3_v4 · jit · base_rate · live_run · benchmarks · spike · MCP session
 ├── docs/SPEC.md                      the rule: thresholds, state machine, invariants I1–I6
 ├── docs/COMPARISON.md · docs/screenshots/   the field, by name; the product, as captured
@@ -417,7 +419,7 @@ forwarding/
 - [x] Five-way adjudication with the six invariants, verified by property over 2,000 cases
 - [x] MCP server with a real Claude Code session committed
 - [x] Autonomous watch loop with a per-token high-water mark and an optional webhook
-- [x] Live deployment: landing page, `/judge`, keyless `/api/lookup`, `/api/health`
+- [x] Live deployment: landing page, `/judge`, `/pitch`, keyless `/api/lookup`, `/api/health`; GitHub Pages workflow for forwarding.edycu.dev
 - [x] Base rate over 335 removals, benchmarks, receipts for every branch
 - [ ] Demo video — recorded against the live product, at real speed, with the trace on screen
 - [ ] A 24-hour unattended `watch` log catching a real removal as it lands (`docs/proof/watch_24h.log`)
@@ -431,7 +433,8 @@ forwarding/
 |---|---|
 | **For judges** | **[forwarding-cmc.vercel.app/judge](https://forwarding-cmc.vercel.app/judge)** · [JUDGE.md](JUDGE.md) — the 30-second path |
 | **The receipt** | **[DEMO.md](DEMO.md)** — the live run transcribed, with [`docs/proof/live_run.json`](docs/proof/live_run.json) behind it |
-| **Landing page** | **[forwarding-cmc.vercel.app](https://forwarding-cmc.vercel.app)** — the receipt beside its raw rows, and a live box |
+| **Landing page** | **[forwarding-cmc.vercel.app](https://forwarding-cmc.vercel.app)** — the receipt beside its raw rows, and a live box (also [forwarding.edycu.dev](https://forwarding.edycu.dev) on GitHub Pages after the public flip) |
+| **Pitch deck** | **[forwarding-cmc.vercel.app/pitch](https://forwarding-cmc.vercel.app/pitch/)** — 11 slides from the same receipts; `P` for speaker notes, print to PDF |
 | **The agent, for real** | [`docs/proof/mcp_session.md`](docs/proof/mcp_session.md) — a Claude Code session: three tool calls, the JIT refusal, every figure from a tool result |
 | **How it works** | [ARCHITECTURE.md](ARCHITECTURE.md) · [docs/SPEC.md](docs/SPEC.md) |
 | **API feedback for CMC** | [FEEDBACK.md](FEEDBACK.md) — where the API got in the way, with dates and receipts |

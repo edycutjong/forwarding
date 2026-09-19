@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Render site/index.html, site/judge.html and JUDGE.md from the committed receipts.
+"""Render site/index.html, site/judge.html, site/pitch/index.html and JUDGE.md from the receipts.
 
-    python3 scripts/render_site.py            # write site/index.html, site/judge.html, JUDGE.md
+    python3 scripts/render_site.py            # write site/index.html, site/judge.html, site/pitch/index.html, JUDGE.md
     python3 scripts/render_site.py --check    # exit 1 if what is on disk is not this render
 
 Every number on either surface comes from docs/proof/*.json, which are real keyless runs. The
@@ -10,6 +10,8 @@ left unfilled, so a placeholder can never reach the committed HTML and a number 
 typed in by hand. The HTML under site/ is generated output: edit the template or the receipt,
 never the page. site/judge.html — the /judge route — is JUDGE.md itself, converted to HTML by
 md_to_html() below, so the judge guide on GitHub and the one on the site cannot disagree.
+site/pitch/index.html — the deck at /pitch — is the same contract: scripts/site_templates/pitch.html
+with every figure a slot, so the deck, the landing page and the README cannot carry different numbers.
 """
 
 import hashlib
@@ -32,10 +34,15 @@ SITE = BUILD / "site"
 
 REPO = "https://github.com/edycutjong/forwarding"
 SITE_URL = "https://forwarding-cmc.vercel.app"
+# GitHub Pages serves the same site/ at this host once the repository is public (site/CNAME,
+# .github/workflows/pages.yml); the Vercel deployment stays the API host and a mirror.
+PAGES_URL = "https://forwarding.edycu.dev"
 EVENT = "https://dorahacks.io/hackathon/coinmarketcap-api-202609/detail"
+EVENT_BUIDLS = "https://dorahacks.io/hackathon/coinmarketcap-api-202609/buidl"
 AUTHOR = "Edy Cu"
 X_HANDLE = "@edycutjong"
 OG_IMAGE = SITE / "assets" / "og-image.png"
+ICON_ANIMATED = BUILD / "docs" / "assets" / "icon-animated.svg"
 OG_SIZE = (1200, 630)
 PROPERTY_CASES = 2000
 CLI_CMD = (
@@ -218,6 +225,36 @@ def trace_rows(calls):
     return "\n".join(out)
 
 
+def cover_icon():
+    """The project's animated mark, inlined on the cover so the deck loads no extra asset. The
+    SMIL loops are cut from indefinite to two: the story plays twice, then rests on the poster
+    frame (frame 0 == the end state by the icon's own storyboard)."""
+    if not ICON_ANIMATED.exists():
+        sys.exit(f"{ICON_ANIMATED.relative_to(BUILD)} is missing — run scripts/sync-assets.sh")
+    svg = ICON_ANIMATED.read_text()
+    return svg.replace('repeatCount="indefinite"', 'repeatCount="2"')
+
+
+def deck_trace(calls):
+    """The live run's trace as the CLI prints it, one line per call: endpoint, the parameters
+    that matter, status, ms. Long values (addresses, cursors) are shortened the way the CLI does."""
+    out = []
+    for c in calls:
+        params = " ".join(
+            f"{k}={short(v, 4) if len(str(v)) > 24 else v}"
+            for k, v in c["params"].items()
+            if k != "limit"
+        )
+        if len(params) > 50:  # the cursor lines: keep the column, mark the cut
+            params = params[:49] + "…"
+        out.append(
+            f'<span class="dim">    GET </span><span class="m">{esc(c["endpoint"]):<30}</span>'
+            f'<span class="dim">{esc(params):<52}</span><span class="ok">{c["status"]}</span>'
+            f'<span class="dim">{c["ms"]:>6} ms</span>'
+        )
+    return "\n".join(out)
+
+
 def base_ctx(b):
     if not b:
         return {
@@ -232,6 +269,7 @@ def base_ctx(b):
             "base.method": "—",
             "base.summary": "not captured yet",
             "base.put_back_pct": "—",
+            "base.calls": "0",
         }
     n = b["n"]
     split = b["split"]
@@ -265,6 +303,7 @@ def base_ctx(b):
         "base.method": esc(b["method"]),
         "base.summary": summary,
         "base.put_back_pct": f"{back * 100:.0f}",
+        "base.calls": f"{b['calls_made']:,}",
     }
 
 
@@ -534,6 +573,18 @@ def context():
     base = load("base_rate")
     bench_replay = load("bench_replay") or {}
     bench_live = load("bench_live") or {}
+    live_run = load("live_run")
+    if not live_run:
+        sys.exit("docs/proof/live_run.json is missing — run the zero-flag investigate")
+    # The deck quotes the live run's call count and wall clock (DEMO.md's receipt) beside the
+    # hero's verdict; the two receipts must agree on the verdict or one of them is stale.
+    lv = live_run["verdict"]
+    if (lv["kind"], round(lv["recovered_share"], 4), lv["removal"]["txn"]) != (
+        v["kind"],
+        round(v["recovered_share"], 4),
+        r["txn"],
+    ):
+        sys.exit("docs/proof/live_run.json and hero.json disagree on the verdict — re-seed one")
     offline, live = test_count()
     (PROOF / "tests.json").write_text(
         json.dumps({"offline": offline, "live": live, "property_cases": PROPERTY_CASES}, indent=1)
@@ -619,6 +670,25 @@ def context():
         "bench.live_p50": f"{bench_live.get('investigate', {}).get('p50', 0):.1f}",
         "bench.live_p95": f"{bench_live.get('investigate', {}).get('p95', 0):.1f}",
         "bench.live_n": str(bench_live.get("investigate", {}).get("n", 0)),
+        # deck-only slots (scripts/site_templates/pitch.html)
+        "pages_url": PAGES_URL,
+        "pages_host": PAGES_URL.replace("https://", ""),
+        "event_buidls": EVENT_BUIDLS,
+        "icon.animated": cover_icon(),
+        "live.calls": str(live_run["calls_made"]),
+        "live.wall": f"{live_run['wall_clock_s']:.1f} s",
+        "live.captured": live_run["captured_utc"].replace("T", " ").replace("Z", " UTC"),
+        "live.trace": deck_trace(live_run["calls"]),
+        "hero.dest_liq_full": money(dest.get("liquidity_now_usd") or 0),
+        "hero.ts_remove": esc(r["ts"]),
+        "hero.ts_add": esc(add["ts"]),
+        "hero.elapsed_ms": f"{int(add['ts']) - int(r['ts']):,}",
+        "hero.remove_tu_raw": repr(float(r["tu"])),
+        "hero.add_tu_raw": repr(float(add["tu"])),
+        "hero.remove_a0_raw": repr(float(r.get("a0") or 0)),
+        "hero.add_a0_raw": repr(float(add.get("a0") or 0)),
+        "hero.remove_t1s": esc(r.get("t1s") or ""),
+        "hero.add_t1s": esc(add.get("t1s") or ""),
     }
     ctx.update(base_ctx(base))
     return ctx
@@ -635,6 +705,9 @@ def main():
         SITE / "judge.html": render(
             (TEMPLATES / "judge.html").read_text(), {**ctx, "judge.body": md_to_html(judge_md)}
         ),
+        # /pitch: the deck, same slots, same receipts — a judge comparing the deck, the landing
+        # page and the README sees one set of numbers
+        SITE / "pitch" / "index.html": render((TEMPLATES / "pitch.html").read_text(), ctx),
     }
     if check:
         # the render stamp is a date; a page rendered yesterday is not drift
@@ -648,10 +721,14 @@ def main():
             print(f"DRIFT: {p.relative_to(BUILD)} is not what the receipts render")
         if stale:
             sys.exit(1)
-        print("in sync: site/index.html, site/judge.html and JUDGE.md match docs/proof/*.json")
+        print(
+            "in sync: site/index.html, site/judge.html, site/pitch/index.html and JUDGE.md "
+            "match docs/proof/*.json"
+        )
         return
     SITE.mkdir(parents=True, exist_ok=True)
     for path, out in outputs.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(out)
     print(
         "rendered "
