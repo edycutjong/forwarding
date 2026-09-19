@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>For judges — Forwarding Address</title>
+<meta name="description" content="The 30-second path, the live receipt, the reproduce command and the honest limitations of Forwarding Address — one page, no setup, no key, no account.">
+<meta name="author" content="{{author}}">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0B0E14">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="canonical" href="{{site_url}}/judge">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Forwarding Address">
+<meta property="og:title" content="For judges — Forwarding Address">
+<meta property="og:description" content="The 30-second path, the live receipt, the reproduce command and the honest limitations — one page, no setup, no key, no account.">
+<meta property="og:url" content="{{site_url}}/judge">
+{{og.meta}}
+<meta name="twitter:title" content="For judges — Forwarding Address">
+<meta name="twitter:description" content="The 30-second path, the live receipt, the reproduce command and the honest limitations — one page, no setup, no key, no account.">
+<meta name="twitter:creator" content="{{x_handle}}">
+<style>
+@font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-latin-var.woff2) format("woff2")}
+@font-face{font-family:"Inter Tight";font-style:normal;font-weight:100 900;font-display:swap;src:url(assets/fonts/inter-tight-latin-var.woff2) format("woff2")}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:100 800;font-display:swap;src:url(assets/fonts/jetbrains-mono-latin-var.woff2) format("woff2")}
+:root{
+  --bg:#0B0E14;--surface:#141A24;--surface-2:#1A2230;--border:#243044;--text:#E6EDF3;--muted:#8B98A9;
+  --exit:#FF5C5C;--migration:#FFB020;--partial:#FF8A3D;--rebalance:#8B98A9;--maker:#4C9AFF;--ok:#3DDC97;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --display:"Inter Tight","Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--maker);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .15s}
+a:hover,a:focus-visible{border-bottom-color:currentColor;outline:none}
+a:focus-visible{outline:2px solid var(--maker);outline-offset:3px;border-radius:2px}
+.wrap{max-width:880px;margin:0 auto;padding:0 24px 64px}
+header.top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:28px 0 8px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:800;letter-spacing:.14em;font-size:.95rem;text-transform:uppercase}
+.brand a{color:var(--text)}
+.brand small{display:block;letter-spacing:0;text-transform:none;font-weight:400;color:var(--muted);font-family:var(--sans);font-size:1rem;margin-top:2px}
+nav.links{display:flex;gap:18px;flex-wrap:wrap;font-size:.95rem}
+nav.links a{color:var(--muted)}
+nav.links a:hover{color:var(--text)}
+article h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,5vw,3rem);line-height:1.05;letter-spacing:-.02em;margin:36px 0 12px}
+article h2{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:48px 0 14px;padding-top:24px;border-top:1px solid var(--border)}
+article p{margin:0 0 16px}
+article p.claim{background:var(--surface);border:1px solid var(--migration);border-radius:14px;padding:20px 24px;font-size:1.08rem;line-height:1.5}
+article strong{color:var(--text);font-weight:650}
+article code{font-family:var(--mono);font-size:.88em;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1px 6px;word-break:break-all}
+article pre{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-family:var(--mono);font-size:.86rem;line-height:1.55;overflow-x:auto;margin:0 0 16px;white-space:pre}
+article pre code{background:none;border:0;padding:0;font-size:inherit;word-break:normal}
+article ol,article ul{margin:0 0 16px;padding-left:1.4em}
+article li{margin:0 0 10px}
+article table{width:100%;border-collapse:collapse;font-size:.95rem;margin:0 0 16px}
+article th,article td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--border)}
+article th{font-family:var(--display);letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;color:var(--muted)}
+article thead:empty,article tr.empty{display:none}
+article td:first-child{white-space:nowrap;color:var(--muted)}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:.9rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:760px){
+  article td:first-child{white-space:normal}
+  article th,article td{padding:8px 8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="brand"><a href="./">Forwarding Address</a><small>Where the pulled liquidity went.</small></div>
+  <nav class="links" aria-label="Project links">
+    <a href="./">Home</a>
+    <a href="{{repo}}" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href="{{repo}}/blob/main/DEMO.md" target="_blank" rel="noopener noreferrer">Demo &amp; receipt</a>
+    <a href="{{repo}}/blob/main/FEEDBACK.md" target="_blank" rel="noopener noreferrer">API feedback</a>
+    <a href="./#live">Run it live</a>
+  </nav>
+</header>
+
+<article>
+{{judge.body}}
+</article>
+
+<footer>
+  <span>This page is <a href="{{repo}}/blob/main/JUDGE.md" target="_blank" rel="noopener noreferrer">JUDGE.md</a>, rendered from the same receipts · no auth, no cookies, no key</span>
+  <span>Built for the <a href="{{event}}" target="_blank" rel="noopener noreferrer">Build with CMC: API Hackathon</a> · AI Agents &amp; Automation · rendered {{rendered_utc}} from <span class="mono">docs/proof/*.json</span></span>
+</footer>
+
+</div>
+</body>
+</html>

@@ -38,7 +38,7 @@ flowchart LR
   SEED["scripts/seed.py<br/>base_rate.py · bench.py"] --> engine
   SEED --> PROOF[("docs/proof/*.json<br/>verbatim responses under their sha256")]
   PROOF --> VER["scripts/verify.py<br/>replay + I1–I6 + custody + page drift"]
-  PROOF --> RS["scripts/render_site.py"] --> SITE["site/index.html · JUDGE.md"]
+  PROOF --> RS["scripts/render_site.py"] --> SITE["site/index.html · site/judge.html · JUDGE.md"]
   JUDGE(["judge"]) --> CLI
   JUDGE -->|"claude mcp add"| MCP
   JUDGE --> SITE --> API
@@ -114,10 +114,10 @@ scripts/
   base_rate.py                  every ≥ $100k removal on the watchlist, each wallet followed → base_rate.json
   bench.py                      p50/p95: investigate end to end, follow, adjudicate — live and replay
   verify.py                     replay every receipt, assert I1–I6 and chain of custody, check page drift
-  render_site.py                docs/proof/*.json → site/index.html + JUDGE.md (--check = drift gate)
+  render_site.py                docs/proof/*.json → site/index.html + site/judge.html + JUDGE.md (--check = drift gate)
   check_submission_readiness.py placeholders, stale counts, stale numbers → exit 1
   spike_maker.py                the day-1 spike: is `m` the wallet? (answered: yes)
-  site_templates/               landing.html, JUDGE.md — slot tokens filled only from receipts
+  site_templates/               landing.html, judge.html, JUDGE.md — slot tokens filled only from receipts
 api/
   lookup.py                     GET /api/lookup?platform=&address= — same-chain investigate, CORS, 60 s cache
   health.py                     GET /api/health — engine, rule, receipt ages, python version
@@ -130,13 +130,14 @@ tests/
   test_cli.py                   exit codes 0/3/75/2, the receipt file, what is printed
   test_mcp.py                   the protocol over a real pipe; the three tools; the refusal
   test_published_counts.py      the counts the documents state are the counts pytest collects
-  test_live.py                  8 tests against the real API (pytest -m live)
+  test_boundary.py              least privilege, proven: the agent surface cannot send or be handed a key; the proxy takes a slug and an address, same chain, no secret
+  test_live.py                  10 tests against the real API and the deployment (pytest -m live)
 docs/
   SPEC.md                       the rule, formally
   proof/                        hero · runner_up · exit · rebalance · uni_v3_v4 · jit · base_rate ·
                                 live_run · bench_live · bench_replay · spike_maker · seed_sweep ·
                                 mcp_session.md + .jsonl · tests.json
-site/                           index.html (rendered), assets/ (icon, fonts under OFL)
+site/                           index.html and judge.html (rendered — /judge is JUDGE.md converted), assets/ (icon, fonts under OFL)
 ```
 
 ## Deliberate non-architecture
