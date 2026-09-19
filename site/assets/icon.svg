@@ -1,7 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Forwarding Address">
-  <rect width="64" height="64" rx="14" fill="#0B0E14"/>
-  <rect x="8" y="20" width="20" height="24" rx="4" fill="none" stroke="#FF5C5C" stroke-width="3"/>
-  <rect x="36" y="20" width="20" height="24" rx="4" fill="none" stroke="#FFB020" stroke-width="3"/>
-  <path d="M18 32 H46" stroke="#4C9AFF" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M40 26 L46 32 L40 38" fill="none" stroke="#4C9AFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Forwarding Address — follows the wallet: the blue wallet trail leaves the red removal row and lands on an amber add row one pool over.">
+  <title>Forwarding Address — two pools and the wallet trail between them</title>
+  <defs>
+  <filter id="iglow" x="-60%" y="-80%" width="220%" height="260%"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+  <!-- plate: opaque, so the mark holds on GitHub light AND dark; the edge is what survives on #0d1117 -->
+  <rect width="512" height="512" rx="112" fill="var(--bg-base, #0B0E14)"/>
+  <rect x="8" y="8" width="496" height="496" rx="105" fill="none" stroke="var(--text-low, #5E6C80)" stroke-width="6"/>
+  <rect x="68" y="216" width="156" height="150" rx="24" fill="var(--bg-surface, #141A24)" stroke="var(--gone, #FF5C5C)" stroke-width="16"/>
+  <rect x="100" y="272" width="92" height="64" rx="12" fill="none" stroke="var(--gone, #FF5C5C)" stroke-width="6" stroke-dasharray="14 10" opacity=".7"/>
+  <rect x="288" y="216" width="156" height="150" rx="24" fill="var(--bg-surface, #141A24)" stroke="var(--found, #FFB020)" stroke-width="16"/>
+  <rect x="320" y="272" width="92" height="64" rx="12" fill="var(--found, #FFB020)" filter="url(#iglow)" opacity=".5"/>
+  <rect x="320" y="272" width="92" height="64" rx="12" fill="var(--found, #FFB020)"/>
+  <path d="M146 208 C146 60 366 60 366 254" fill="none" stroke="var(--maker, #4C9AFF)" stroke-width="14" stroke-linecap="round" stroke-dasharray="22 16"/>
+  <path d="M336 226 L366 256 L396 226" fill="none" stroke="var(--maker, #4C9AFF)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

@@ -1,10 +1,14 @@
 <div align="center">
 
-<img src="docs/assets/icon.svg" alt="Forwarding Address icon" width="128">
+<img src="docs/assets/icon.svg" alt="Forwarding Address — two pools and the wallet trail between them" width="128">
 
 <h1>Forwarding Address</h1>
 
 <p><em>Where the pulled liquidity went.</em></p>
+
+<p align="center">
+  <img src="docs/assets/readme-hero-animated.svg" alt="Forwarding Address — follows the wallet: the blue wallet trail leaves the red removal row and lands on an amber add row one pool over" width="100%">
+</p>
 
 <p>Every “LP removed” alert stops at the row that fired it. Forwarding Address follows the
 <strong>wallet</strong> — across every pool of the token, on this chain and on every other EVM

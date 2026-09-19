@@ -106,8 +106,9 @@ def png_size(path):
     return struct.unpack(">II", head[16:24])
 
 
-def og_meta():
-    """The social-card tags, only when the image exists at exactly 1200x630 — never a dead link."""
+def og_meta(verdict):
+    """The social-card tags, only when the image exists at exactly 1200x630 — never a dead link.
+    The alt text is derived from the hero receipt like every other number on the page."""
     if not OG_IMAGE.exists():
         return ""
     w, h = png_size(OG_IMAGE)
@@ -115,12 +116,15 @@ def og_meta():
         sys.exit(f"og-image.png is {w}x{h}; the card must be exactly {OG_SIZE[0]}x{OG_SIZE[1]}")
     v = hashlib.sha1(OG_IMAGE.read_bytes()).hexdigest()[:8]
     url = f"{SITE_URL}/assets/og-image.png?v={v}"
+    alt = (
+        f"A red LP-removed alert becoming an {verdict['severity']} {verdict['kind']} verdict: "
+        f"{verdict['recovered_share'] * 100:.1f}% recovered."
+    )
     return (
         f'<meta property="og:image" content="{url}">\n'
         f'<meta property="og:image:width" content="{w}">\n'
         f'<meta property="og:image:height" content="{h}">\n'
-        '<meta property="og:image:alt" content="A red LP-removed alert becoming an amber '
-        'MIGRATION verdict: 99.9% recovered.">\n'
+        f'<meta property="og:image:alt" content="{esc(alt)}">\n'
         '<meta name="twitter:card" content="summary_large_image">\n'
         f'<meta name="twitter:image" content="{url}">'
     )
@@ -392,7 +396,7 @@ def context():
         "event": EVENT,
         "author": AUTHOR,
         "x_handle": X_HANDLE,
-        "og.meta": og_meta(),
+        "og.meta": og_meta(v),
         "meta.description": esc(desc[:300]),
         "cli_cmd": CLI_CMD,
         "mcp_cmd": MCP_CMD,

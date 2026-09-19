@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Forwarding Address — follows the wallet: the blue wallet trail leaves the red removal row and lands on an amber add row one pool over.">
+  <title>Forwarding Address — the trail leaves the red pool and lands in the amber one</title>
+  <!--
+  STORYBOARD (dur 6s — must equal this file's single master dur) — icon-animated.svg
+    beat 1   0-10%    0.00s-0.60s   POSTER: the end-state — trail landed, the add row found, verdict amber. Identical to icon.svg; frame 0 is a usable still.
+    beat 2  10-18%    0.60s-1.08s   RESET: the end-state DISSOLVES (opacity only, a scene cut) to the alert as fired: red removal, destination blank.   data-story="beat-2"
+    beat 3  18-52%    1.08s-3.12s   FOLLOW: The blue wallet trail leaves the red removal row and lands on an amber add row one pool over.   data-story="beat-3"
+    beat 4  52-66%    3.12s-3.96s   FLIP: the block pops into the second pool, the pool lights amber, the alert rewrites its own severity red -> amber.   data-story="beat-4"
+    beat 5  66-100%   3.96s-6.00s   HOLD: the verdict stands; glow breath on the found block; the seam sits inside the hold (frame 6s == frame 0s, zero velocity).
+  -->
+  <style>
+    /* prefers-reduced-motion: SMIL ignores CSS animation:none, so the guard swaps the animated story
+       layer (.anim) for a static duplicate of the poster frame (.still). The still layer is hidden by a
+       display="none" ATTRIBUTE so that if GitHub strips this block the animation simply plays; if the
+       block survives, the rule outranks the attribute and reduced motion gets its still. */
+    @media (prefers-reduced-motion: reduce) { .anim { display: none; } .still { display: inline; } }
+  </style>
+  <defs>
+  <filter id="iglow" x="-60%" y="-80%" width="220%" height="260%"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#0B0E14"/>
+  <rect x="8" y="8" width="496" height="496" rx="105" fill="none" stroke="#5E6C80" stroke-width="6"/>
+  <g class="anim">
+    <!-- L pool: neutral until the removal fires, then red for the rest of the loop -->
+    <rect x="68" y="216" width="156" height="150" rx="24" fill="#141A24" stroke="#FF5C5C" stroke-width="16">
+      <animate attributeName="stroke" values="#FF5C5C;#FF5C5C;#5E6C80;#5E6C80;#FF5C5C;#FF5C5C" keyTimes="0;0.1;0.18;0.22;0.3;1" dur="6s" repeatCount="indefinite"/>
+    </rect>
+    <!-- the block at rest in L (the state before the alert) — lifts out and fades at the trigger -->
+    <rect data-story="beat-2" x="100" y="272" width="92" height="64" rx="12" fill="#8B98A9" opacity="0">
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.14;0.18;0.22;0.3;1" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="272;272;272;272;238;272" keyTimes="0;0.14;0.18;0.22;0.3;1" dur="6s" repeatCount="indefinite" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0.16 0.84 0.44 1;0 0 1 1"/>
+    </rect>
+    <!-- the ghost: where the block was — visible from the trigger on, and in the poster -->
+    <rect x="100" y="272" width="92" height="64" rx="12" fill="none" stroke="#FF5C5C" stroke-width="6" stroke-dasharray="14 10" opacity=".7">
+      <animate attributeName="opacity" values=".7;.7;0;0;.7;.7" keyTimes="0;0.1;0.14;0.24;0.3;1" dur="6s" repeatCount="indefinite"/>
+    </rect>
+    <!-- R pool: neutral until the trail lands, then amber -->
+    <rect x="288" y="216" width="156" height="150" rx="24" fill="#141A24" stroke="#FFB020" stroke-width="16">
+      <animate attributeName="stroke" values="#FFB020;#FFB020;#5E6C80;#5E6C80;#FFB020;#FFB020" keyTimes="0;0.1;0.18;0.52;0.56;1" dur="6s" repeatCount="indefinite"/>
+    </rect>
+    <!-- the trail: the maker address. Revealed by a mask whose dashoffset draws along the arc — the
+         dashes stay dashes, and the arrowhead is uncovered last, inside the second pool. -->
+    <mask id="ireveal" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <path d="M146 208 C146 60 366 60 366 254 L366 262" pathLength="100" fill="none" stroke="#fff" stroke-width="84" stroke-linecap="butt" stroke-dasharray="100 100" stroke-dashoffset="0">
+        <animate attributeName="stroke-dashoffset" values="0;0;0;100;100;0;0" keyTimes="0;0.1;0.18;0.181;0.32;0.52;1" dur="6s" repeatCount="indefinite" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0.16 0.84 0.44 1;0 0 1 1"/>
+      </path>
+    </mask>
+    <g mask="url(#ireveal)">
+      <g>
+        <animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0;0.1;0.14;0.3;0.32;1" dur="6s" repeatCount="indefinite"/>
+        <path d="M146 208 C146 60 366 60 366 254" fill="none" stroke="#4C9AFF" stroke-width="14" stroke-linecap="round" stroke-dasharray="22 16"/>
+        <path d="M336 226 L366 256 L396 226" fill="none" stroke="#4C9AFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <!-- glow breath: a blurred copy of the found block, breathing through the hold -->
+    <rect x="320" y="272" width="92" height="64" rx="12" fill="#FFB020" filter="url(#iglow)" opacity=".5">
+      <animate attributeName="opacity" values=".5;.5;0;0;.6;.36;.56;.36;.5;.5" keyTimes="0;0.1;0.14;0.52;0.6;0.72;0.8;0.88;0.95;1" dur="6s" repeatCount="indefinite"/>
+    </rect>
+    <!-- the block, now in R: the same block, present in exactly one pool. Pops in at the landing. -->
+    <rect x="320" y="272" width="92" height="64" rx="12" fill="#FFB020">
+      <animate attributeName="opacity" values="1;1;0;0;1;1" keyTimes="0;0.1;0.14;0.52;0.53;1" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="x" values="320;320;320;366;366;315.9;320;320" keyTimes="0;0.1;0.18;0.181;0.52;0.565;0.6;1" dur="6s" repeatCount="indefinite" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0.16 0.84 0.44 1;0.16 0.84 0.44 1;0 0 1 1"/>
+      <animate attributeName="y" values="272;272;272;304;304;269.1;272;272" keyTimes="0;0.1;0.18;0.181;0.52;0.565;0.6;1" dur="6s" repeatCount="indefinite" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0.16 0.84 0.44 1;0.16 0.84 0.44 1;0 0 1 1"/>
+      <animate attributeName="width" values="92;92;92;0;0;100.3;92;92" keyTimes="0;0.1;0.18;0.181;0.52;0.565;0.6;1" dur="6s" repeatCount="indefinite" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0.16 0.84 0.44 1;0.16 0.84 0.44 1;0 0 1 1"/>
+      <animate attributeName="height" values="64;64;64;0;0;69.8;64;64" keyTimes="0;0.1;0.18;0.181;0.52;0.565;0.6;1" dur="6s" repeatCount="indefinite" calcMode="spline" keySplines="0 0 1 1;0 0 1 1;0 0 1 1;0 0 1 1;0.16 0.84 0.44 1;0.16 0.84 0.44 1;0 0 1 1"/>
+    </rect>
+  </g>
+  <g class="still" display="none">
+  <rect x="68" y="216" width="156" height="150" rx="24" fill="#141A24" stroke="#FF5C5C" stroke-width="16"/>
+  <rect x="100" y="272" width="92" height="64" rx="12" fill="none" stroke="#FF5C5C" stroke-width="6" stroke-dasharray="14 10" opacity=".7"/>
+  <rect x="288" y="216" width="156" height="150" rx="24" fill="#141A24" stroke="#FFB020" stroke-width="16"/>
+  <rect x="320" y="272" width="92" height="64" rx="12" fill="#FFB020" filter="url(#iglow)" opacity=".5"/>
+  <rect x="320" y="272" width="92" height="64" rx="12" fill="#FFB020"/>
+  <path d="M146 208 C146 60 366 60 366 254" fill="none" stroke="#4C9AFF" stroke-width="14" stroke-linecap="round" stroke-dasharray="22 16"/>
+  <path d="M336 226 L366 256 L396 226" fill="none" stroke="#4C9AFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
