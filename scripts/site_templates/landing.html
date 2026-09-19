@@ -205,7 +205,7 @@ svg.block .row.leg rect{fill:var(--accent)}
 .hero.rebalance .share,.hero.rebalance .claim em{color:var(--muted)}
 .hero.partial .share,.hero.partial .claim em{color:var(--partial)}
 .hero.refused .share,.hero.refused .claim em{color:var(--muted)}
-.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface)}
+.tablewrap{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface)}   /* position:relative — LANDING_DESIGN.md §4: the scroll container is the containing block for the sr-only spans inside it */
 table.pools{width:100%;border-collapse:collapse;font-size:.95rem}
 table.pools th,table.pools td{padding:11px 12px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--border)}
 table.pools th{font-family:var(--font-mono);color:var(--muted);font-weight:500;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;user-select:none}
@@ -229,7 +229,7 @@ tr.routed td.pool{box-shadow:inset 4px 0 0 var(--verdict)}
 .rows{margin:0 0 24px;padding:20px 22px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg)}
 .rows h3{margin:0 0 4px}
 .rows .cap{color:var(--muted);font-size:.9rem;margin-bottom:12px;font-family:var(--font-mono);overflow-wrap:anywhere}
-.rowlist{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.rowlist{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .rowlist table{width:100%;border-collapse:collapse;font-size:.88rem}
 .rowlist th,.rowlist td{padding:7px 10px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}
 .rowlist th{font-family:var(--font-mono);font-weight:500;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -297,7 +297,7 @@ details.calls .rowlist td:last-child{overflow-wrap:anywhere;white-space:normal;m
 .proof .arrow-ext{position:absolute;top:10px;right:12px;margin:0;color:var(--muted)}
 
 /* ── api table + findings ────────────────────────────────────────────────────── */
-.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.scroll-x{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch}
 table.api{width:100%;border-collapse:collapse;font-size:.95rem}
 table.api th,table.api td{padding:12px 10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
 table.api tr:last-child td{border-bottom:0}
@@ -700,6 +700,8 @@ footer .bottom .ver{color:var(--accent)}
   const LIST = '/v1/dex/liquidity-change/list';
   const BASE = 'https://pro-api.coinmarketcap.com/public-api';
   const CLI = '{{cli_cmd}}';
+  // every off-site link the page re-renders ends in this — the same EXT as scripts/render_site.py (LANDING_DESIGN.md 6.4)
+  const EXT = '<span class="arrow arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span>';
 
   // ── the product section: one set of slots, filled from a committed receipt or a live run ──
   const SLOT = { context: 'context', share: 'share', claim: 'claim', support: 'support', table: 'tbody', route_line: 'routeline', route_rule: 'routerule', rows_title: 'rowstitle', rows_cap: 'rowscap', rows_table: 'rowlist', rows_arith: 'arith', rows_json: 'rawpre', receipt: 'receipt-grid', calls: 'callslist', calls_n: 'calls-n' };
@@ -734,13 +736,15 @@ footer .bottom .ver{color:var(--accent)}
   function joinCall(calls) { return calls.find((c) => c.endpoint === LIST && c.params && c.params.maker) || calls.find((c) => c.endpoint === LIST) || calls[0] || { endpoint: LIST, params: {} }; }
   function receiptGrid(d, calls, chains) {
     const jc = joinCall(calls), statuses = Array.from(new Set(calls.map((c) => String(c.status)))).sort();
+    // the fifth and sixth keys name the call they hash: the maker= join for a verdict, the trigger page for a refusal
+    const joined = !!(jc.params && jc.params.maker), which = joined ? 'join call' : 'trigger page';
     const items = [
-      ['endpoint', '<span class="mono">' + LIST + '?maker=</span> — the join'],
+      ['endpoint', joined ? '<span class="mono">' + LIST + '?maker=</span> — the join' : '<span class="mono">' + LIST + '</span> — the trigger page; refused before any join'],
       ['calls', calls.length + ' · HTTP ' + statuses.join(', ') + (chains ? ' · ' + chains + ' chain followed, same chain only' : ' · refused before any follow')],
       ['credits used', '<span class="mono">' + esc(d.credits_used || 0) + '</span> — ' + esc(d.auth || 'none — keyless /public-api')],
       ['captured', '<span class="mono">live, just now</span> · ' + esc(d.wall_clock_s || '') + ' s wall clock' + (d.cached ? ' · served from the proxy\'s 60 s cache' : '')],
-      ['first page sha256', '<span class="mono">' + esc(jc.sha256 || '—') + '</span>'],
-      ['first request', '<a class="mono" href="' + esc(callUrl(jc)) + '" target="_blank" rel="noopener noreferrer">' + esc(callUrl(jc)) + '</a>'],
+      [which + ' sha256', '<span class="mono">' + esc(jc.sha256 || '—') + '</span>'],
+      [which.split(' ')[0] + ' request', '<a class="mono" href="' + esc(callUrl(jc)) + '" target="_blank" rel="noopener noreferrer">' + esc(callUrl(jc)) + EXT + '</a>'],
       ['re-derive', '<span class="mono">' + esc(CLI.replace(/--platform \S+ --address \S+/, '--platform ' + $('platform').value + ' --address ' + $('addr').value.trim())) + '</span> · the CLI follows {{trigger.rows}} rows and every sibling chain · <a href="#calls">every call ↓</a>'],
     ];
     return items.map(([k, v]) => '<div><div class="k">' + k + '</div><div class="v">' + v + '</div></div>').join('');

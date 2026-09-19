@@ -66,6 +66,10 @@ MCP_SESSION = PROOF / "mcp_session.jsonl"
 # outcome the same published rule produced. Each is a real keyless run; none is picked by hand.
 SWITCHER = ["hero", "uni_v3_v4", "rebalance", "runner_up", "exit", "jit"]
 LIST_EP = "/v1/dex/liquidity-change/list"
+# Every off-site link the script emits ends in this (LANDING_DESIGN.md 6.4) — the arrow the eye
+# reads and the words a screen reader needs; the page script carries the same EXT for the links
+# it re-renders on a token switch or a live run.
+EXT = '<span class="arrow arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span>'
 
 ENDPOINTS = [
     (
@@ -336,7 +340,7 @@ def mini_card(name, d):
             f"<p><b>{esc(d['sym'])}</b> · +{esc(money(usd(add)))} and −{esc(money(usd(rem)))} in <b>one transaction</b> "
             f"({esc(venue(rem))}) — just-in-time liquidity, not an event.</p>"
             f"<p>Named by hash, the agent answers: <i>{esc(d['refused'])}</i></p>"
-            f'<p><a href="{REPO}/blob/main/docs/proof/jit.json" target="_blank" rel="noopener noreferrer">jit.json ↗</a></p></div>'
+            f'<p><a href="{REPO}/blob/main/docs/proof/jit.json" target="_blank" rel="noopener noreferrer">jit.json{EXT}</a></p></div>'
         )
     v = d["verdict"]
     r = v["removal"]
@@ -384,7 +388,7 @@ def mini_card(name, d):
         f'<div class="n">{n}<span style="font-size:.5em;color:var(--muted);font-weight:500"> recovered</span></div>'
         f"{body}"
         f"<p>captured {esc(d['captured_utc'].replace('T', ' ').replace('Z', ' UTC'))} · {d['calls_made']} calls · 0 credits · "
-        f'<a href="{REPO}/blob/main/docs/proof/{name}.json" target="_blank" rel="noopener noreferrer">{name}.json ↗</a></p></div>'
+        f'<a href="{REPO}/blob/main/docs/proof/{name}.json" target="_blank" rel="noopener noreferrer">{name}.json{EXT}</a></p></div>'
     )
 
 
@@ -644,15 +648,36 @@ def sev_word(kind, severity):
     return f"severity rewritten <em>red → {esc(severity)}</em>"
 
 
-def join_call(calls):
-    """The call the verdict rests on: the maker= follow on the removal's own chain."""
+def join_call(calls, d=None):
+    """The call the rows on the page came from: the maker= follow on the removal's own chain
+    (the join every verdict rests on) — or, for a refusal that never joined, the trigger page
+    whose stored bytes hold the refused pair. jit.json's pair sits on the third page, not the
+    first, and the receipt block used to hash the first."""
     for c in calls:
         if c["endpoint"] == LIST_EP and "maker" in c["params"]:
+            return c
+    txn = (d or {}).get("txn")
+    for c in calls:
+        if (
+            txn
+            and c["endpoint"] == LIST_EP
+            and holds_txn((d or {}).get("responses", {}).get(c.get("sha256")), txn)
+        ):
             return c
     for c in calls:
         if c["endpoint"] == LIST_EP:
             return c
     return calls[0]
+
+
+def holds_txn(body, txn):
+    """Whether a stored /liquidity-change/list response carries a row with this txn hash."""
+    rows = ((body or {}).get("data") or {}).get("lcs") or []
+    return any(isinstance(r, dict) and r.get("txn") == txn for r in rows)
+
+
+def is_join(c):
+    return c.get("endpoint") == LIST_EP and "maker" in (c.get("params") or {})
 
 
 def params_text(params, n=6):
@@ -683,12 +708,22 @@ def calls_table(calls):
 
 def receipt_grid(d, name, calls):
     """The seven keys of the family receipt block, in the family order."""
-    jc = join_call(calls)
+    jc = join_call(calls, d)
     statuses = sorted({str(c["status"]) for c in calls})
     v = d.get("verdict") or {}
     chains = len(v.get("follows") or [])
+    # The fifth and sixth keys name the call whose hash and URL they show: the maker= join for a
+    # verdict, the trigger page that held the pair for a refusal — never "first", which it is not
+    # (the token lookup is call 1 on every receipt).
+    joined = is_join(jc)
+    which = "join call" if joined else "trigger page"
     items = [
-        ("endpoint", f'<span class="mono">{esc(LIST_EP)}?maker=</span> — the join'),
+        (
+            "endpoint",
+            f'<span class="mono">{esc(LIST_EP)}?maker=</span> — the join'
+            if joined
+            else f'<span class="mono">{esc(LIST_EP)}</span> — the trigger page; refused before any join',
+        ),
         (
             "calls",
             f"{d['calls_made']} · HTTP {', '.join(statuses)}"
@@ -699,14 +734,14 @@ def receipt_grid(d, name, calls):
             "captured",
             f'<span class="mono">{esc(d["captured_utc"])}</span> · {d["wall_clock_s"]:.1f} s wall clock',
         ),
-        ("first page sha256", f'<span class="mono">{esc(jc.get("sha256", "—"))}</span>'),
+        (f"{which} sha256", f'<span class="mono">{esc(jc.get("sha256", "—"))}</span>'),
         (
-            "first request",
-            f'<a class="mono" href="{esc(call_url(jc))}" target="_blank" rel="noopener noreferrer">{esc(call_url(jc))}</a>',
+            f"{which.split()[0]} request",
+            f'<a class="mono" href="{esc(call_url(jc))}" target="_blank" rel="noopener noreferrer">{esc(call_url(jc))}{EXT}</a>',
         ),
         (
             "re-derive",
-            f'<span class="mono">python3 scripts/verify.py</span> · <a href="{REPO}/blob/main/docs/proof/{name}.json" target="_blank" rel="noopener noreferrer">{name}.json ↗</a> · <a href="#calls">every call ↓</a>',
+            f'<span class="mono">python3 scripts/verify.py</span> · <a href="{REPO}/blob/main/docs/proof/{name}.json" target="_blank" rel="noopener noreferrer">{name}.json{EXT}</a> · <a href="#calls">every call ↓</a>',
         ),
     ]
     return "".join(f'<div><div class="k">{k}</div><div class="v">{v}</div></div>' for k, v in items)
@@ -861,11 +896,11 @@ def verdict_slots(name, d):
             f"±{(v.get('window_h') or {}).get('back', 6):.0f} h on {n_follow} chains, every follow 200"
         )
     # the rows panel
-    jc = join_call(d["calls"])
+    jc = join_call(d["calls"], d)
     cap = (
         f'maker <span class="mono">{esc(r["m"])}</span> · endpoint <span class="mono">{esc(LIST_EP)}?maker=</span> · '
         f'sha256 <span class="mono">{esc((jc.get("sha256") or "")[:16])}…</span> · '
-        f'<a href="{REPO}/blob/main/docs/proof/{name}.json" target="_blank" rel="noopener noreferrer">the whole receipt ↗</a>'
+        f'<a href="{REPO}/blob/main/docs/proof/{name}.json" target="_blank" rel="noopener noreferrer">the whole receipt{EXT}</a>'
     )
     trs = [row_tr(r, "gone")]
     for e in adds[:4]:
@@ -938,7 +973,7 @@ def jit_slots(name, d):
     rows = d["rows"]
     add = next(x for x in rows if x["tp"] == "add")
     rem = next(x for x in rows if x["tp"] == "remove")
-    jc = join_call(d["calls"])
+    jc = join_call(d["calls"], d)
     support = (
         f"<b>+{money(usd(add))}</b> and <b>−{money(usd(rem))}</b> in one transaction on "
         f"{esc(venue(rem))} · {esc(pair(rem))}, {esc(fmt_utc(ts_ms(rem)))} — just-in-time liquidity. "
@@ -968,7 +1003,7 @@ def jit_slots(name, d):
         "rows_cap": (
             f'txn <span class="mono">{esc(d["txn"])}</span> · endpoint <span class="mono">{esc(LIST_EP)}</span> · '
             f'sha256 <span class="mono">{esc((jc.get("sha256") or "")[:16])}…</span> · '
-            f'<a href="{REPO}/blob/main/docs/proof/{name}.json" target="_blank" rel="noopener noreferrer">the whole receipt ↗</a>'
+            f'<a href="{REPO}/blob/main/docs/proof/{name}.json" target="_blank" rel="noopener noreferrer">the whole receipt{EXT}</a>'
         ),
         "rows_table": ROWS_HEAD + trs + "</tbody></table>",
         "rows_arith": (
@@ -1147,7 +1182,9 @@ def findings_ctx(live_run, bench_live):
         "find.backoffs": str(sum(1 for c in live_run["calls"] if (c.get("attempts") or 1) > 1)),
         "find.backoff_s": str(forwarding.BACKOFF_S),
         # the schedule the code runs (BACKOFF_S doubling RETRIES times), never typed: "15 / 30 / 60"
-        "find.backoff_schedule": " / ".join(str(forwarding.BACKOFF_S * 2**i) for i in range(forwarding.RETRIES)),
+        "find.backoff_schedule": " / ".join(
+            str(forwarding.BACKOFF_S * 2**i) for i in range(forwarding.RETRIES)
+        ),
         "find.live_wall": f"{live_run['wall_clock_s']:.1f}",
         "find.sane_usd": compact_money(forwarding.SANE_USD).replace(".00", ""),
     }
@@ -1270,7 +1307,7 @@ def proof_links(hero, live_run, base, mcp):
     )
     return "".join(
         f'<a href="{REPO}/blob/main/docs/proof/{esc(f)}" target="_blank" rel="noopener noreferrer">'
-        f'<div class="f">docs/proof/{esc(f)}<span class="arrow arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></div>'
+        f'<div class="f">docs/proof/{esc(f)}{EXT}</div>'
         f'<div class="m">{esc(m)}</div></a>'
         for f, m in items
     )
@@ -1440,8 +1477,12 @@ def context():
         "jit.sym": esc(jit["sym"]) if jit else "—",
         "jit.usd": f"{jit['usd']:,.0f}" if jit else "—",
         "endpoints.count": str(len(ENDPOINTS)),
-        "endpoints.others": str(len(ENDPOINTS) - 1),  # "the other N endpoints" in the API lede, counted with the h2
-        "trigger.rows": str(forwarding.TRIGGER_PAGES * forwarding.PAGE),  # the trigger's depth: 3 pages × 100 rows
+        "endpoints.others": str(
+            len(ENDPOINTS) - 1
+        ),  # "the other N endpoints" in the API lede, counted with the h2
+        "trigger.rows": str(
+            forwarding.TRIGGER_PAGES * forwarding.PAGE
+        ),  # the trigger's depth: 3 pages × 100 rows
         "endpoints.rows": "\n".join(
             f'        <tr><td class="mono">{esc(p)}</td><td>{esc(what).replace("`maker=`", "<span class=mono>maker=</span>")}</td><td class="ok-t">yes · 0 credits</td></tr>'
             for p, what in ENDPOINTS
