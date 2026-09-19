@@ -21,7 +21,7 @@ from urllib.parse import parse_qs, urlparse
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
 import forwarding  # noqa: E402
 
-CACHE = {}  # (platform, address) -> (expires_at, payload); per function instance, 60 s
+CACHE: dict[tuple[str, str], tuple[float, dict]] = {}  # per function instance, 60 s
 CACHE_S = 60
 SPACING_S = 0.4  # faster than the CLI's 2 s: one visitor, six calls, one shared IP
 EVM = re.compile(r"^0x[0-9a-fA-F]{40}$")

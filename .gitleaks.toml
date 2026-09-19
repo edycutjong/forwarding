@@ -1,0 +1,17 @@
+# gitleaks configuration — the default ruleset, plus one precise allowlist.
+#
+# The committed receipts under docs/proof/ quote CoinMarketCap responses verbatim, and
+# /v2/cryptocurrency/info labels a contract address `token_address`. The generic-api-key rule
+# reads the word "token" beside 40 hex characters as a credential. It is a 20-byte EVM address:
+# a public identifier printed on every block explorer, never a secret. Nothing else is
+# allowlisted — a real key (32+ bytes, or a CMC UUID) still fails the scan.
+
+title = "forwarding-address"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "EVM contract and wallet addresses (0x + 40 hex) are public identifiers"
+regexTarget = "secret"
+regexes = ['''^0x[0-9a-fA-F]{40}$''']

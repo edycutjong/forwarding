@@ -38,7 +38,7 @@ UNI_ELSEWHERE = [
     ("polygon", "0xb33eaad8d922b1083446dc23f610c2567fb5180f"),
     ("unichain", "0x8f187aa05619a017077f5308904739877ce9ea21"),
 ]
-CALLS = []
+CALLS: list[dict] = []
 NPM = "0xc36442b4a4522e871399cd717abdd847ab11fe88"  # Uniswap v3 NonfungiblePositionManager
 
 
