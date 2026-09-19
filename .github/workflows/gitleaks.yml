@@ -1,0 +1,14 @@
+name: gitleaks
+# Full history, every push: the mechanical form of the rule "before any public flip, scan
+# history for secrets". .gitleaks.toml allowlists exactly one shape — a 20-byte EVM address,
+# which CMC's info endpoint labels token_address in the committed receipts.
+on: [push, pull_request, workflow_dispatch]
+permissions: { contents: read }
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: gitleaks/gitleaks-action@v2
+        env: { GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }

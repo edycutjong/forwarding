@@ -1,0 +1,129 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request:
+  workflow_dispatch:
+permissions: { contents: read }
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: "Stage 1 · Lint + typecheck"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -r requirements-dev.txt
+      - run: ruff check --output-format=github .
+      - run: ruff format --check .
+      - run: mypy scripts api --ignore-missing-imports
+
+  test:
+    name: "Stage 1 · Tests + coverage"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ${{ github.event_name == 'push' && fromJSON('["3.11","3.12","3.13"]') || fromJSON('["3.11"]') }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '${{ matrix.python-version }}' }
+      - run: pip install -r requirements-dev.txt
+      # Offline only. The live tests run in the live-api job below, where a CMC rate limit is
+      # diagnosed as a rate limit rather than reported as a test failure. Coverage is measured
+      # on the judged path (scripts/forwarding.py, scripts/mcp_server.py, api/) and gated —
+      # the receipt-producing scripts are EXECUTED by the verify and bench jobs instead.
+      - run: pytest -q -m "not live" --cov --cov-report=term-missing --cov-report=xml --cov-fail-under=90
+      - uses: actions/upload-artifact@v4
+        if: matrix.python-version == '3.11'
+        with: { name: coverage, path: coverage.xml, retention-days: 7 }
+
+  audit:
+    name: "Stage 2 · Dependency audit"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      # The runtime has zero dependencies by design; the dev file is what this workflow installs.
+      - run: pip install pip-audit && pip-audit -r requirements.txt -r requirements-dev.txt
+
+  readiness:
+    name: "Stage 2 · No placeholders, no drift"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -r requirements-dev.txt
+      # An unfilled address, a fake video link, a TODO, a template token, a stale test count or
+      # a killer number the README states but hero.json does not hold — any of them fails here.
+      - run: python3 scripts/check_submission_readiness.py
+      # site/index.html, site/judge.html and JUDGE.md are rendered from docs/proof/*.json. If the
+      # committed output is not what the generator produces, a number was edited by hand — fail.
+      - run: python3 scripts/render_site.py --check
+
+  verify:
+    name: "Stage 3 · Replay every receipt"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -r requirements-dev.txt
+      # Every committed receipt back through adjudicate(): invariants I1–I6, chain of custody
+      # (each evidence row verbatim inside a stored response), and the page carries those numbers.
+      - run: python3 scripts/verify.py
+
+  bench:
+    name: "Stage 3 · Deterministic benchmark"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      # Replay against the committed receipts: no network, so this number is comparable across
+      # runs. It measures the arithmetic, not the product. The LIVE number is the job below.
+      - run: python3 scripts/bench.py --replay --iterations 200
+
+  live-api:
+    name: "Stage 4 · The judged capability, for real"
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -r requirements-dev.txt
+      # No secret is configured for this job, deliberately: the judged path is keyless, so this
+      # runs on forks and PRs too. If CMC changes the contract, it breaks here rather than in
+      # front of a judge.
+      # Exit 75 is EX_TEMPFAIL: CMC throttled this runner. The keyless surface is rate-limited
+      # per IP and GitHub's runners share theirs with everyone else on the platform, so a red
+      # badge there would report someone else's traffic as our breakage. Every other non-zero
+      # exit still fails the job, which is the point of running this live at all.
+      - name: Follow the wallet behind UNI's largest removal, with no credentials
+        run: |
+          mkdir -p out
+          set +e
+          python3 scripts/forwarding.py --json out/ci_live_run.json investigate \
+            --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984
+          code=$?
+          set -e
+          if [ "$code" -eq 75 ]; then
+            echo "::warning title=CMC throttled this runner::Anonymous tier rate-limited the shared runner IP (EX_TEMPFAIL). Not a product failure — re-run to confirm."
+            exit 0
+          fi
+          exit "$code"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: live-run-receipt, path: out/ci_live_run.json, retention-days: 14, if-no-files-found: ignore }
+      # The external contract and the deployment: maker= filters, the hero reproduces, the
+      # sibling chains answer, /judge and /api/health answer with no credentials. A throttle
+      # here is a SKIP with CMC's message (see tests/test_live.py), never a pass.
+      - name: Live contract + deployment tests
+        run: pytest -q -m live -rs
