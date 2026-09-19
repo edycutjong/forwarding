@@ -84,14 +84,15 @@ h2{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:.
 .card.alert.flipped .phase-red{visibility:hidden}
 .card.alert.flipped .phase-verdict{visibility:visible}
 .trace{margin:10px 0 0;padding:0;list-style:none;font-family:var(--mono);font-size:.85rem}
-.trace li{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto;gap:14px;padding:7px 0;border-top:1px solid var(--border);align-items:baseline;opacity:0;transform:translateY(4px);animation:rowin .35s ease forwards}
+.trace li{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto;gap:14px;padding:7px 0;border-top:1px solid var(--border);align-items:baseline;visibility:hidden;transform:translateY(6px);animation:rowin .35s ease forwards}
 .trace li:first-child{border-top:0}
 .trace .ep{color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .trace .ep span{color:var(--muted)}
 .trace .chip{color:var(--ok);background:rgba(61,220,151,.1);border:1px solid rgba(61,220,151,.3);border-radius:6px;padding:1px 8px;font-size:.78rem}
 .trace .ms,.trace .cr,.trace .sha{color:var(--muted);font-size:.8rem;white-space:nowrap}
 .trace .sha{cursor:pointer;border-bottom:1px dotted var(--muted)}
-@keyframes rowin{to{opacity:1;transform:none}}
+/* rows slide in under a visibility gate — never text at partial opacity, which axe reads as a contrast failure */
+@keyframes rowin{from{visibility:visible;transform:translateY(6px)}to{visibility:visible;transform:none}}
 .rows{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
 .json{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 18px;font-family:var(--mono);font-size:.84rem;line-height:1.6;overflow-x:auto;white-space:pre;margin:0}
 .json .k{color:var(--muted)}
@@ -151,7 +152,7 @@ footer{margin:64px 0 40px;color:var(--muted);font-size:.9rem;border-top:1px soli
   .big{font-size:clamp(2.6rem,14vw,4rem)}
 }
 @media (prefers-reduced-motion:reduce){
-  .trace li{animation:none;opacity:1;transform:none}
+  .trace li{animation:none;visibility:visible;transform:none}
   .card.alert,.card.alert.flipped{transition:none}
 }
 </style>
