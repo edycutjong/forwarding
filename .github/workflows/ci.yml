@@ -14,8 +14,8 @@ jobs:
     name: "Stage 1 · Lint + typecheck"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: '3.11' }
       - run: pip install -r requirements-dev.txt
       - run: ruff check --output-format=github .
@@ -29,8 +29,8 @@ jobs:
       matrix:
         python-version: ${{ github.event_name == 'push' && fromJSON('["3.11","3.12","3.13"]') || fromJSON('["3.11"]') }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: '${{ matrix.python-version }}' }
       - run: pip install -r requirements-dev.txt
       # Offline only. The live tests run in the live-api job below, where a CMC rate limit is
@@ -38,7 +38,7 @@ jobs:
       # on the judged path (scripts/forwarding.py, scripts/mcp_server.py, api/) and gated —
       # the receipt-producing scripts are EXECUTED by the verify and bench jobs instead.
       - run: pytest -q -m "not live" --cov --cov-report=term-missing --cov-report=xml --cov-fail-under=90
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: matrix.python-version == '3.11'
         with: { name: coverage, path: coverage.xml, retention-days: 7 }
 
@@ -46,8 +46,8 @@ jobs:
     name: "Stage 2 · Dependency audit"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: '3.11' }
       # The runtime has zero dependencies by design; the dev file is what this workflow installs.
       - run: pip install pip-audit && pip-audit -r requirements.txt -r requirements-dev.txt
@@ -56,8 +56,8 @@ jobs:
     name: "Stage 2 · No placeholders, no drift"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: '3.11' }
       - run: pip install -r requirements-dev.txt
       # An unfilled address, a fake video link, a TODO, a template token, a stale test count or
@@ -72,8 +72,8 @@ jobs:
     name: "Stage 3 · Replay every receipt"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: '3.11' }
       - run: pip install -r requirements-dev.txt
       # Every committed receipt back through adjudicate(): invariants I1–I6, chain of custody
@@ -84,8 +84,8 @@ jobs:
     name: "Stage 3 · Deterministic benchmark"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: '3.11' }
       # Replay against the committed receipts: no network, so this number is comparable across
       # runs. It measures the arithmetic, not the product. The LIVE number is the job below.
@@ -96,8 +96,8 @@ jobs:
     needs: [lint, test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: '3.11' }
       - run: pip install -r requirements-dev.txt
       # No secret is configured for this job, deliberately: the judged path is keyless, so this
@@ -120,7 +120,7 @@ jobs:
             exit 0
           fi
           exit "$code"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with: { name: live-run-receipt, path: out/ci_live_run.json, retention-days: 14, if-no-files-found: ignore }
       # The external contract and the deployment: maker= filters, the hero reproduces, the
