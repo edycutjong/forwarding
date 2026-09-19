@@ -3,6 +3,6 @@
 pytest>=9.1.1
 pytest-cov>=7.1
 hypothesis>=6.168.0
-ruff>=0.15
+ruff>=0.16.7
 mypy>=2.3.1
-pip-audit>=2.9
+pip-audit>=2.10.1
