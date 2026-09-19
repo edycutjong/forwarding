@@ -1009,7 +1009,10 @@ def hero_viz(v):
     mx = max(usd(x) for _, x in rows) or 1.0
     # the bars stop 130px short of the right edge so the hairpin has room to turn — on this
     # receipt the two bars are within 0.2 % of each other, which is the point of the picture
-    top, rowh, x0, barmax = 16, 44, 70, 1030
+    # two rows, so each is drawn tall (the flagship's five-row block is 252 units high; this
+    # one is 240) — at 375px wide a 44-unit bar is still 12px, not a hairline
+    top, rowh, bar, x0, barmax = 28, 92, 44, 70, 1030
+    mid = rowh // 2
     height = top * 2 + rowh * len(rows)
     sym = esc(r.get("t0s") or "")
     if add is not None:
@@ -1031,8 +1034,8 @@ def hero_viz(v):
         w = max(28.0, usd(row) / mx * barmax)
         ys.append((y, w))
         parts.append(
-            f'<g class="row {cls}"><line class="tick" x1="34" y1="{y + 22}" x2="46" y2="{y + 22}"/>'
-            f'<rect x="{x0}" y="{y + 9}" width="{w:.0f}" height="26" rx="5"/></g>'
+            f'<g class="row {cls}"><line class="tick" x1="34" y1="{y + mid}" x2="46" y2="{y + mid}"/>'
+            f'<rect x="{x0}" y="{y + mid - bar // 2}" width="{w:.0f}" height="{bar}" rx="8"/></g>'
         )
     if len(ys) == 2:
         (y1, w1), (y2, w2) = ys
@@ -1040,8 +1043,8 @@ def hero_viz(v):
         xr = min(1180, max(xe1, xe2) + 64)
         r_ = abs(y2 - y1) / 2
         parts.append(
-            f'<path class="hairpin" d="M{xe1:.0f} {y1 + 22} H{xr - r_:.0f} A{r_:.0f} {r_:.0f} 0 0 1 {xr - r_:.0f} {y2 + 22} '
-            f'H{xe2 + 14:.0f} m12 -9 l-12 9 l12 9"/>'
+            f'<path class="hairpin" d="M{xe1:.0f} {y1 + mid} H{xr - r_:.0f} A{r_:.0f} {r_:.0f} 0 0 1 {xr - r_:.0f} {y2 + mid} '
+            f'H{xe2 + 16:.0f} m14 -11 l-14 11 l14 11"/>'
         )
     parts.append("</svg>")
     key = (
