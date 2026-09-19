@@ -45,12 +45,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # The landing footer links "latest release" and the deck carries the version on its cover
-      # and in its chrome. Both are stamped HERE rather than at render time: release.yml derives
-      # the tag from the commits in the push that produced the page, so at render time the tag
-      # does not exist yet, and the job that gates the rendered output against its templates
-      # clones shallow with no tags at all. The committed HTML keeps the label / the version the
-      # deck was rendered with, and the deploy substitutes the current tag over both.
+      # The landing footer and the deck's cover and chrome carry the version render_site.py read
+      # from `git describe --tags --abbrev=0` (family rule, LANDING_DESIGN.md §6.21). It is
+      # re-stamped HERE because release.yml derives the next tag from the commits in the push
+      # that produced the page, so at render time that tag does not exist yet. The deploy
+      # substitutes the current release over both pages; the committed HTML keeps the tag the
+      # render saw (or the v0.0.0-dev fallback of a tagless clone).
       - name: Stamp the current release into the footer and the deck
         env:
           GH_TOKEN: ${{ github.token }}
@@ -58,12 +58,11 @@ jobs:
           set -euo pipefail
           TAG="$(gh release view --json tagName -q .tagName 2>/dev/null || true)"
           if [ -n "${TAG:-}" ]; then
-            sed -i "s|>latest release<|>${TAG}<|g" site/index.html
-            sed -i -E "s|(class=\"ver[^\"]*\"[^>]*>)v[0-9]+\.[0-9]+\.[0-9]+<|\1${TAG}<|g" site/pitch/index.html
-            sed -i -E "s|(· MIT · )v[0-9]+\.[0-9]+\.[0-9]+<|\1${TAG}<|g" site/pitch/index.html
+            sed -i -E "s|(class=\"ver[^\"]*\"[^>]*>)v[0-9]+\.[0-9]+\.[0-9]+(-dev)?<|\1${TAG}<|g" site/index.html site/pitch/index.html
+            sed -i -E "s|(· MIT · )v[0-9]+\.[0-9]+\.[0-9]+(-dev)?<|\1${TAG}<|g" site/pitch/index.html
             echo "stamped ${TAG} into the footer and the deck"
           else
-            echo "no published release yet — the footer keeps its label and the deck its rendered version"
+            echo "no published release yet — both pages keep the version the render saw"
           fi
 
       - uses: actions/configure-pages@v6
