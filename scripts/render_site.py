@@ -551,7 +551,13 @@ def context():
         "hero.utc": fmt_utc(ts_ms(r)),
         "hero.maker": r["m"],
         "hero.maker_short": short(r["m"]),
-        "hero.share_of_pool": f"{(v['removal_share_of_pool'] or 0) * 100:.1f}%",
+        # None means the pool was not among the 20 the API returns, so the share is unknown —
+        # rendering it as 0.0% put a number on the judged surface that no row supports
+        "hero.share_of_pool": (
+            f"{v['removal_share_of_pool'] * 100:.1f}%"
+            if v.get("removal_share_of_pool") is not None
+            else "an unknown share"
+        ),
         "hero.txn_short": short(r["txn"], 6),
         "hero.add_txn_short": short(add["txn"], 6),
         "hero.dest_venue": esc(dest.get("venue", "")),

@@ -107,6 +107,21 @@ def numbers():
                     "text": f"hero.json says {pct} recovered; the README never states it",
                 }
             )
+        # A share of pool the receipt does not hold must never reach a page as a number. The
+        # hero's pool was not among the 20 the API returns, so its share is None — and the
+        # renderer once printed that as "0.0% of the pool" (live 2026-09-19, landing + JUDGE.md).
+        if v.get("removal_share_of_pool") is None:
+            for page in ("JUDGE.md", "site/index.html", "site/judge.html"):
+                text = (ROOT / page).read_text() if (ROOT / page).exists() else ""
+                if re.search(r"\b0\.0% of the pool", re.sub(r"<[^>]+>", "", text)):
+                    findings.append(
+                        {
+                            "file": page,
+                            "line": 0,
+                            "kind": "invented number",
+                            "text": "hero.json holds no share of pool; the page prints 0.0%",
+                        }
+                    )
     return findings
 
 

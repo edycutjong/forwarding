@@ -60,7 +60,7 @@ Full annotated transcript with the receipt: **[DEMO.md](DEMO.md)**.
 
 | | |
 |---|---|
-| **The removal** | **−$21,330,275** out of Ring Exchange (Ethereum) · UNI/WBTC, 2026-09-02 03:59:11 UTC, 0.0% of the pool, maker `0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9` |
+| **The removal** | **−$21,330,275** out of Ring Exchange (Ethereum) · UNI/WBTC, 2026-09-02 03:59:11 UTC, an unknown share of the pool, maker `0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9` |
 | **The verdict** | **MIGRATION · 99.8% recovered** — +$21,287,255 into Ring Exchange (Ethereum) · UNI/WETH, **2 min 12 s** later, the same 1,962,475.54 UNI to ten decimals |
 | **Re-derive it** | `21,287,254.93 ÷ 21,330,274.56 = 0.9980` — two `tu` fields from `/v1/dex/liquidity-change/list?maker=` |
 | API calls | 11, all HTTP 200, 73.0 s wall clock |
