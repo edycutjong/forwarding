@@ -15,7 +15,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Forwarding Address — pitch deck</title>
-<meta name="description" content="Pitch deck for Forwarding Address: every LP-removed alert stops at the row that fired it; this one follows the wallet. Build with CMC API Hackathon, AI Agents and Automation track.">
+<meta name="description" content="Pitch deck for Forwarding Address: every LP-removed alert stops at the row that fired it; this one follows the wallet. Build with CMC, AI Agents track.">
 <meta name="author" content="{{author}}">
 <link rel="canonical" href="{{site_url}}/pitch/">
 <link rel="icon" type="image/svg+xml" href="../assets/icon.svg">
@@ -24,7 +24,7 @@
 <meta property="og:site_name" content="Forwarding Address">
 <meta property="og:url" content="{{site_url}}/pitch/">
 <meta property="og:title" content="Forwarding Address — pitch deck">
-<meta property="og:description" content="A wallet pulled {{hero.removed_usd}} out of {{hero.pair}}; {{hero.elapsed}} later the same wallet put {{hero.recovered_pct}}% into the pool next door. Eleven slides, every number from a keyless run.">
+<meta property="og:description" content="A wallet pulled {{hero.removed_usd}} out of {{hero.pair}}; {{hero.elapsed}} later it put {{hero.recovered_pct}}% into the pool next door. Eleven slides.">
 {{og.meta}}
 <meta name="twitter:site" content="{{x_handle}}">
 <meta name="twitter:creator" content="{{x_handle}}">
@@ -86,7 +86,7 @@ p{margin:0}
 #chrome{position:absolute;left:0;right:0;bottom:0;height:72px;padding:0 120px;z-index:5;display:flex;align-items:center;justify-content:space-between;font-family:var(--font-mono);font-size:18px;color:var(--muted);pointer-events:none}
 #chrome .l{display:flex;gap:22px;align-items:center}
 #chrome .ver{color:var(--found)}
-#chrome .prog{position:absolute;left:0;bottom:0;height:3px;background:var(--found);transition:width var(--t-med) var(--ease)}
+#chrome .prog{position:absolute;left:0;bottom:0;height:3px;background:var(--found)}
 .brandmark{display:inline-flex;align-items:center;gap:12px;font-family:var(--font-display);font-weight:700;color:var(--text);font-size:20px}
 .brandmark svg,.brandmark img{width:26px;height:26px;border-radius:6px}
 
@@ -267,14 +267,15 @@ body.overview #viewport{display:none}
 #overview{display:none;position:fixed;inset:0;overflow:auto;padding:32px;background:var(--bg);z-index:40}
 body.overview #overview{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-content:start}
 #overview .thumb{position:relative;aspect-ratio:16/9;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);cursor:pointer;transition:border-color var(--t-fast),transform var(--t-fast) var(--ease)}
-#overview .thumb:hover,#overview .thumb:focus-visible{border-color:var(--found);transform:translateY(-2px);outline:none}
+#overview .thumb:hover,#overview .thumb:focus-visible{border-color:var(--found);transform:translateY(-2px)}
 #overview .thumb.cur{border-color:var(--found)}
 #overview .thumb .n{position:absolute;left:10px;top:8px;font-family:var(--font-mono);font-size:12px;color:var(--found)}
 #overview .thumb .t{position:absolute;left:12px;right:12px;bottom:10px;font-family:var(--font-display);font-weight:700;font-size:clamp(12px,1.3vw,18px);letter-spacing:-.01em}
 
 /* keyboard hint (first slide only, fades) */
-#hint{position:fixed;right:24px;top:20px;font-family:var(--font-mono);font-size:13px;color:var(--muted);background:rgba(20,26,36,.85);border:1px solid var(--border);border-radius:999px;padding:8px 14px;z-index:30;transition:opacity .6s}
+#hint{position:fixed;right:24px;top:20px;font-family:var(--font-mono);font-size:13px;color:var(--muted);background:rgba(20,26,36,.85);border:1px solid var(--border);border-radius:999px;padding:8px 14px;z-index:30}
 #hint.gone{opacity:0;pointer-events:none}
+@media (prefers-reduced-motion:no-preference){#chrome .prog{transition:width var(--t-med) var(--ease)}#hint{transition:opacity .6s}}
 #hint kbd{color:var(--text)}
 
 /* Press C to toggle contrast debug mode */
@@ -579,12 +580,12 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
         <a href="../">Landing page <span>{{pages_host}} · mirror {{site_host}}</span></a>
         <a href="../judge">For judges <span>the 30-second path · no auth, no cookie, no key</span></a>
         <a href="{{repo}}/blob/main/DEMO.md" target="_blank" rel="noopener noreferrer">DEMO.md <span>the receipt · live_run.json behind it<span class="arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></span></a>
-        <a href="{{event_buidls}}" target="_blank" rel="noopener noreferrer">Demo video <span>2:54, real speed, throttle kept in — on the BUIDL page<span class="arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></span></a>
+        <a href="{{event_buidls}}" target="_blank" rel="noopener noreferrer">Demo video <span>real speed, the throttle kept in — on the BUIDL page<span class="arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></span></a>
       </div>
     </div>
     <div>
       <div class="term">
-        <div class="bar"><i></i><i></i><i></i><span>thirty seconds on a clean machine · no key · no install</span></div>
+        <div class="bar"><i></i><i></i><i></i><span>thirty seconds from a fresh clone · no key · no install</span></div>
         <pre style="font-size:21px"><span class="p">$</span> <span class="cmd">git clone {{repo}}.git</span>
 <span class="p">$</span> <span class="cmd">cd forwarding</span>
 <span class="p">$</span> <span class="cmd">python3 scripts/forwarding.py investigate \
