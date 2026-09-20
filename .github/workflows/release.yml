@@ -22,37 +22,19 @@ jobs:
         with:
           fetch-depth: 0        # full history — we read commits since the last tag
 
+      # The rule lives in scripts/next_version.sh — the same script the production-deploy job
+      # in ci.yml stamps into the footer and the deck, so the pages and the tag cannot disagree.
       - name: Compute next version from Angular commits
         id: ver
         run: |
           set -euo pipefail
           LAST=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          if [ -z "$LAST" ]; then
-            RANGE=""; CUR="0.0.0"
-          else
-            RANGE="${LAST}..HEAD"; CUR="${LAST#v}"
-          fi
-          LOG=$(git log --format=%B $RANGE)
-          if [ -z "$(echo "$LOG" | tr -d '[:space:]')" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0
-          fi
-
-          BUMP=none
-          echo "$LOG" | grep -qE '^(feat|fix|perf)(\(.+\))?!:|BREAKING CHANGE:' && BUMP=major
-          [ "$BUMP" = none ] && echo "$LOG" | grep -qE '^feat(\(.+\))?:'        && BUMP=minor
-          [ "$BUMP" = none ] && echo "$LOG" | grep -qE '^(fix|perf)(\(.+\))?:'  && BUMP=patch
+          BUMP=$(scripts/next_version.sh --bump)
+          NEXT=$(scripts/next_version.sh)
           if [ "$BUMP" = none ]; then
             echo "No releasable commits since ${LAST:-the beginning}."
             echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0
           fi
-
-          IFS=. read -r MA MI PA <<< "$CUR"
-          case "$BUMP" in
-            major) MA=$((MA+1)); MI=0; PA=0 ;;
-            minor) MI=$((MI+1)); PA=0 ;;
-            patch) PA=$((PA+1)) ;;
-          esac
-          NEXT="v${MA}.${MI}.${PA}"
           echo "Bump: $BUMP  ${LAST:-none} -> $NEXT"
           echo "next=$NEXT"  >> "$GITHUB_OUTPUT"
           echo "bump=$BUMP"  >> "$GITHUB_OUTPUT"

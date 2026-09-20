@@ -57,7 +57,8 @@ CLONE_CMD = f"git clone {REPO}.git && cd forwarding && {CLI_CMD}"
 # The version stamp in the landing footer and on the deck: `git describe --tags --abbrev=0`,
 # never typed. A clone with no tag reachable (a shallow CI checkout) renders this fallback, and
 # --check then leaves the stamp out of the comparison rather than reporting drift it cannot judge.
-# `vercel --prod` runs from a full clone, so the deployed pages carry the tag `git describe` saw.
+# The production-deploy job in ci.yml re-stamps the version the push releases (scripts/next_version.sh)
+# over both pages before `vercel build`, so the deployed pages never sit one release behind.
 VERSION_FALLBACK = "v0.0.0-dev"
 FEEDBACK_MD = BUILD / "FEEDBACK.md"
 MCP_SESSION = PROOF / "mcp_session.jsonl"

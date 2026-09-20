@@ -167,6 +167,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0        # tags + full history: the stamp below is computed from the commits
+      # The landing footer and the deck's cover and chrome carry the version render_site.py read
+      # from `git describe --tags --abbrev=0` (family rule, LANDING_DESIGN.md §6.21). release.yml
+      # derives the next tag from the commits in THIS push, in parallel with this job, so at
+      # render time that tag did not exist yet. scripts/next_version.sh is the same rule, so the
+      # deployed pages carry the version this push releases; the committed HTML keeps the tag the
+      # render saw (or the v0.0.0-dev fallback of a tagless clone).
+      - name: Stamp the version this push releases into the footer and the deck
+        run: |
+          set -euo pipefail
+          TAG="$(scripts/next_version.sh)"
+          sed -i -E "s|(class=\"ver[^\"]*\"[^>]*>)v[0-9]+\.[0-9]+\.[0-9]+(-dev)?<|\1${TAG}<|g" site/index.html site/pitch/index.html
+          sed -i -E "s|(· MIT · )v[0-9]+\.[0-9]+\.[0-9]+(-dev)?<|\1${TAG}<|g" site/pitch/index.html
+          echo "stamped ${TAG} into the footer and the deck"
+      # vercel build runs @vercel/python on the runner: it needs the interpreter and uv on PATH.
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v10
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
