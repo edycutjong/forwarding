@@ -25,7 +25,7 @@ import pytest
 from forwarding import Client, investigate, walk
 
 PROOF = Path(__file__).resolve().parents[1] / "docs" / "proof"
-SITE = "https://forwarding-cmc.vercel.app"
+SITE = "https://forwarding.edycu.dev"
 UNI = "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
 HERO_MAKER = "0xc3da4779d7e069a36b81d7d2bfb8ed882a1a5e56"
 HERO_TXN = "0xf560f13928f2e654062a38be2725efd92dc4d56c5071a103927cf92b92074793"

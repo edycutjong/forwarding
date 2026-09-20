@@ -120,4 +120,4 @@ replace 6 keyless endpoints.
 | **The rule** | [docs/SPEC.md](docs/SPEC.md) — state machine, thresholds, invariants I1–I6 |
 | **API feedback for CMC** | [FEEDBACK.md](FEEDBACK.md) — where the API got in the way |
 | **The product** | [`scripts/forwarding.py`](scripts/forwarding.py) · [`scripts/mcp_server.py`](scripts/mcp_server.py) |
-| **Landing page** | [forwarding-cmc.vercel.app](https://forwarding-cmc.vercel.app) — the receipt, the flip, and a live box |
+| **Landing page** | [forwarding.edycu.dev](https://forwarding.edycu.dev) — the receipt, the flip, and a live box |

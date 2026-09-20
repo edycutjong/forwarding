@@ -722,10 +722,11 @@ footer .bottom .ver{color:var(--accent)}
   }));
 
   // ── the paste box: the same engine on the proxy, same-chain, rendered into the same slots ──
-  // The proxy lives on Vercel. Served from there the call is same-origin; served from GitHub
-  // Pages or a local copy it is cross-origin, and api/lookup.py answers the preflight with
-  // Access-Control-Allow-Origin: *, so the page works from both hosts.
-  const API = /\.vercel\.app$/.test(location.hostname) ? '' : '{{site_url}}';
+  // The proxy and the page share one Vercel host, so the call is same-origin wherever Vercel
+  // serves it (the production domain or its .vercel.app alias). A local copy of site/ has no
+  // /api, so it calls the production host cross-origin — api/lookup.py sends
+  // Access-Control-Allow-Origin: * for exactly that case.
+  const API = /^https?:$/.test(location.protocol) && !/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) ? '' : '{{site_url}}';
   const form = $('live'), go = $('go'), status = $('status'), mode = $('mode');
   function setMode(text, cls) { mode.textContent = text; mode.className = 'chip ' + cls; }
   const callUrl = (c) => BASE + c.endpoint + '?' + Object.keys(c.params || {}).map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(c.params[k])).join('&');

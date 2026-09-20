@@ -36,10 +36,10 @@ PROOF = BUILD / "docs" / "proof"
 SITE = BUILD / "site"
 
 REPO = "https://github.com/edycutjong/forwarding"
-SITE_URL = "https://forwarding-cmc.vercel.app"
-# GitHub Pages serves the same site/ at this host once the repository is public (site/CNAME,
-# .github/workflows/pages.yml); the Vercel deployment stays the API host and a mirror.
-PAGES_URL = "https://forwarding.edycu.dev"
+SITE_URL = "https://forwarding.edycu.dev"
+# One host. Vercel serves site/ and the two functions at SITE_URL (the production domain);
+# forwarding-cmc.vercel.app is the deployment alias and 308s here, so the live box is same-origin.
+ALIAS_URL = "https://forwarding-cmc.vercel.app"
 EVENT = "https://dorahacks.io/hackathon/coinmarketcap-api-202609/detail"
 EVENT_BUIDLS = "https://dorahacks.io/hackathon/coinmarketcap-api-202609/buidl"
 AUTHOR = "Edy Cu"
@@ -56,8 +56,8 @@ MCP_CMD = "claude mcp add forwarding -- python3 $PWD/scripts/mcp_server.py"
 CLONE_CMD = f"git clone {REPO}.git && cd forwarding && {CLI_CMD}"
 # The version stamp in the landing footer and on the deck: `git describe --tags --abbrev=0`,
 # never typed. A clone with no tag reachable (a shallow CI checkout) renders this fallback, and
-# --check then leaves the stamp out of the comparison rather than reporting drift it cannot judge;
-# .github/workflows/pages.yml re-stamps the current release over both pages at deploy.
+# --check then leaves the stamp out of the comparison rather than reporting drift it cannot judge.
+# `vercel --prod` runs from a full clone, so the deployed pages carry the tag `git describe` saw.
 VERSION_FALLBACK = "v0.0.0-dev"
 FEEDBACK_MD = BUILD / "FEEDBACK.md"
 MCP_SESSION = PROOF / "mcp_session.jsonl"
@@ -1493,8 +1493,7 @@ def context():
         "bench.live_p95": f"{bench_live.get('investigate', {}).get('p95', 0):.1f}",
         "bench.live_n": str(bench_live.get("investigate", {}).get("n", 0)),
         # deck-only slots (scripts/site_templates/pitch.html)
-        "pages_url": PAGES_URL,
-        "pages_host": PAGES_URL.replace("https://", ""),
+        "alias_host": ALIAS_URL.replace("https://", ""),
         "event_buidls": EVENT_BUIDLS,
         "icon.animated": cover_icon(),
         "live.calls": str(live_run["calls_made"]),
@@ -1517,7 +1516,7 @@ def context():
     return ctx
 
 
-# the two shapes the version takes on the pages — the same two .github/workflows/pages.yml stamps
+# the two shapes the version takes on the pages: the landing footer chip and the deck's "· MIT · v…"
 _VER_STAMP = re.compile(r'(class="ver[^"]*"[^>]*>|· MIT · )v\d+\.\d+\.\d+(?:-dev)?<')
 
 

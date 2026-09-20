@@ -6,15 +6,15 @@
 <title>Forwarding Address — 99.8% of a $21,330,275 LP removal was one pool over</title>
 <meta name="description" content="Where the pulled liquidity went. $21,330,275 left UNI/WBTC; the same wallet put 99.8% into UNI/WETH 2 min 12 s later. Keyless CoinMarketCap API, 0 credits.">
 <meta name="author" content="Edy Cu">
-<link rel="canonical" href="https://forwarding-cmc.vercel.app/">
+<link rel="canonical" href="https://forwarding.edycu.dev/">
 <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
 <meta name="theme-color" content="#0B0E14">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Forwarding Address">
-<meta property="og:url" content="https://forwarding-cmc.vercel.app/">
+<meta property="og:url" content="https://forwarding.edycu.dev/">
 <meta property="og:title" content="Forwarding Address — 99.8% of a $21,330,275 LP removal was one pool over">
 <meta property="og:description" content="$21,330,275 left UNI/WBTC; the same wallet re-added 99.8% 2 min 12 s later. Follow the wallet — keyless, live, CoinMarketCap.">
-<meta property="og:image" content="https://forwarding-cmc.vercel.app/assets/og-image.png?v=80c18a88">
+<meta property="og:image" content="https://forwarding.edycu.dev/assets/og-image.png?v=80c18a88">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="A red LP-removed alert becoming an amber MIGRATION verdict: 99.8% recovered.">
@@ -23,7 +23,7 @@
 <meta name="twitter:creator" content="@edycutjong">
 <meta name="twitter:title" content="Forwarding Address — 99.8% of a $21,330,275 LP removal was one pool over">
 <meta name="twitter:description" content="$21,330,275 left UNI/WBTC; the same wallet re-added 99.8% 2 min 12 s later. Follow the wallet — keyless, live, CoinMarketCap.">
-<meta name="twitter:image" content="https://forwarding-cmc.vercel.app/assets/og-image.png?v=80c18a88">
+<meta name="twitter:image" content="https://forwarding.edycu.dev/assets/og-image.png?v=80c18a88">
 <link rel="preload" href="assets/fonts/inter-tight-latin-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/jetbrains-mono-latin-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -809,10 +809,11 @@ footer .bottom .ver{color:var(--accent)}
   }));
 
   // ── the paste box: the same engine on the proxy, same-chain, rendered into the same slots ──
-  // The proxy lives on Vercel. Served from there the call is same-origin; served from GitHub
-  // Pages or a local copy it is cross-origin, and api/lookup.py answers the preflight with
-  // Access-Control-Allow-Origin: *, so the page works from both hosts.
-  const API = /\.vercel\.app$/.test(location.hostname) ? '' : 'https://forwarding-cmc.vercel.app';
+  // The proxy and the page share one Vercel host, so the call is same-origin wherever Vercel
+  // serves it (the production domain or its .vercel.app alias). A local copy of site/ has no
+  // /api, so it calls the production host cross-origin — api/lookup.py sends
+  // Access-Control-Allow-Origin: * for exactly that case.
+  const API = /^https?:$/.test(location.protocol) && !/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) ? '' : 'https://forwarding.edycu.dev';
   const form = $('live'), go = $('go'), status = $('status'), mode = $('mode');
   function setMode(text, cls) { mode.textContent = text; mode.className = 'chip ' + cls; }
   const callUrl = (c) => BASE + c.endpoint + '?' + Object.keys(c.params || {}).map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(c.params[k])).join('&');
