@@ -369,12 +369,15 @@ make ci              # lint typecheck test-coverage verify check audit
 | Security (SCA) | Dependabot (grouped, monthly) + pip-audit in CI | ✅ |
 | Secret scanning | gitleaks, full history, every push | ✅ |
 | Release automation | semver from Angular-convention commits | ✅ |
+| Deployment | gated: `vercel build` + `vercel deploy --prebuilt --prod` on `main` only, after every stage above | ✅ |
 
 CI runs four stages on every push: lint + typecheck and the tests with their coverage gate on
 Python 3.11/3.12/3.13; pip-audit and the no-placeholder / no-drift gate; a replay of every
 committed receipt through the invariants plus the deterministic benchmark; **and a `live-api`
 job that follows the wallet for real, keyless, then runs the live contract and deployment
-tests.** No secret is configured anywhere in the pipeline because the product needs none. If
+tests.** On `main`, a fifth stage gates on all of those and a sixth deploys the exact commit to
+Vercel — `forwarding.edycu.dev` is the production domain. The only secret in the pipeline is
+that deploy token; the product itself needs none, so every test job runs on forks and PRs. If
 CMC changes the contract, it breaks in CI rather than in front of a judge; if CMC throttles the
 shared runner IP, the job says so as a warning rather than reporting someone else's traffic as
 our breakage.
