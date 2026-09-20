@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/icon.svg" alt="Forwarding Address icon" width="128">
+<img src="docs/assets/icon-animated.svg" alt="Forwarding Address icon" width="128">
 
 <h1>Forwarding Address ↪</h1>
 
@@ -158,6 +158,9 @@ adjudicate  REBALANCE ≥70% same pool · MIGRATION ≥70% elsewhere (CONSOLIDAT
 confirm     pairs/quotes/latest → the destination pool's depth now
 ```
 
+<details>
+<summary><b>Architecture diagram</b> (click to expand)</summary>
+
 ```mermaid
 flowchart LR
   CLI["forwarding.py<br/>investigate · removals · follow · watch"] --> E
@@ -168,6 +171,8 @@ flowchart LR
   E --> V["Verdict + receipt<br/>every response under its sha256"]
   V --> P[("docs/proof/*.json")] --> R["render_site.py → site/ · /judge · JUDGE.md<br/>verify.py → I1–I6, chain of custody"]
 ```
+
+</details>
 
 | Layer | Technology |
 |---|---|
@@ -181,6 +186,7 @@ flowchart LR
 No database, no cache beyond 60 seconds inside the proxy, no model of our own, no key anywhere.
 The rule, its thresholds, the state machine and the six invariants are one page:
 [docs/SPEC.md](docs/SPEC.md). The architecture, derived from the code: [ARCHITECTURE.md](ARCHITECTURE.md).
+Rendered page, light and dark: [forwarding.edycu.dev/architecture](https://forwarding.edycu.dev/architecture).
 
 ---
 

@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>Architecture — Forwarding Address: one join, three ways to run it</title>
+<meta name="description" content="How Forwarding Address is built: one maker join the CoinMarketCap API does not perform, wrapped in a CLI, an MCP server and a watch loop. Every module on this page exists in the repo. Stdlib Python, keyless, 0 credits.">
+<meta name="author" content="Edy Cu">
+<link rel="canonical" href="https://forwarding.edycu.dev/architecture">
+<link rel="icon" type="image/svg+xml" href="../assets/icon.svg">
+<meta name="theme-color" content="#0B0E14" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F6F8FB" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Forwarding Address">
+<meta property="og:url" content="https://forwarding.edycu.dev/architecture">
+<meta property="og:title" content="Architecture — Forwarding Address: one join, three ways to run it">
+<meta property="og:description" content="The shape of the thing, call by call: trigger, pool identity, the maker join, cross-chain, adjudicate, confirm. Derived from the code, not a design document.">
+<meta property="og:image" content="https://forwarding.edycu.dev/assets/og-image.png?v=80c18a88">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@edycutjong">
+<meta name="twitter:title" content="Architecture — Forwarding Address">
+<meta name="twitter:description" content="One join no endpoint performs, wrapped in a CLI, an MCP server and a watch loop. Stdlib Python, keyless, 0 credits.">
+<meta name="twitter:image" content="https://forwarding.edycu.dev/assets/og-image.png?v=80c18a88">
+<script>
+/* the stored theme is applied before first paint, so a reload never flashes the other palette */
+(function(){try{var t=localStorage.getItem('fa-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();
+</script>
+<link rel="preload" href="../assets/fonts/inter-tight-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/jetbrains-mono-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Fonts are the site's own self-hosted latin subsets (SIL OFL 1.1) — this page loads no third-party resource. */
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:500 800;font-display:swap;src:url(../assets/fonts/inter-tight-latin-var.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url(../assets/fonts/inter-latin-var.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 700;font-display:swap;src:url(../assets/fonts/jetbrains-mono-latin-var.woff2) format('woff2')}
+@font-face{font-family:'Inter Fallback';src:local('Arial'),local('Helvetica');ascent-override:90.2%;descent-override:22.48%;line-gap-override:0%;size-adjust:107.4%}
+
+/* ── tokens: the landing page's dark palette, verbatim; the light palette keeps the same hue
+      relationships (amber accent · blue data · green verdict · red flag) at AA on light ground ── */
+:root{
+  --bg:#0B0E14; --surface:#141A24; --surface-2:#1A2230; --border:#243044; --border-strong:#3A4A63;
+  --text:#E6EDF3; --muted:#8B98A9; --dim:#5E6C80; --code:#B9C4D2;
+  --accent:#FFB020; --data:#4C9AFF; --verdict:#3DDC97; --flag:#FF5C5C; --partial:#FF8A3D;
+  --accent-soft:rgba(255,176,32,.07); --accent-line:rgba(255,176,32,.55);
+  --data-soft:rgba(76,154,255,.08); --data-line:rgba(76,154,255,.6);
+  --verdict-soft:rgba(61,220,151,.07); --verdict-line:rgba(61,220,151,.55);
+  --flag-soft:rgba(255,92,92,.07); --flag-line:rgba(255,92,92,.55);
+  --header-bg:rgba(11,14,20,.8); --glow-a:rgba(255,176,32,.09); --glow-b:rgba(76,154,255,.07);
+  --shadow:0 18px 50px -24px rgba(0,0,0,.8); --sel:rgba(255,176,32,.35);
+  --font-display:'Inter Tight','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI Variable','Segoe UI',system-ui,sans-serif;
+  --font-body:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',Menlo,Consolas,'Liberation Mono',ui-monospace,monospace;
+  --num:'tnum' 1,'lnum' 1;
+  --r-sm:6px; --r-md:12px; --r-lg:20px;
+  --t-fast:160ms; --t-med:320ms; --ease:cubic-bezier(.16,.84,.44,1);
+  --maxw:1180px;
+  color-scheme:dark;
+}
+/* light: the system preference, unless the toggle said dark */
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --bg:#F6F8FB; --surface:#FFFFFF; --surface-2:#EEF2F7; --border:#D3DBE6; --border-strong:#AEBBCC;
+    --text:#0F1620; --muted:#4F5D70; --dim:#7C8898; --code:#0F1620;
+    --accent:#8A5700; --data:#1657C7; --verdict:#107A4B; --flag:#C8262B; --partial:#B4480A;
+    --accent-soft:rgba(138,87,0,.07); --accent-line:rgba(138,87,0,.5);
+    --data-soft:rgba(22,87,199,.07); --data-line:rgba(22,87,199,.55);
+    --verdict-soft:rgba(16,122,75,.07); --verdict-line:rgba(16,122,75,.5);
+    --flag-soft:rgba(200,38,43,.06); --flag-line:rgba(200,38,43,.5);
+    --header-bg:rgba(246,248,251,.84); --glow-a:rgba(138,87,0,.07); --glow-b:rgba(22,87,199,.06);
+    --shadow:0 18px 50px -28px rgba(15,22,32,.25); --sel:rgba(138,87,0,.25);
+    color-scheme:light;
+  }
+}
+/* light: the toggle said so, whatever the system prefers */
+:root[data-theme="light"]{
+  --bg:#F6F8FB; --surface:#FFFFFF; --surface-2:#EEF2F7; --border:#D3DBE6; --border-strong:#AEBBCC;
+  --text:#0F1620; --muted:#4F5D70; --dim:#7C8898; --code:#0F1620;
+  --accent:#8A5700; --data:#1657C7; --verdict:#107A4B; --flag:#C8262B; --partial:#B4480A;
+  --accent-soft:rgba(138,87,0,.07); --accent-line:rgba(138,87,0,.5);
+  --data-soft:rgba(22,87,199,.07); --data-line:rgba(22,87,199,.55);
+  --verdict-soft:rgba(16,122,75,.07); --verdict-line:rgba(16,122,75,.5);
+  --flag-soft:rgba(200,38,43,.06); --flag-line:rgba(200,38,43,.5);
+  --header-bg:rgba(246,248,251,.84); --glow-a:rgba(138,87,0,.07); --glow-b:rgba(22,87,199,.06);
+  --shadow:0 18px 50px -28px rgba(15,22,32,.25); --sel:rgba(138,87,0,.25);
+  color-scheme:light;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:0s!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:17px;line-height:1.6;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(900px 480px at 78% -8%,var(--glow-a),transparent 60%),radial-gradient(700px 420px at 12% 18%,var(--glow-b),transparent 60%)}
+a{color:var(--data);text-decoration:none}
+a:hover{color:var(--text)}
+p a,li a,td a,.cap a,.note a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.16em;text-decoration-color:var(--data-line);transition:text-decoration-color var(--t-fast)}
+p a:hover,li a:hover,td a:hover,.cap a:hover,.note a:hover{text-decoration-color:currentColor}
+::selection{background:var(--sel)}
+img,svg{max-width:100%;height:auto;display:block}
+h1,h2,h3{font-family:var(--font-display);letter-spacing:-.02em;line-height:1.08;margin:0}
+h1{font-size:clamp(2.2rem,5vw,4rem);font-weight:800}
+h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:700}
+h3{font-size:1.15rem;font-weight:700;letter-spacing:-.01em}
+p{margin:0 0 1rem}
+code,kbd{font-family:var(--font-mono);font-size:.86em;color:var(--data);background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:.08em .38em;overflow-wrap:anywhere}
+pre code{font-size:inherit;color:inherit;background:none;border:0;padding:0}
+.mono{font-family:var(--font-mono);font-feature-settings:var(--num)}
+.muted{color:var(--muted)}
+.orange{color:var(--accent)}.blue{color:var(--data)}.green{color:var(--verdict)}.red{color:var(--flag)}
+.wrap{width:min(var(--maxw),calc(100% - 40px));margin:0 auto;position:relative;z-index:1}
+section{padding:clamp(48px,7vw,88px) 0;scroll-margin-top:84px;border-top:1px solid var(--border)}
+section:first-of-type{border-top:0}
+.eyebrow{font-family:var(--font-mono);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--dim);display:inline-block}
+.kicker{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.lede{font-size:1.15rem;color:var(--muted);max-width:62ch}
+h2+.lede{margin-top:16px}
+h2+.nots{margin-top:28px}
+.lede b{color:var(--text);font-weight:600}
+.note{color:var(--muted);font-size:.95rem}
+.note b{color:var(--text);font-weight:600}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:12px;top:-60px;z-index:50;padding:10px 14px;border-radius:999px;background:var(--accent);color:var(--bg);font-weight:700;transition:top var(--t-fast)}
+.skip:focus{top:12px;color:var(--bg)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* ── header: the landing page's, plus the theme toggle ─────────────────────── */
+header.top{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:var(--header-bg);border-bottom:1px solid transparent;transition:border-color var(--t-med),background var(--t-med)}
+header.top.scrolled{border-bottom-color:var(--border)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:12px;color:var(--text);font-family:var(--font-display);font-weight:700;font-size:1.05rem;letter-spacing:-.01em;white-space:nowrap}
+.brand:hover{color:var(--text)}
+.brand svg{width:30px;height:30px;border-radius:7px;flex:none}
+.brand .here{font-family:var(--font-mono);font-weight:500;font-size:.8rem;color:var(--muted);letter-spacing:0}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{padding:8px 12px;border-radius:999px;color:var(--muted);font-size:.92rem;font-weight:500;transition:color var(--t-fast),background var(--t-fast),border-color var(--t-fast)}
+.nav-links a:hover{color:var(--text);background:var(--surface)}
+.nav-links a.judge{font-family:var(--font-mono);font-size:.86rem;letter-spacing:-.01em;color:var(--text);border:1px solid var(--border)}
+.nav-links a.judge:hover{border-color:var(--accent);color:var(--accent);background:var(--surface)}
+.gh{display:inline-flex;width:38px;height:38px;border-radius:50%;align-items:center;justify-content:center;color:var(--muted);transition:color var(--t-fast),background var(--t-fast)}
+.gh:hover{color:var(--text);background:var(--surface)}
+.gh svg{width:20px;height:20px}
+.theme{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;padding:0;transition:color var(--t-fast),border-color var(--t-fast),transform var(--t-fast) var(--ease)}
+.theme:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-1px)}
+.theme:active{transform:scale(.96)}
+.theme svg{width:18px;height:18px}
+.theme .sun{display:none}.theme .moon{display:block}
+:root[data-theme="light"] .theme .sun{display:block}:root[data-theme="light"] .theme .moon{display:none}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .theme .sun{display:block}:root:not([data-theme="dark"]) .theme .moon{display:none}}
+
+/* ── lead ────────────────────────────────────────────────────────────────────── */
+.lead{padding:clamp(44px,6vw,80px) 0 clamp(28px,4vw,48px)}
+.lead h1{margin-top:18px;max-width:24ch}
+.lead h1 .line1{display:block;color:var(--muted);font-weight:700;font-size:.62em}
+.lead .lede{margin:20px 0 26px}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.facts span{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border:1px solid var(--border);border-radius:999px;background:var(--surface);color:var(--muted);font-family:var(--font-mono);font-size:.8rem;white-space:nowrap}
+.facts b{color:var(--text);font-weight:600}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.toc a{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--border);border-radius:999px;background:var(--surface);color:var(--muted);font-size:.9rem;font-weight:500;transition:color var(--t-fast),border-color var(--t-fast),transform var(--t-fast) var(--ease)}
+.toc a:hover{color:var(--text);border-color:var(--accent);transform:translateY(-1px)}
+.toc a .n{font-family:var(--font-mono);font-size:.74rem;color:var(--accent)}
+
+/* ── the diagram ─────────────────────────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;box-shadow:none;transition:border-color var(--t-med)}
+.diagram{margin-top:28px;padding:clamp(12px,2vw,24px);position:relative;overflow:hidden}
+.diagram::after{content:"";position:absolute;inset:auto 0 0 0;height:1px;background:linear-gradient(90deg,transparent,var(--accent-line),transparent)}
+.diagram .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.diagram .scroll:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--r-sm)}
+svg.arch{width:100%;min-width:960px;height:auto;font-family:var(--font-body);font-size:13px}
+svg.arch .box{fill:var(--surface-2);stroke:var(--border-strong);stroke-width:1.2}
+svg.arch .box.caller{fill:var(--surface)}
+svg.arch .engine{fill:var(--accent-soft);stroke:var(--accent-line);stroke-width:1.4;stroke-dasharray:6 5}
+svg.arch .stage{fill:var(--surface);stroke:var(--border-strong);stroke-width:1.2}
+svg.arch .stage.join{stroke:var(--accent);stroke-width:1.8}
+svg.arch .stage.pure{stroke:var(--verdict);stroke-width:1.6}
+svg.arch .stage.verdict{fill:var(--surface-2);stroke:var(--text);stroke-width:1.4}
+svg.arch .cmc{fill:var(--data-soft);stroke:var(--data);stroke-width:1.4}
+svg.arch .proof{fill:var(--surface);stroke:var(--verdict-line);stroke-width:1.4}
+svg.arch .t{fill:var(--text);font-weight:600}
+svg.arch .m{fill:var(--muted);font-size:12px}
+svg.arch .k{font-family:var(--font-mono);font-weight:700;font-size:13px;fill:var(--text)}
+svg.arch .k.acc{fill:var(--accent)}
+svg.arch .k.ver{fill:var(--verdict)}
+svg.arch .k.dat{fill:var(--data)}
+svg.arch .lbl{font-family:var(--font-mono);font-size:11px;fill:var(--muted);letter-spacing:.04em}
+svg.arch .lbl.acc{fill:var(--accent)}
+svg.arch .lbl.dat{fill:var(--data)}
+svg.arch .lbl.ver{fill:var(--verdict)}
+svg.arch .flow{fill:none;stroke:var(--border-strong);stroke-width:1.6}
+svg.arch .flow.strong{stroke:var(--text);stroke-width:1.8}
+svg.arch .get{fill:none;stroke:var(--data);stroke-width:1.4;stroke-dasharray:5 4}
+svg.arch .rec{fill:none;stroke:var(--verdict);stroke-width:1.6}
+svg.arch .rail{fill:none;stroke:var(--border-strong);stroke-width:1.4}
+svg.arch marker path.a{fill:var(--border-strong)}
+svg.arch marker path.b{fill:var(--data)}
+svg.arch marker path.c{fill:var(--verdict)}
+svg.arch marker path.d{fill:var(--text)}
+.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 22px;margin-top:16px;font-family:var(--font-mono);font-size:.8rem;color:var(--muted);line-height:1.6}
+.key>span{display:flex;align-items:flex-start;gap:9px;min-width:0}
+.key i{width:22px;height:0;border-top:2px solid var(--border-strong);display:inline-block;flex:none;margin-top:10px}
+.key i.get{border-top-style:dashed;border-top-color:var(--data)}
+.key i.rec{border-top-color:var(--verdict)}
+.key i.join{border-top-color:var(--accent);border-top-width:3px}
+.key b{color:var(--text);font-weight:600}
+.cap{color:var(--muted);font-size:.9rem;font-family:var(--font-mono);margin-top:12px;overflow-wrap:anywhere}
+.scroll-hint{display:none;font-family:var(--font-mono);font-size:.74rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin:0 0 8px}
+
+/* ── tables ──────────────────────────────────────────────────────────────────── */
+.scroll-x{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface);margin-top:28px}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th,td{padding:12px 14px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;white-space:nowrap}
+tbody tr{transition:background var(--t-fast)}
+tbody tr:hover{background:var(--surface-2)}
+td.n{font-family:var(--font-mono);color:var(--muted);white-space:nowrap;font-feature-settings:var(--num)}
+td code{white-space:nowrap}
+td .what{color:var(--muted)}
+td .what b{color:var(--text);font-weight:600}
+tr.join td{background:linear-gradient(90deg,var(--accent-soft),transparent)}
+tr.join td code{color:var(--accent);border-color:var(--accent-line)}
+tr.pure td code{color:var(--verdict);border-color:var(--verdict-line)}
+td.cond{min-width:18ch}
+td.cond code{white-space:normal}
+td.beh{min-width:26ch}
+.tag{display:inline-block;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid var(--border);color:var(--muted);margin-right:6px;white-space:nowrap}
+.tag.warn{color:var(--accent);border-color:var(--accent-line)}
+.tag.stop{color:var(--flag);border-color:var(--flag-line)}
+.tag.ok{color:var(--verdict);border-color:var(--verdict-line)}
+
+/* ── the arithmetic block and the three fields ───────────────────────────────── */
+.two{display:grid;grid-template-columns:1.35fr 1fr;gap:24px;margin-top:28px;align-items:start}
+.two>*{min-width:0}
+pre.rule{margin:0;padding:18px 20px;border:1px dashed var(--accent-line);border-radius:var(--r-md);background:var(--accent-soft);font:.84rem/1.65 var(--font-mono);color:var(--text);overflow-x:auto;-webkit-overflow-scrolling:touch}
+pre.rule .c{color:var(--muted)}
+pre.rule .kw{color:var(--accent);font-weight:700}
+pre.rule .v{color:var(--verdict);font-weight:700}
+pre.rule .r{color:var(--flag);font-weight:700}
+pre.rule:focus-visible,pre.tree:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.fields{display:grid;gap:12px}
+.field{padding:16px 18px;border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface);transition:border-color var(--t-fast),transform var(--t-fast) var(--ease)}
+.field:hover{border-color:var(--data);transform:translateY(-2px)}
+.field .f{font-family:var(--font-mono);font-weight:700;color:var(--data);font-size:.98rem}
+.field .e{font-family:var(--font-mono);font-size:.76rem;color:var(--muted);margin:2px 0 8px;overflow-wrap:anywhere}
+.field p{margin:0;color:var(--muted);font-size:.93rem}
+.field p b{color:var(--text);font-weight:600}
+
+/* ── repository layout ───────────────────────────────────────────────────────── */
+pre.tree{margin:28px 0 0;padding:20px 22px;border:1px solid var(--border);border-radius:var(--r-lg);background:var(--surface);font:.82rem/1.7 var(--font-mono);color:var(--code);overflow-x:auto;-webkit-overflow-scrolling:touch}
+pre.tree .d{color:var(--accent);font-weight:700}
+pre.tree .f{color:var(--text)}
+pre.tree .c{color:var(--muted)}
+pre.tree .hi{color:var(--data);font-weight:700}
+
+/* ── non-architecture ────────────────────────────────────────────────────────── */
+.nots{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:28px}
+.not{padding:20px 22px;border:1px solid var(--border);border-radius:var(--r-lg);background:var(--surface);transition:border-color var(--t-fast),transform var(--t-fast) var(--ease)}
+.not:hover{border-color:var(--flag-line);transform:translateY(-2px)}
+.not .x{font-family:var(--font-mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--flag);margin-bottom:8px}
+.not h3{margin-bottom:8px}
+.not p{margin:0;color:var(--muted);font-size:.95rem}
+.not p b{color:var(--text);font-weight:600}
+
+/* ── final row ───────────────────────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-family:var(--font-display);font-weight:700;font-size:1rem;letter-spacing:-.01em;border:1px solid var(--border);color:var(--text);background:var(--surface);cursor:pointer;transition:transform var(--t-fast) var(--ease),box-shadow var(--t-fast) var(--ease),background var(--t-fast),border-color var(--t-fast),color var(--t-fast)}
+.btn:hover{transform:translateY(-2px);border-color:var(--border-strong);background:var(--surface-2);color:var(--text)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-primary{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent);border-color:var(--accent);color:var(--bg);box-shadow:var(--shadow)}
+.btn .arrow{transition:transform var(--t-fast) var(--ease)}
+.btn:hover .arrow{transform:translateX(3px)}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:24px}
+.arrow-ext{display:inline-block}
+a:not(.btn) .arrow-ext{font-size:.85em;margin-left:.3em;opacity:.8;transition:transform var(--t-fast) var(--ease),opacity var(--t-fast)}
+a:not(.btn):hover .arrow-ext{transform:translate(1px,-1px);opacity:1}
+
+/* ── footer ──────────────────────────────────────────────────────────────────── */
+footer{padding:44px 0 60px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--border)}
+footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px}
+footer h3{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:500;line-height:1.6}
+footer ul{list-style:none;margin:0;padding:0}
+footer li{margin:6px 0}
+footer .brand{color:var(--text)}
+footer .brand img{width:30px;height:30px;border-radius:7px}
+.link-quiet{color:var(--muted);transition:color var(--t-fast)}
+.link-quiet:hover{color:var(--text)}
+footer .bottom{margin-top:32px;padding-top:18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--font-mono);font-size:.78rem}
+
+/* ── breakpoints ─────────────────────────────────────────────────────────────── */
+@media (max-width:900px){.two{grid-template-columns:1fr}footer .cols{grid-template-columns:1fr 1fr}footer .cols>div:first-child{grid-column:1/-1}}
+@media (max-width:640px){
+  body{font-size:16px}
+  section{padding:36px 0;scroll-margin-top:70px}
+  .lede{font-size:1.02rem}
+  h2{font-size:1.55rem}
+  .lead{padding:28px 0 20px}
+  .lead .lede{margin:14px 0 20px}
+  .card{padding:14px}
+  .diagram{margin-top:20px}
+  .toc a{padding:7px 12px;font-size:.84rem}
+  /* each table row becomes one block: three columns cannot share 350px */
+  .scroll-x table,.scroll-x tbody,.scroll-x tr,.scroll-x td{display:block}
+  .scroll-x thead{display:none}
+  .scroll-x tr{padding:12px 14px;border-bottom:1px solid var(--border)}
+  .scroll-x tr:last-child{border-bottom:0}
+  .scroll-x td{padding:3px 0;border:0;font-size:.92rem;min-width:0}
+  td.n::before{content:"call "}
+  td.n.none::before{content:""}
+  td.n{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+  td code{white-space:normal}
+  .eyebrow span:nth-child(n+4){display:none}
+  .scroll-hint{display:block}
+  pre.rule{font-size:.76rem;padding:14px}
+  pre.tree{font-size:.74rem;padding:14px}
+  .nav{gap:8px}
+  .brand{font-size:.95rem;gap:9px}.brand svg{width:26px;height:26px}
+  .brand .here{display:none}
+  .nav-links a.home,.nav-links a.pitch{display:none}
+  .nav-links a.judge{padding:7px 10px;font-size:.8rem;white-space:nowrap}
+  footer{padding:32px 0 40px;font-size:.85rem}
+  footer .cols{grid-template-columns:1fr;gap:18px}
+}
+@media (max-width:360px){.brand{font-size:.84rem;gap:7px}.brand svg{width:22px;height:22px}.nav-links{gap:2px}.nav-links a.judge{padding:6px 8px;font-size:.72rem}.gh,.theme{width:32px;height:32px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top" id="top">
+  <div class="wrap nav">
+    <a class="brand" href="../" title="Forwarding Address — home">
+      <svg viewBox="0 0 512 512" aria-hidden="true" focusable="false"><rect width="512" height="512" rx="112" fill="#0B0E14"/><rect x="8" y="8" width="496" height="496" rx="105" fill="none" stroke="#5E6C80" stroke-width="6"/><rect x="68" y="216" width="156" height="150" rx="24" fill="#141A24" stroke="#FF5C5C" stroke-width="16"/><rect x="100" y="272" width="92" height="64" rx="12" fill="none" stroke="#FF5C5C" stroke-width="6" stroke-dasharray="14 10" opacity=".7"/><rect x="288" y="216" width="156" height="150" rx="24" fill="#141A24" stroke="#FFB020" stroke-width="16"/><rect x="320" y="272" width="92" height="64" rx="12" fill="#FFB020"/><path d="M146 208 C146 60 366 60 366 254" fill="none" stroke="#4C9AFF" stroke-width="14" stroke-linecap="round" stroke-dasharray="22 16"/><path d="M336 226 L366 256 L396 226" fill="none" stroke="#4C9AFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Forwarding Address <span class="here">/architecture</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="home" href="../">Home</a>
+      <a class="pitch" href="../pitch/">Pitch deck</a>
+      <a class="judge" href="../judge" title="For judges — the claim, the 30-second path, the receipt">For judges</a>
+      <a class="gh" href="https://github.com/edycutjong/forwarding" aria-label="Source on GitHub (opens in a new tab)" title="Source on GitHub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a>
+      <button class="theme" id="theme" type="button" aria-label="Switch to light theme" title="Switch theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="lead" id="lead">
+  <div class="wrap">
+    <div class="eyebrow"><span>Architecture</span><span class="dot" aria-hidden="true"></span><span>derived from the code, not from a design document</span><span class="dot" aria-hidden="true"></span><span>every name on this page is greppable</span></div>
+    <h1><span class="line1">Forwarding Address is</span>one join, three ways to run it.</h1>
+    <p class="lede"><b>The join no endpoint performs</b> — the same maker <code>m</code> on a <code>remove</code> row and an <code>add</code> row in different pools — wrapped in an investigation a judge can run as a <b>CLI</b>, as an <b>MCP server</b> inside their own Claude, and as an autonomous <b>watch loop</b>. No database, no cache beyond 60 seconds inside the proxy, no model of our own, no key anywhere.</p>
+    <div class="facts" aria-label="Facts about the build">
+      <span><b>stdlib</b> Python, zero runtime deps</span>
+      <span><b>6</b> keyless endpoints</span>
+      <span><b>0</b> credits billed</span>
+      <span><b>3</b> surfaces, one engine</span>
+      <span>every response receipted under its <b>sha256</b></span>
+    </div>
+    <nav class="toc" aria-label="On this page">
+      <a href="#shape"><span class="n">01</span>The shape</a>
+      <a href="#calls"><span class="n">02</span>Call by call</a>
+      <a href="#arithmetic"><span class="n">03</span>The arithmetic</a>
+      <a href="#failure"><span class="n">04</span>Failure handling</a>
+      <a href="#layout"><span class="n">05</span>Repository layout</a>
+      <a href="#not"><span class="n">06</span>Deliberate non-architecture</a>
+    </nav>
+  </div>
+</section>
+
+<section id="shape">
+  <div class="wrap">
+    <div class="kicker">01 · the shape of the thing</div>
+    <h2>One engine, three callers, one upstream.</h2>
+    <p class="lede">Every caller hands the same <code>scripts/forwarding.py</code> a platform and an address. The engine walks eight stages, six of which hit the keyless CoinMarketCap surface; one is pure arithmetic. Every run ends in a <code>Verdict</code> and a receipt, and the receipts are what the site, the judge guide and the verifier are rendered from.</p>
+
+    <figure class="card diagram" aria-labelledby="diagram-title">
+      <p class="scroll-hint" aria-hidden="true">← the diagram scrolls sideways →</p>
+      <div class="scroll" tabindex="0" role="group" aria-label="Architecture diagram; scrolls horizontally on narrow screens">
+      <svg class="arch" viewBox="0 0 1120 900" role="img" aria-labelledby="diagram-title diagram-desc">
+        <title id="diagram-title">Forwarding Address: callers, the engine's eight stages, the CoinMarketCap API, and the receipt path to the site</title>
+        <desc id="diagram-desc">The judge reaches the engine through the CLI in scripts/forwarding.py, the MCP server in scripts/mcp_server.py, or the Vercel proxy in api/lookup.py. Inside scripts/forwarding.py the stages run in order: largest_removals, pools_of, follow_maker (the join), resolve_asset, follow_maker on every sibling chain, adjudicate (no network), pool_liquidity, and the Verdict. All stages but adjudicate issue keyless GETs to pro-api.coinmarketcap.com/public-api. The Verdict is written by receipt() into docs/proof/*.json, which scripts/verify.py replays and scripts/render_site.py turns into the site, the judge page and JUDGE.md.</desc>
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="a" d="M0 0L10 5L0 10z"/></marker>
+          <marker id="ah-get" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="b" d="M0 0L10 5L0 10z"/></marker>
+          <marker id="ah-rec" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="c" d="M0 0L10 5L0 10z"/></marker>
+          <marker id="ah-strong" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="d" d="M0 0L10 5L0 10z"/></marker>
+        </defs>
+
+        <!-- ── left: the judge and the three callers ─────────────────────── -->
+        <text class="lbl" x="56" y="40">CALLERS</text>
+        <rect class="box caller" x="56" y="52" width="232" height="52" rx="10"/>
+        <text class="t" x="72" y="74">the judge</text>
+        <text class="m" x="72" y="92">a terminal · their own Claude · a browser</text>
+
+        <path class="rail" d="M36 78 H56"/>
+        <path class="rail" d="M36 78 V344"/>
+        <path class="flow" d="M36 158 H54" marker-end="url(#ah)"/>
+        <path class="flow" d="M36 250 H54" marker-end="url(#ah)"/>
+        <path class="flow" d="M36 344 H54" marker-end="url(#ah)"/>
+
+        <rect class="box caller" x="56" y="128" width="232" height="60" rx="10"/>
+        <text class="k" x="72" y="150">scripts/forwarding.py</text>
+        <text class="m" x="72" y="168">CLI · investigate · removals · follow · watch</text>
+
+        <rect class="box caller" x="56" y="220" width="232" height="60" rx="10"/>
+        <text class="k" x="72" y="242">scripts/mcp_server.py</text>
+        <text class="m" x="72" y="260">stdio JSON-RPC 2.0 · 3 tools</text>
+
+        <rect class="box caller" x="56" y="312" width="232" height="60" rx="10"/>
+        <text class="k" x="72" y="334">api/lookup.py</text>
+        <text class="m" x="72" y="352">Vercel · same chain · CORS · 60 s cache</text>
+
+        <text class="lbl" x="56" y="428">PROOF PRODUCERS</text>
+        <rect class="box caller" x="56" y="440" width="232" height="76" rx="10"/>
+        <text class="k" x="72" y="462">scripts/seed.py</text>
+        <text class="m" x="72" y="480">base_rate.py · bench.py</text>
+        <text class="m" x="72" y="498">capture · base rate · p50/p95</text>
+
+        <path class="flow" d="M288 158 H334" marker-end="url(#ah)"/>
+        <path class="flow" d="M288 250 H334" marker-end="url(#ah)"/>
+        <path class="flow" d="M288 344 H334" marker-end="url(#ah)"/>
+        <path class="flow" d="M288 478 H334" marker-end="url(#ah)"/>
+
+        <!-- ── centre: the engine ────────────────────────────────────────── -->
+        <rect class="engine" x="336" y="52" width="440" height="632" rx="16"/>
+        <text class="k acc" x="356" y="78">scripts/forwarding.py</text>
+        <text class="m" x="356" y="96">the engine · stdlib Python · keyless · investigate(platform, address)</text>
+
+        <rect class="stage" x="356" y="112" width="400" height="58" rx="9"/>
+        <text class="k" x="372" y="133">largest_removals()</text>
+        <text class="m" x="372" y="151">trigger · 300 rows ≥ $100k · JIT and implausible rows out</text>
+        <text class="lbl" x="736" y="133" text-anchor="end">1</text>
+        <path class="flow" d="M556 170 V182" marker-end="url(#ah)"/>
+
+        <rect class="stage" x="356" y="184" width="400" height="58" rx="9"/>
+        <text class="k" x="372" y="205">pools_of()</text>
+        <text class="m" x="372" y="223">identity (f, {t0a, t1a}) · liqUsd · pubAt · share of pool</text>
+        <text class="lbl" x="736" y="205" text-anchor="end">2</text>
+        <path class="flow" d="M556 242 V254" marker-end="url(#ah)"/>
+
+        <rect class="stage join" x="356" y="256" width="400" height="58" rx="9"/>
+        <text class="k acc" x="372" y="277">follow_maker()</text>
+        <text class="m" x="372" y="295">THE JOIN · liquidity-change/list?maker=&lt;m&gt; · to window start</text>
+        <text class="lbl acc" x="736" y="277" text-anchor="end">3</text>
+        <path class="flow" d="M556 314 V326" marker-end="url(#ah)"/>
+
+        <rect class="stage" x="356" y="328" width="400" height="58" rx="9"/>
+        <text class="k" x="372" y="349">resolve_asset()</text>
+        <text class="m" x="372" y="367">search by address → cid · by symbol → siblings · info → registry</text>
+        <text class="lbl" x="736" y="349" text-anchor="end">4</text>
+        <path class="flow" d="M556 386 V398" marker-end="url(#ah)"/>
+
+        <rect class="stage" x="356" y="400" width="400" height="58" rx="9"/>
+        <text class="k" x="372" y="421">follow_maker() × each sibling chain</text>
+        <text class="m" x="372" y="439">the join again, on every EVM chain with ≥ $10k of liquidity</text>
+        <text class="lbl" x="736" y="421" text-anchor="end">5</text>
+        <path class="flow" d="M556 458 V470" marker-end="url(#ah)"/>
+
+        <rect class="stage pure" x="356" y="472" width="400" height="58" rx="9"/>
+        <text class="k ver" x="372" y="493">adjudicate()</text>
+        <text class="m" x="372" y="511">pure arithmetic, no network · REBALANCE · MIGRATION · EXIT …</text>
+        <text class="lbl ver" x="736" y="493" text-anchor="end">6</text>
+        <path class="flow" d="M556 530 V542" marker-end="url(#ah)"/>
+
+        <rect class="stage" x="356" y="544" width="400" height="58" rx="9"/>
+        <text class="k" x="372" y="565">pool_liquidity()</text>
+        <text class="m" x="372" y="583">pairs/quotes/latest → the destination pool's depth now</text>
+        <text class="lbl" x="736" y="565" text-anchor="end">7</text>
+        <path class="flow strong" d="M556 602 V614" marker-end="url(#ah-strong)"/>
+
+        <rect class="stage verdict" x="356" y="616" width="400" height="58" rx="9"/>
+        <text class="k" x="372" y="637">Verdict</text>
+        <text class="m" x="372" y="655">kind · severity · recovered_share · evidence[] · follows[] · calls[]</text>
+        <text class="lbl" x="736" y="637" text-anchor="end">8</text>
+
+        <!-- ── right: the upstream, one dashed bus ───────────────────────── -->
+        <path class="get" d="M756 141 H808"/>
+        <path class="get" d="M756 213 H808"/>
+        <path class="get" d="M756 285 H808"/>
+        <path class="get" d="M756 357 H808"/>
+        <path class="get" d="M756 429 H808"/>
+        <path class="get" d="M756 573 H808"/>
+        <path class="get" d="M808 573 V141"/>
+        <path class="get" d="M808 152 H838" marker-end="url(#ah-get)"/>
+        <text class="lbl dat" x="816" y="596">GET · no key</text>
+        <text class="lbl" x="816" y="514">6 · no network</text>
+
+        <text class="lbl" x="840" y="40">UPSTREAM</text>
+        <path class="cmc" d="M840 66 a128 12 0 0 1 256 0 v150 a128 12 0 0 1 -256 0 z"/>
+        <path class="cmc" d="M840 66 a128 12 0 0 0 256 0" fill="none"/>
+        <text class="k dat" x="968" y="106" text-anchor="middle">pro-api.coinmarketcap.com</text>
+        <text class="k dat" x="968" y="124" text-anchor="middle">/public-api</text>
+        <text class="m" x="968" y="150" text-anchor="middle">six endpoints · no key</text>
+        <text class="m" x="968" y="168" text-anchor="middle">credit_count reported, 0 billed</text>
+        <text class="m" x="968" y="186" text-anchor="middle">429 / 5xx → 15 s, 30 s, 60 s backoff</text>
+        <text class="m" x="968" y="204" text-anchor="middle">a throttled follow is never an Exit</text>
+
+        <!-- ── bottom: the receipt path ──────────────────────────────────── -->
+        <path class="rec" d="M556 674 V732" marker-end="url(#ah-rec)"/>
+        <text class="lbl ver" x="568" y="712">receipt()</text>
+
+        <rect class="proof" x="336" y="734" width="220" height="136" rx="12"/>
+        <text class="k ver" x="352" y="758">docs/proof/*.json</text>
+        <text class="m" x="352" y="778">verbatim responses under</text>
+        <text class="m" x="352" y="796">their sha256 · hero · exit ·</text>
+        <text class="m" x="352" y="814">rebalance · jit · base_rate ·</text>
+        <text class="m" x="352" y="832">bench · spike_maker ·</text>
+        <text class="m" x="352" y="850">mcp_session · tests</text>
+
+        <path class="flow" d="M556 764 H588" marker-end="url(#ah)"/>
+        <rect class="box" x="590" y="734" width="220" height="60" rx="10"/>
+        <text class="k" x="606" y="756">scripts/verify.py</text>
+        <text class="m" x="606" y="774">replay · I1–I6 · chain of custody</text>
+        <text class="m" x="606" y="788">· page drift</text>
+
+        <path class="flow" d="M556 840 H588" marker-end="url(#ah)"/>
+        <rect class="box" x="590" y="810" width="220" height="60" rx="10"/>
+        <text class="k" x="606" y="832">scripts/render_site.py</text>
+        <text class="m" x="606" y="850">slot tokens filled only from receipts</text>
+        <text class="m" x="606" y="864">· --check is the drift gate</text>
+
+        <path class="flow" d="M810 840 H842" marker-end="url(#ah)"/>
+        <rect class="box" x="844" y="810" width="252" height="60" rx="10"/>
+        <text class="k" x="860" y="832">site/ · JUDGE.md</text>
+        <text class="m" x="860" y="850">index.html · judge.html · pitch/</text>
+        <text class="m" x="860" y="864">what the judge reads first</text>
+
+        <path class="flow" d="M1080 810 V730" marker-end="url(#ah)"/>
+        <text class="m" x="1068" y="776" text-anchor="end">the judge lands here;</text>
+        <text class="m" x="1068" y="792" text-anchor="end">the live box calls api/lookup.py</text>
+      </svg>
+      </div>
+      <figcaption class="key" aria-label="Diagram key">
+        <span><i aria-hidden="true"></i><span><b>solid</b> · a call into the engine, or a stage handing rows to the next</span></span>
+        <span><i class="get" aria-hidden="true"></i><span><b>dashed blue</b> · a keyless <span class="mono">GET</span>; stages 1–5 and 7 issue one, stage 6 never does</span></span>
+        <span><i class="join" aria-hidden="true"></i><span><b>amber</b> · the join — the one call that turns an alert into a verdict</span></span>
+        <span><i class="rec" aria-hidden="true"></i><span><b>green</b> · <span class="mono">receipt()</span> — every verdict lands on disk with its responses</span></span>
+      </figcaption>
+    </figure>
+    <p class="cap">Boxes are files and functions, not concepts: <code>largest_removals</code>, <code>pools_of</code>, <code>follow_maker</code>, <code>resolve_asset</code>, <code>adjudicate</code>, <code>pool_liquidity</code>, <code>investigate</code> and <code>receipt</code> are module-level functions in <code>scripts/forwarding.py</code>; <code>Verdict</code> is its dataclass.</p>
+  </div>
+</section>
+
+<section id="calls">
+  <div class="wrap">
+    <div class="kicker">02 · one investigation, call by call</div>
+    <h2>Every call printed as it happens, every one receipted.</h2>
+    <p class="lede"><code>investigate(platform, address)</code> runs the stages below in order. The numbers are the call slots of a full cross-chain run; a token with no sibling chains stops sooner. Each response is stored verbatim under its <span class="mono">sha256</span>, so a judge replays the verdict without the network.</p>
+    <div class="scroll-x">
+      <table>
+        <thead><tr><th scope="col">Call</th><th scope="col">Endpoint</th><th scope="col">What it is for</th></tr></thead>
+        <tbody>
+          <tr><td class="n">0</td><td><code>GET /v1/dex/token</code></td><td class="what">card header: name, symbol, token liquidity — <b>context, never an input to the verdict</b></td></tr>
+          <tr><td class="n">1–3</td><td><code>GET /v1/dex/liquidity-change/list?minVolume=100000</code> ×3</td><td class="what"><b>the trigger</b>: 300 rows keyed <code>(txn, lgid)</code>, cursor from the envelope's <code>data.lastId</code>; a transaction that both adds and removes is JIT and is discarded; a row above <code>SANE_USD</code> is a price artefact and is refused</td></tr>
+          <tr><td class="n">4</td><td><code>GET /v1/dex/token/pools?size=20</code></td><td class="what">pool identity → address, depth now, creation time; <b>the removal's share of its pool</b></td></tr>
+          <tr class="join"><td class="n">5</td><td><code>GET /v1/dex/liquidity-change/list?maker=&lt;m&gt;</code></td><td class="what"><b>the join</b> — the same wallet's events across every pool of the token, walked back to the window start, server-side, in one call</td></tr>
+          <tr><td class="n">6</td><td><code>GET /v1/dex/search?q=&lt;address&gt;</code></td><td class="what">the asset's CoinMarketCap id</td></tr>
+          <tr><td class="n">7</td><td><code>GET /v1/dex/search?q=&lt;symbol&gt;</code></td><td class="what">the same id on every other chain</td></tr>
+          <tr><td class="n">8</td><td><code>GET /v2/cryptocurrency/info?id=</code></td><td class="what">the canonical contract registry the sibling rows are checked against</td></tr>
+          <tr class="join"><td class="n">9–12</td><td><code>GET /v1/dex/liquidity-change/list?platform=&lt;sibling&gt;&amp;maker=&lt;m&gt;</code></td><td class="what">the join again, on each EVM chain where the asset has ≥ $10k of DEX liquidity — for UNI: bsc, arbitrum, unichain, polygon</td></tr>
+          <tr class="pure"><td class="n none">no network</td><td><code>adjudicate()</code></td><td class="what"><b>no network.</b> Sums and ratios over the rows already fetched; the <code>Verdict</code> dataclass, printed by <code>print_verdict()</code> or serialised by <code>receipt()</code></td></tr>
+          <tr><td class="n">13</td><td><code>GET /v4/dex/pairs/quotes/latest?contract_address=&lt;dest&gt;</code></td><td class="what">the destination pool's depth now (and the source pool's, when it is listed)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:14px">Constants are named, not buried: <code>MIN_USD</code> 100,000 · <code>MIN_SHARE</code> 0.10 · <code>W_BACK_H</code>/<code>W_FWD_H</code> 6 h · <code>FULL</code> 0.70 · <code>PARTIAL_MIN</code> 0.10 · <code>TRIGGER_PAGES</code> 3 · <code>SIBLING_MIN_LIQ</code> 10,000 · <code>SANE_USD</code> 1e10 — all at the top of <code>scripts/forwarding.py</code>.</p>
+  </div>
+</section>
+
+<section id="arithmetic">
+  <div class="wrap">
+    <div class="kicker">03 · the arithmetic, in full</div>
+    <h2>A verdict is a ratio of <span class="mono">tu</span> fields. Nothing else.</h2>
+    <p class="lede">No model produces a number. Every float in a <code>Verdict</code> is a sum or a ratio of the signed USD values on API rows (invariant I1), and two runs on the same rows are byte-identical (I4). The full statement, thresholds and six invariants are one page: <a href="https://github.com/edycutjong/forwarding/blob/main/docs/SPEC.md" target="_blank" rel="noopener noreferrer">docs/SPEC.md<span class="arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>.</p>
+    <div class="two">
+      <pre class="rule" tabindex="0" aria-label="The adjudication rule"><code>identity(row)  = (row.f, {row.t0a, row.t1a})   <span class="c"># factory + unordered pair</span>
+adds           = same-maker rows in [ts−6h, ts+6h], tp == "add"
+                 <span class="c"># JIT and implausible rows excluded</span>
+same           = Σ |tu| of adds, identity == identity(removal), same chain
+other          = Σ |tu| of every other add   <span class="c"># other pool or chain</span>
+
+<span class="kw">REBALANCE</span>      same/|removed| ≥ 0.70  and  same ≥ other
+<span class="kw">MIGRATION</span>      other/|removed| ≥ 0.70
+               <span class="c">(</span><span class="kw">CONSOLIDATION</span><span class="c"> if destination.pubAt &gt; removal.ts)</span>
+<span class="kw">PARTIAL</span>        0.10 ≤ (same+other)/|removed|
+<span class="r">EXIT</span>           otherwise, and every planned follow returned 200
+<span class="r">INCOMPLETE</span>     otherwise   <span class="c"># a throttle is never an Exit (I6)</span>
+
+recovered_share = same/|removed|    <span class="c">(REBALANCE)</span>
+                · other/|removed|   <span class="c">(MIGRATION, CONSOLIDATION)</span>
+                · total             <span class="c">(PARTIAL)</span>
+elapsed_s       = ts(first add into destination) − ts(removal)</code></pre>
+      <div class="fields" aria-label="The three fields the product rests on">
+        <div class="field">
+          <div class="f">m</div>
+          <div class="e">/v1/dex/liquidity-change/list</div>
+          <p><b>The wallet.</b> Verified to be the transaction sender's own address, never a position manager — 32 distinct makers on 71 Uniswap v3 rows (<code>docs/proof/spike_maker.json</code>). Without it there is nothing to join.</p>
+        </div>
+        <div class="field">
+          <div class="f">maker=</div>
+          <div class="e">same endpoint, query parameter</div>
+          <p><b>The join in one call.</b> The same wallet's adds and removes across every pool of the token, filtered server-side. This is the call no other endpoint replaces.</p>
+        </div>
+        <div class="field">
+          <div class="f">f · t0a · t1a</div>
+          <div class="e">same endpoint, on every row</div>
+          <p><b>Pool identity.</b> Rows carry no pool address; the factory plus the unordered pair is the closest stable key, and <code>f</code> is present even when the venue name <code>en</code> is not.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="failure">
+  <div class="wrap">
+    <div class="kicker">04 · failure handling</div>
+    <h2>The anonymous tier can never manufacture an Exit.</h2>
+    <p class="lede">Transient errors are retried and recorded; everything else is returned at once and named for what it is. A finding with nothing to follow is an exit code, not a stack trace.</p>
+    <div class="scroll-x">
+      <table>
+        <thead><tr><th scope="col">Condition</th><th scope="col">Behaviour</th></tr></thead>
+        <tbody>
+          <tr><td class="cond"><span class="tag warn">retry</span>HTTP 429 (error 1022 <em>or</em> 1011) · any 5xx · a dropped connection</td><td class="beh">transient: retried with 15 s, 30 s, 60 s backoff (<code>BACKOFF_S</code>, <code>RETRIES</code>); a call that backed off and then answered records <code>attempts</code> in its receipt</td></tr>
+          <tr><td class="cond"><span class="tag stop">exit 75</span>throttled on every retry, on the trigger</td><td class="beh"><code>Throttled</code> — what happened and the two ways through: wait, or the optional key</td></tr>
+          <tr><td class="cond"><span class="tag warn">incomplete</span>throttled on a follow</td><td class="beh">that follow is <code>complete: false</code>; the verdict is INCOMPLETE if nothing was found, or a MIGRATION / REBALANCE marked incomplete if something was — <b>never an EXIT</b> (invariant I6)</td></tr>
+          <tr><td class="cond"><span class="tag">at once</span>any other 4xx · malformed JSON · unreachable host</td><td class="beh">returned immediately, never retried, never reported as a rate limit</td></tr>
+          <tr><td class="cond"><span class="tag ok">exit 3</span>no removal ≥ $100k, or every one below 10% of its pool</td><td class="beh"><code>NoCandidate</code> — a finding, with the refused rows and their reasons</td></tr>
+          <tr><td class="cond"><span class="tag ok">exit 3</span>a JIT transaction named by hash</td><td class="beh"><code>NoCandidate</code> — “not an event”</td></tr>
+          <tr><td class="cond"><span class="tag">refused</span>a row with |tu| above $10B</td><td class="beh">a price-feed artefact, listed under <code>refused</code> with its reason; the next candidate is taken</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:14px">Exit codes are the contract the tests pin: <b>0</b> a verdict · <b>3</b> a finding with no candidate · <b>75</b> throttled (<code>EX_TEMPFAIL</code>) · <b>2</b> bad arguments. See <code>tests/test_cli.py</code>.</p>
+  </div>
+</section>
+
+<section id="layout">
+  <div class="wrap">
+    <div class="kicker">05 · repository layout</div>
+    <h2>Two files are the product. The rest proves it.</h2>
+    <p class="lede"><code>scripts/forwarding.py</code> and <code>scripts/mcp_server.py</code> import only the standard library, so a judge runs them on a clean machine. Everything else captures, verifies or renders what those two files did.</p>
+<pre class="tree" tabindex="0" aria-label="Repository layout"><code><span class="d">scripts/</span>
+  <span class="hi">forwarding.py</span>                 <span class="c">the product: Client, walk, largest_removals, follow_maker, resolve_asset,</span>
+                                <span class="c">pools_of, pool_liquidity, adjudicate, investigate, watch, and the CLI</span>
+  <span class="hi">mcp_server.py</span>                 <span class="c">stdio JSON-RPC 2.0: where_did_liquidity_go · largest_removals · follow_maker</span>
+  <span class="f">seed.py</span>                       <span class="c">the published selection rule → docs/proof/{hero,runner_up,exit,rebalance,jit}.json</span>
+  <span class="f">base_rate.py</span>                  <span class="c">every ≥ $100k removal on the watchlist, each wallet followed → base_rate.json</span>
+  <span class="f">bench.py</span>                      <span class="c">p50/p95: investigate end to end, follow, adjudicate — live and replay</span>
+  <span class="f">verify.py</span>                     <span class="c">replay every receipt, assert I1–I6 and chain of custody, check page drift</span>
+  <span class="f">render_site.py</span>                <span class="c">docs/proof/*.json → site/index.html + site/judge.html + site/pitch/ + JUDGE.md (--check = drift gate)</span>
+  <span class="f">check_submission_readiness.py</span> <span class="c">placeholders, stale counts, stale numbers → exit 1</span>
+  <span class="f">spike_maker.py</span>                <span class="c">the day-1 spike: is `m` the wallet? (answered: yes)</span>
+  <span class="d">site_templates/</span>               <span class="c">landing.html, judge.html, pitch.html, JUDGE.md — slot tokens filled only from receipts</span>
+<span class="d">api/</span>
+  <span class="f">lookup.py</span>                     <span class="c">GET /api/lookup?platform=&amp;address= — same-chain investigate, CORS, 60 s cache</span>
+  <span class="f">health.py</span>                     <span class="c">GET /api/health — engine, rule, receipt ages, python version</span>
+<span class="d">tests/</span>
+  <span class="f">conftest.py</span>                   <span class="c">live-shaped rows and a routed FakeClient whose receipts come from the real _record()</span>
+  <span class="f">test_adjudicate.py</span>            <span class="c">the rule, threshold by threshold; regressions named for the live defect they pin</span>
+  <span class="f">test_fetch.py</span>                 <span class="c">keyless default, backoff, the cursor, dedupe, stall, attempts</span>
+  <span class="f">test_investigate.py</span>           <span class="c">every branch: JIT, share, throttle, cross-chain, Solana, registry, watch()</span>
+  <span class="f">test_property.py</span>              <span class="c">hypothesis cases over adjudicate(): I1–I6 never violated</span>
+  <span class="f">test_cli.py</span>                   <span class="c">exit codes 0/3/75/2, the receipt file, what is printed</span>
+  <span class="f">test_mcp.py</span>                   <span class="c">the protocol over a real pipe; the three tools; the refusal</span>
+  <span class="f">test_boundary.py</span>              <span class="c">least privilege, proven: the agent surface cannot send or be handed a key</span>
+  <span class="f">test_published_counts.py</span>      <span class="c">the counts the documents state are the counts pytest collects</span>
+  <span class="f">test_live.py</span>                  <span class="c">against the real API and the deployment (pytest -m live)</span>
+<span class="d">docs/</span>
+  <span class="f">SPEC.md</span>                       <span class="c">the rule, formally</span>
+  <span class="d">proof/</span>                        <span class="c">hero · runner_up · exit · rebalance · uni_v3_v4 · jit · base_rate · live_run ·</span>
+                                <span class="c">bench_live · bench_replay · spike_maker · seed_sweep · mcp_session.md + .jsonl · tests.json</span>
+<span class="d">site/</span>                           <span class="c">index.html, judge.html, pitch/, architecture/ (this page), assets/ (icon, fonts under OFL)</span></code></pre>
+  </div>
+</section>
+
+<section id="not">
+  <div class="wrap">
+    <div class="kicker">06 · deliberate non-architecture</div>
+    <h2>What is not here, and why that is the design.</h2>
+    <div class="nots">
+      <div class="not">
+        <div class="x">not present</div>
+        <h3>A model of our own</h3>
+        <p>The judge's Claude is the model in the loop; it chooses the token and the removal, and <b>deterministic code decides what is true</b>. An LLM producing the recovered share would fail the track's own gate.</p>
+      </div>
+      <div class="not">
+        <div class="x">not present</div>
+        <h3>A database</h3>
+        <p>Every verdict is recomputed from live rows; receipts are committed JSON under <code>docs/proof/</code>. The only cache is 60 seconds inside <code>api/lookup.py</code>.</p>
+      </div>
+      <div class="not">
+        <div class="x">not present</div>
+        <h3>A key</h3>
+        <p>Every endpoint used is on the keyless surface, so the proxy holds no secret and judge traffic bills nothing. <code>CMC_API_KEY</code> is honoured only as an escape hatch for a throttled IP, and a keyed run <b>announces itself</b> on its first line, its last line and in its receipt.</p>
+      </div>
+      <div class="not">
+        <div class="x">not present</div>
+        <h3>Runtime dependencies</h3>
+        <p><code>scripts/forwarding.py</code> and <code>scripts/mcp_server.py</code> import only the standard library. <code>pytest</code>, <code>hypothesis</code>, <code>ruff</code> and <code>mypy</code> are dev-only.</p>
+      </div>
+      <div class="not">
+        <div class="x">not present</div>
+        <h3>A pool address on the row</h3>
+        <p>The API does not carry one; identity is venue + pair, and <b>the limit is stated</b> rather than guessed around.</p>
+      </div>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="../judge">For judges — the 30-second path <span class="arrow" aria-hidden="true">→</span></a>
+      <a class="btn" href="https://github.com/edycutjong/forwarding/blob/main/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">ARCHITECTURE.md on GitHub <span class="arrow arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="brand"><img src="../assets/icon.svg" alt="" width="30" height="30">Forwarding Address</div>
+        <p style="margin-top:12px;max-width:40ch">Follows the wallet. Built on the CoinMarketCap API for the <a href="https://dorahacks.io/hackathon/coinmarketcap-api-202609/detail" target="_blank" rel="noopener noreferrer">Build with CMC: API Hackathon<span class="arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>, AI Agents and Automation track. MIT licensed.</p>
+      </div>
+      <div>
+        <h3>Repository</h3>
+        <ul>
+          <li><a class="link-quiet" href="https://github.com/edycutjong/forwarding" target="_blank" rel="noopener noreferrer">Source<span class="arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a class="link-quiet" href="https://github.com/edycutjong/forwarding/blob/main/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">ARCHITECTURE.md<span class="arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a class="link-quiet" href="https://github.com/edycutjong/forwarding/blob/main/docs/SPEC.md" target="_blank" rel="noopener noreferrer">docs/SPEC.md — the rule<span class="arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a class="link-quiet" href="https://github.com/edycutjong/forwarding/blob/main/scripts/forwarding.py" target="_blank" rel="noopener noreferrer">scripts/forwarding.py<span class="arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Surfaces</h3>
+        <ul>
+          <li><a class="link-quiet" href="../">Landing page — /</a></li>
+          <li><a class="link-quiet" href="../judge">For judges — /judge</a></li>
+          <li><a class="link-quiet" href="../pitch/">Pitch deck — /pitch</a></li>
+          <li><a class="link-quiet" href="https://github.com/edycutjong/forwarding/tree/main/docs/proof" target="_blank" rel="noopener noreferrer">Receipts<span class="arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bottom">
+      <span>derived from the code in <span class="mono">scripts/</span> and <span class="mono">api/</span> · no key · 0 credits</span>
+      <span><a class="link-quiet" href="https://github.com/edycutjong/forwarding/blob/main/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">the same page as Markdown<span class="arrow-ext" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme');
+  var mq=window.matchMedia('(prefers-color-scheme: light)');
+  function current(){var t=root.getAttribute('data-theme');if(t==='light'||t==='dark')return t;return mq.matches?'light':'dark';}
+  function label(){var next=current()==='light'?'dark':'light';btn.setAttribute('aria-label','Switch to '+next+' theme');btn.title='Switch to '+next+' theme';}
+  btn.addEventListener('click',function(){
+    var next=current()==='light'?'dark':'light';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('fa-theme',next);}catch(e){}
+    label();
+  });
+  if(mq.addEventListener)mq.addEventListener('change',label);
+  label();
+  var top=document.getElementById('top');
+  function onScroll(){top.classList.toggle('scrolled',window.scrollY>8);}
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+})();
+</script>
+</body>
+</html>
