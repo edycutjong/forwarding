@@ -43,7 +43,7 @@ def status():
 
 
 class handler(BaseHTTPRequestHandler):
-    def do_OPTIONS(self):  # the CORS preflight, for a page served from another host (GitHub Pages)
+    def do_OPTIONS(self):  # the CORS preflight, for a local copy of site/ or any other origin
         self.send_response(204)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")

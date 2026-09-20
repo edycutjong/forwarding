@@ -219,7 +219,7 @@ def test_the_health_check_reports_the_credential_position_and_never_the_credenti
     assert status == 200 and body["key_exported"] is True
     assert headers["Cache-Control"] == "no-store"  # a health answer is never served stale
     assert headers["Access-Control-Allow-Origin"] == "*"
-    # the page is also served from GitHub Pages, so both functions must answer the preflight
+    # a local copy of site/ calls the functions cross-origin, so both must answer the preflight
     h = _sink(health.handler, "/api/health")
     h.do_OPTIONS()
     assert h.status == 204 and h.headers_sent["Access-Control-Allow-Origin"] == "*"
