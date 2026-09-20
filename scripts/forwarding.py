@@ -120,7 +120,7 @@ def api_key():
     return None
 
 
-def api_key_var():
+def escape_hatch_var():
     """The NAME of the variable a key came from — the half that is safe to print."""
     for var in KEY_VARS:
         if os.environ.get(var, "").strip():
@@ -988,8 +988,9 @@ def receipt(verdict, client, *, started, selection_rule=None, extra=None):
         "captured_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(started)),
         "wall_clock_s": round(time.time() - started, 2),
         "auth": (
-            f"X-CMC_PRO_API_KEY from ${api_key_var()} — keyed escape hatch, not the default path"
-            if api_key_var()
+            f"X-CMC_PRO_API_KEY from ${escape_hatch_var()} — keyed escape hatch, "
+            "not the default path"
+            if escape_hatch_var()
             else "none — CoinMarketCap keyless /public-api surface"
         ),
         "credits_used": client.credits,
@@ -1223,7 +1224,7 @@ def print_verdict(v, out=None):
 
 
 def throttle_advice(err):
-    var = api_key_var()
+    var = escape_hatch_var()
     waits = " + ".join(f"{BACKOFF_S * 2**i} s" for i in range(RETRIES))
     hatch = (
         f"unset {var} to use the keyless surface instead"
@@ -1298,7 +1299,7 @@ def main(argv=None):
         return 2
 
     started = time.time()
-    var = api_key_var()
+    var = escape_hatch_var()
     mode = f"keyed via ${var} (escape hatch — the default is keyless)" if var else "keyless"
     trace = None if a.quiet else print_trace_line
     c = Client(keep_bodies=bool(a.json), on_call=trace)

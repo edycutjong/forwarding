@@ -28,7 +28,7 @@ def status():
             "partial_min": forwarding.PARTIAL_MIN,
             "window_h": [forwarding.W_BACK_H, forwarding.W_FWD_H],
         }
-        out["key_exported"] = forwarding.api_key_var() is not None
+        out["key_exported"] = forwarding.escape_hatch_var() is not None
     except Exception as e:  # the health check must answer even if the import breaks
         out["ok"] = False
         out["engine_error"] = f"{type(e).__name__}: {e}"

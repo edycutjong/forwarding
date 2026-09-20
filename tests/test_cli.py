@@ -135,9 +135,12 @@ def test_follow_lists_a_wallets_events_oldest_first_and_marks_jit(routed, capsys
     assert "JIT" in lines[0] and "remove" in lines[2] and "add" in lines[3]
 
 
-def test_watch_one_cycle_fires_on_the_newest_removal_and_prints_the_rewrite(routed, capsys):
+def test_watch_one_cycle_fires_on_the_newest_removal_and_prints_the_rewrite(
+    routed, capsys, tmp_path
+):
     routed(scenario(trigger_rows=[HERO_REMOVE], maker_rows=[HERO_ADD, HERO_REMOVE]))
-    code = forwarding.main(["--quiet", "watch", "--cycles", "1", "--watchlist", _watchlist()])
+    wl = _watchlist(tmp_path)
+    code = forwarding.main(["--quiet", "watch", "--cycles", "1", "--watchlist", wl])
     out = capsys.readouterr().out
     assert code == 0
     assert "● LP REMOVED $2,921,711" in out
@@ -145,13 +148,10 @@ def test_watch_one_cycle_fires_on_the_newest_removal_and_prints_the_rewrite(rout
     assert "1 verdict(s)" in out
 
 
-def _watchlist():
-    import tempfile
-
-    path = tempfile.mktemp(suffix=".json")
-    with open(path, "w") as f:
-        json.dump([{"platform": "ethereum", "address": UNI, "symbol": "UNI"}], f)
-    return path
+def _watchlist(tmp_path):
+    path = tmp_path / "watchlist.json"
+    path.write_text(json.dumps([{"platform": "ethereum", "address": UNI, "symbol": "UNI"}]))
+    return str(path)
 
 
 def test_no_subcommand_prints_help_and_exits_two(capsys):

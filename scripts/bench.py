@@ -29,7 +29,7 @@ from forwarding import (  # noqa: E402
     NoCandidate,
     Throttled,
     adjudicate,
-    api_key_var,
+    escape_hatch_var,
     follow_maker,
     investigate,
     ts_ms,
@@ -117,7 +117,7 @@ def main():
         out["receipts"] = names
         print(f"\n  byte-identical {identical}/{total} · no network")
     else:
-        var = api_key_var()
+        var = escape_hatch_var()
         surface = f"keyed via ${var} (escape hatch)" if var else "keyless"
         hero = json.loads((PROOF / "hero.json").read_text())["verdict"]
         txn, maker, platform = (

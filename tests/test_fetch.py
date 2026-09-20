@@ -78,7 +78,7 @@ def test_an_exported_key_is_the_escape_hatch_and_announces_itself(monkeypatch, n
     c.get("/v1/dex/token", platform="ethereum", address=UNI)
     assert seen["url"].startswith(forwarding.BASE_KEYED + "/v1/dex/token?")
     assert seen["headers"].get("X-cmc_pro_api_key") == "secret-key"
-    assert forwarding.api_key_var() == var
+    assert forwarding.escape_hatch_var() == var
     assert c.credits == 1
     assert "secret-key" not in json.dumps(c.calls)  # the receipt never carries the key
 
@@ -86,7 +86,7 @@ def test_an_exported_key_is_the_escape_hatch_and_announces_itself(monkeypatch, n
 def test_a_blank_key_variable_does_not_switch_the_path(monkeypatch):
     monkeypatch.setenv("CMC_API_KEY", "   ")
     assert forwarding.api_key() is None
-    assert forwarding.api_key_var() is None
+    assert forwarding.escape_hatch_var() is None
 
 
 def test_the_429_and_the_500_are_both_retried_and_the_row_then_lands(monkeypatch, no_sleep):
