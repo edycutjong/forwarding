@@ -224,3 +224,20 @@ def test_the_health_check_reports_the_credential_position_and_never_the_credenti
     h.do_OPTIONS()
     assert h.status == 204 and h.headers_sent["Access-Control-Allow-Origin"] == "*"
     assert h.headers_sent["Access-Control-Allow-Methods"] == "GET, OPTIONS"
+
+
+def test_the_health_check_answers_even_when_the_engine_or_the_proofs_are_missing(
+    monkeypatch, tmp_path, capsys
+):
+    """A health answer that crashes is no health answer: a broken import is reported as
+    ok:false with the reason, and a missing receipt is reported as null, never as a 500."""
+    monkeypatch.setattr(health, "ROOT", str(tmp_path))
+    d = health.status()
+    assert d["ok"] is True and d["hero"] is None and d["base_rate"] is None and d["tests"] is None
+    monkeypatch.setitem(sys.modules, "forwarding", None)  # `import forwarding` now raises
+    d = health.status()
+    assert d["ok"] is False and d["engine_error"].startswith("ModuleNotFoundError")
+    assert "engine" not in d
+    # the proxy's request log is one line per request, on stderr
+    lookup.handler.log_message(_sink(lookup.handler, "/api/lookup"), "%s %s", "GET", "/api/lookup")
+    assert capsys.readouterr().err == "lookup GET /api/lookup\n"

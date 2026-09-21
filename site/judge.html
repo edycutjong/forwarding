@@ -127,7 +127,7 @@ python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840
 <tr><td><strong>Credits used</strong></td><td><strong>0</strong> — every endpoint is on the keyless <code>/public-api</code> surface</td></tr>
 <tr><td>Credentials</td><td>none; run with every CMC env var unset</td></tr>
 <tr><td>Base rate</td><td><strong>335</strong> removals ≥ $100,000 followed one wallet at a time: rebalance 194 · migration 19 · partial 10 · exit 112 — <strong>67% were the same wallet putting liquidity back within 6 h</strong></td></tr>
-<tr><td>Tests</td><td><strong>126</strong> offline tests + 10 live · <strong>2,000 property cases, 0 failing</strong></td></tr>
+<tr><td>Tests</td><td><strong>320</strong> offline tests + 10 live · <strong>2,000 property cases, 0 failing</strong></td></tr>
 <tr><td>Latency</td><td>adjudicate replay p50 <strong>0.004 ms</strong> (n=1000) · live investigation p50 <strong>27.0 s</strong>, p95 28.0 s (n=5)</td></tr>
 <tr><td>Raw receipts</td><td><a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/hero.json" target="_blank" rel="noopener noreferrer"><code>hero.json</code></a> · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/exit.json" target="_blank" rel="noopener noreferrer"><code>exit.json</code></a> · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/rebalance.json" target="_blank" rel="noopener noreferrer"><code>rebalance.json</code></a> · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/jit.json" target="_blank" rel="noopener noreferrer"><code>jit.json</code></a> · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/base_rate.json" target="_blank" rel="noopener noreferrer"><code>base_rate.json</code></a> · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/live_run.json" target="_blank" rel="noopener noreferrer"><code>live_run.json</code></a> · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/bench_live.json" target="_blank" rel="noopener noreferrer"><code>bench_live.json</code></a> · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/bench_replay.json" target="_blank" rel="noopener noreferrer"><code>bench_replay.json</code></a> · <a href="https://github.com/edycutjong/forwarding/blob/main/docs/proof/spike_maker.json" target="_blank" rel="noopener noreferrer"><code>spike_maker.json</code></a></td></tr>
 </tbody></table>
@@ -136,7 +136,7 @@ python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840
 <pre><code>python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984   # the hero, live
 python3 scripts/forwarding.py investigate --platform ethereum --address 0x514910771af9ca656af840dff83e8264ecf986ca   # LINK
 python3 scripts/forwarding.py watch --cycles 1                    # the autonomous loop, one pass over 11 tokens
-make test                                                         # 126 offline tests
+make test                                                         # 320 offline tests
 make test-live                                                    # 10 tests against the real CMC contract
 make verify                                                       # replay every receipt, assert I1–I6, check the page
 pytest tests/test_property.py --hypothesis-show-statistics        # the 2,000</code></pre>
@@ -166,7 +166,7 @@ pytest tests/test_property.py --hypothesis-show-statistics        # the 2,000</c
 
 <footer>
   <span>This page is <a href="https://github.com/edycutjong/forwarding/blob/main/JUDGE.md" target="_blank" rel="noopener noreferrer">JUDGE.md</a>, rendered from the same receipts · no auth, no cookies, no key</span>
-  <span>Built for the <a href="https://dorahacks.io/hackathon/coinmarketcap-api-202609/detail" target="_blank" rel="noopener noreferrer">Build with CMC: API Hackathon</a> · AI Agents &amp; Automation · rendered 2026-09-20 from <span class="mono">docs/proof/*.json</span></span>
+  <span>Built for the <a href="https://dorahacks.io/hackathon/coinmarketcap-api-202609/detail" target="_blank" rel="noopener noreferrer">Build with CMC: API Hackathon</a> · AI Agents &amp; Automation · rendered 2026-09-21 from <span class="mono">docs/proof/*.json</span></span>
 </footer>
 
 </div>

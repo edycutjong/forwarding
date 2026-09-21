@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/icon-animated.svg" alt="Forwarding Address icon" width="128">
+<img src="docs/assets/icon-animated.svg" alt="Forwarding Address icon" width="144">
 
 <h1>Forwarding Address ↪</h1>
 
@@ -158,8 +158,15 @@ adjudicate  REBALANCE ≥70% same pool · MIGRATION ≥70% elsewhere (CONSOLIDAT
 confirm     pairs/quotes/latest → the destination pool's depth now
 ```
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/architecture-dark.png">
+  <img src="docs/assets/architecture.png" alt="Forwarding Address architecture: the CLI, the MCP server and the Vercel function all call one stdlib engine whose eight stages hit six keyless CoinMarketCap endpoints; the verdict and every response go to docs/proof, which render_site.py and verify.py turn into the site and its checks" width="100%">
+</picture>
+
+<p align="center"><sub>The same diagram as a page, light and dark, with the derivation beside it: <a href="https://forwarding.edycu.dev/architecture">forwarding.edycu.dev/architecture</a></sub></p>
+
 <details>
-<summary><b>Architecture diagram</b> (click to expand)</summary>
+<summary><b>Architecture diagram as Mermaid</b> (click to expand)</summary>
 
 ```mermaid
 flowchart LR
@@ -181,7 +188,7 @@ flowchart LR
 | Data | CoinMarketCap DEX API, keyless `/public-api` surface — six endpoints, 0 credits |
 | Web surface | Static site rendered from receipts + two Python functions on Vercel (`/api/lookup`, `/api/health`) |
 | Tests | pytest · **hypothesis** (property-based) · live contract tests · boundary tests |
-| Quality | ruff · mypy · pytest-cov (90% gate) · pip-audit · gitleaks · CodeQL · Dependabot |
+| Quality | ruff · mypy · pytest-cov (100% gate) · pip-audit · gitleaks · CodeQL · Dependabot |
 
 No database, no cache beyond 60 seconds inside the proxy, no model of our own, no key anywhere.
 The rule, its thresholds, the state machine and the six invariants are one page:
@@ -244,13 +251,13 @@ so the page leads with the dated receipt and the CLI is the surface with a quota
 |---|---|
 | Live run wall clock | **50.6 s** — 14 keyless calls including one 15 s backoff ([`live_run.json`](docs/proof/live_run.json)); clean path p50 **27.0 s**, p95 28.0 s (n=5) |
 | **Credits used** | **0** — keyless, with every CMC env var explicitly unset |
-| Tests | **126** offline tests (~10 s, no network) + 10 live against the real contract and the deployment |
+| Tests | **320** offline tests (~10 s, no network) + 10 live against the real contract and the deployment |
 | Regression tests named for the live defect they pin | 12 |
 | **Property-based verification of `adjudicate()`** | **2,000 generated investigations, 0 failing** — invariants I1–I6 never violated |
 | Permission-boundary tests | 4 — the agent surface cannot send or be handed a key; the proxy takes a slug and an address, same chain, no secret |
 | `make verify` | replays every committed receipt, asserts the invariants, checks every evidence row is verbatim inside a stored response, fails if the page drifted |
 | Adjudication replay | p50 **0.004 ms**, byte-identical 1,000/1,000 ([`bench_replay.json`](docs/proof/bench_replay.json)) |
-| Coverage of the judged path | 90.6% of `scripts/forwarding.py`, `scripts/mcp_server.py`, `api/` — `make test-coverage` fails under 90 |
+| Coverage | 100% statements and branches of every file in `scripts/` and `api/` — `make test-coverage` fails under 100 |
 
 **The 2,000 is the number worth reading.** Coverage says we ran the lines we wrote. The property
 test says that across 2,000 generated investigations — any removal size, any mix of adds across
@@ -271,7 +278,7 @@ a throttled follow an Exit, and produced the same bytes on a second run.
 | The default path sends no key; a keyed run names itself | a keyed receipt can never pass as the keyless one | `tests/test_fetch.py::test_default_path_sends_no_key_and_uses_the_public_surface` · `tests/test_cli.py::test_the_mode_line_names_a_keyed_run_so_it_can_never_pass_as_keyless` |
 | No MCP tool can send data anywhere or accept a credential, however its arguments are padded | an injected prompt cannot turn the agent into an exfiltration path | `tests/test_boundary.py::test_no_tool_on_the_agent_surface_can_send_data_anywhere_or_be_handed_a_credential` |
 | The hosted proxy accepts exactly a chain slug and an EVM address, same chain only | one visitor is six calls on a shared IP, never a fan-out or a fetch of a URL of their choosing | `tests/test_boundary.py::test_the_hosted_proxy_refuses_anything_but_a_chain_slug_and_an_evm_address` |
-| The test count and the killer number the documents state are the ones the repository holds | a README that says 126 over a suite of 90 is a lie a judge checks in ten seconds | `tests/test_published_counts.py::test_the_test_count_each_judged_document_states_matches_pytest` |
+| The test count and the killer number the documents state are the ones the repository holds | a README that says 320 over a suite of 90 is a lie a judge checks in ten seconds | `tests/test_published_counts.py::test_the_test_count_each_judged_document_states_matches_pytest` |
 
 ### Honest limits (8)
 
@@ -354,8 +361,8 @@ itself so it can never pass as keyless.
 make setup           # dev deps only (pytest, pytest-cov, hypothesis, ruff, mypy, pip-audit)
 make lint            # ruff check + format check
 make typecheck       # mypy over scripts/ and api/
-make test            # 126 offline tests, no internet
-make test-coverage   # the same, coverage of the judged path gated at 90%
+make test            # 320 offline tests, no internet
+make test-coverage   # the same, coverage of every file in scripts/ and api/ gated at 100%
 make test-live       # 10 tests against the real CoinMarketCap contract and the deployment
 make demo            # the judged capability, live, zero config
 make verify          # replay every receipt, I1–I6, chain of custody, page drift
@@ -367,7 +374,7 @@ make ci              # lint typecheck test-coverage verify check audit
 | Layer | Tool | Status |
 |---|---|---|
 | Code quality | ruff (check + format) · mypy | ✅ |
-| Unit testing | pytest, 126 offline tests, 90% coverage gate on the judged path | ✅ |
+| Unit testing | pytest, 320 offline tests, 100% statement + branch coverage gate on scripts/ and api/ | ✅ |
 | Property testing | hypothesis, 2,000 cases over `adjudicate()` | ✅ |
 | Boundary testing | the agent surface and the hosted proxy, least privilege proven | ✅ |
 | Live contract testing | pytest `-m live` against real CMC and the deployment; a throttle skips, never passes | ✅ |
@@ -409,7 +416,7 @@ forwarding/
 │   ├── render_site.py                docs/proof/*.json → site/index.html · site/judge.html · site/pitch/index.html · JUDGE.md
 │   └── check_submission_readiness.py placeholder, stale-count and stale-number scanner
 ├── api/lookup.py · api/health.py     the Vercel functions — keyless, same-chain, CORS
-├── tests/                            126 offline + 10 live; boundary · property · regressions named for defects
+├── tests/                            320 offline + 10 live; boundary · property · regressions named for defects
 ├── site/                             generated: the landing page (/), the judge page (/judge), the deck (/pitch) — served by Vercel
 ├── docs/proof/                       hero · runner_up · exit · rebalance · uni_v3_v4 · jit · base_rate · live_run · benchmarks · spike · MCP session
 ├── docs/SPEC.md                      the rule: thresholds, state machine, invariants I1–I6
@@ -440,6 +447,7 @@ forwarding/
 
 | | |
 |---|---|
+| **Demo video** | **[https://youtu.be/ED5h27Xi2V0](https://youtu.be/ED5h27Xi2V0)** — 2 min 54 s: a real keyless run at real speed (the 15 s throttle kept in), the verdict, the two rows, a real Claude Code session against the MCP server; subtitles in the upload |
 | **For judges** | **[forwarding.edycu.dev/judge](https://forwarding.edycu.dev/judge)** · [JUDGE.md](JUDGE.md) — the 30-second path |
 | **The receipt** | **[DEMO.md](DEMO.md)** — the live run transcribed, with [`docs/proof/live_run.json`](docs/proof/live_run.json) behind it |
 | **Landing page** | **[forwarding.edycu.dev](https://forwarding.edycu.dev)** — the receipt beside its raw rows, and a live box |

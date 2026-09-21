@@ -57,3 +57,5 @@ pip-audit.*
 !/docs/assets/icon-animated.svg
 !/docs/assets/og-image.png
 !/docs/assets/readme-hero-animated.svg
+!/docs/assets/architecture.png
+!/docs/assets/architecture-dark.png

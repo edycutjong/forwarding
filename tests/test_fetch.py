@@ -314,3 +314,38 @@ def test_a_clean_call_carries_no_attempts_field(monkeypatch, no_sleep):
     c = Client(spacing=0)
     c.get("/v1/dex/token", platform="ethereum", address=UNI)
     assert "attempts" not in c.calls[0]
+
+
+def test_calls_are_spaced_by_sleeping_the_remainder_of_the_gap(monkeypatch):
+    slept = []
+    monkeypatch.setattr(forwarding.time, "sleep", lambda s: slept.append(s))
+    monkeypatch.setattr(
+        urllib.request, "urlopen", lambda req, timeout=0: Resp({"data": {}, "status": {}})
+    )
+    c = Client(spacing=5.0)
+    c.get("/v1/dex/token", platform="ethereum", address=UNI)
+    assert slept == []  # the first call never waits
+    c.get("/v1/dex/token", platform="ethereum", address=UNI)
+    assert len(slept) == 1 and 0 < slept[0] <= 5.0
+
+
+def test_a_connection_dropped_on_every_retry_is_reported_as_throttled_with_status_zero(
+    monkeypatch, no_sleep
+):
+    import http.client
+
+    def fake_open(req, timeout=0):
+        raise http.client.RemoteDisconnected("closed")
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_open)
+    c = Client(spacing=0)
+    body = c.get("/v1/dex/liquidity-change/list", platform="ethereum", address=UNI)
+    assert body["_throttled"] is True and body["_status"] == 0
+    assert body["_err"].startswith("RemoteDisconnected")
+    assert c.calls[-1]["attempts"] == forwarding.RETRIES + 1 and c.calls[-1]["status"] == 0
+
+
+def test_a_walk_of_zero_pages_fetches_nothing_and_is_complete():
+    c = FakeClient([])
+    rows, meta = walk(c, {"platform": "ethereum", "address": UNI}, 0)
+    assert rows == [] and meta["pages"] == 0 and meta["complete"] is True and c.calls == []

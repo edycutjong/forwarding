@@ -15,6 +15,7 @@ from conftest import (
     UNI,
     USDC,
     V3_POOL,
+    V4,
     V4_POOL,
     FakeClient,
     envelope,
@@ -417,3 +418,252 @@ def test_an_implausible_txn_named_by_hash_and_maker_is_refused():
     c = FakeClient(scenario(trigger_rows=[], maker_rows=[absurd]))
     with pytest.raises(NoCandidate, match="price-feed artefact"):
         investigate("ethereum", UNI, txn="0xabsurd", maker=MAKER, client=c)
+
+
+# ── The branches the hero never takes: pools, the registry, the depth call ────────────────────
+
+
+def test_pools_of_returns_the_error_and_the_investigation_notes_it():
+    routes = scenario(trigger_rows=[HERO_REMOVE], maker_rows=[HERO_ADD, HERO_REMOVE])
+    routes.insert(0, (ep("/v1/dex/token/pools", platform="ethereum"), THROTTLED))
+    c = FakeClient(routes)
+    pools, err = forwarding.pools_of(c, "ethereum", UNI)
+    assert pools == {} and "429" in err
+    v = investigate("ethereum", UNI, client=c)
+    assert any(x.startswith("pool list unavailable:") for x in v.notes)
+    assert v.removal_share_of_pool is None and v.source_pool is None
+
+
+def test_pools_of_tolerates_unparseable_liquidity_and_publication_fields():
+    from conftest import pool
+
+    odd = pool("0xodd", V3_POOL["fa"], UNI, USDC, 1.0, 0)
+    odd["liqUsd"], odd["pubAt"] = "n/a", "yesterday"
+    c = FakeClient([(ep("/v1/dex/token/pools"), {"data": [odd]})])
+    pools, err = forwarding.pools_of(c, "ethereum", UNI)
+    assert err is None
+    (entry,) = pools.values()
+    assert entry["liqUsd"] == 0.0 and entry["pubAt_ms"] is None
+
+
+def test_fee_tiers_of_one_identity_collapse_onto_the_deepest_pool():
+    from conftest import pool
+
+    thin = pool("0xthin", V3_POOL["fa"], UNI, USDC, 1_000.0, 1)
+    deep = pool("0xdeep", V3_POOL["fa"], UNI, USDC, 9_000.0, 1)
+    c = FakeClient([(ep("/v1/dex/token/pools"), {"data": [thin, deep]})])
+    pools, _ = forwarding.pools_of(c, "ethereum", UNI)
+    (entry,) = pools.values()
+    assert entry["addr"] == "0xdeep" and entry["fee_tiers"] == 2
+    # the other order collapses onto the same pool
+    c = FakeClient([(ep("/v1/dex/token/pools"), {"data": [deep, thin]})])
+    (entry,) = forwarding.pools_of(c, "ethereum", UNI)[0].values()
+    assert entry["addr"] == "0xdeep" and entry["fee_tiers"] == 2
+
+
+def test_resolve_asset_reports_each_way_the_search_and_the_registry_can_fail():
+    search_addr = {"data": {"tks": [{"plt": "Ethereum", "addr": UNI, "cid": 7083, "s": "UNI"}]}}
+    bsc = {"plt": "BSC", "addr": BSC_UNI, "cid": 7083, "s": "UNI", "liq": 3_105_047.0}
+
+    # the address search itself fails
+    c = FakeClient([(ep("/v1/dex/search", q=UNI), THROTTLED)])
+    cid, sym, sibs, refused, notes = forwarding.resolve_asset(c, "ethereum", UNI)
+    assert cid is None and sibs == [] and refused[0].startswith("asset resolution failed:")
+
+    # the address is known but carries no CoinMarketCap id
+    c = FakeClient([(ep("/v1/dex/search", q=UNI), {"data": {"tks": [{"addr": UNI, "plt": "x"}]}})])
+    assert forwarding.resolve_asset(c, "ethereum", UNI)[3] == [
+        "asset has no CoinMarketCap id on this chain"
+    ]
+
+    # the sibling search fails: the id is kept, nothing is followed
+    c = FakeClient([(ep("/v1/dex/search", q=UNI), search_addr), (ep("/v1/dex/search"), THROTTLED)])
+    cid, sym, sibs, refused, notes = forwarding.resolve_asset(c, "ethereum", UNI)
+    assert cid == 7083 and sym == "UNI" and sibs == []
+    assert refused[0].startswith("sibling search failed:")
+
+    # the registry is unavailable: the search rows are followed, and the note says so
+    c = FakeClient(
+        [
+            (ep("/v1/dex/search", q=UNI), search_addr),
+            (ep("/v1/dex/search", q="UNI"), {"data": {"tks": [bsc, bsc]}}),
+            (ep("/v2/cryptocurrency/info"), THROTTLED),
+        ]
+    )
+    cid, sym, sibs, refused, notes = forwarding.resolve_asset(c, "ethereum", UNI)
+    assert [s["platform"] for s in sibs] == ["bsc"]  # the duplicate row is folded
+    assert notes[0].startswith("registry unavailable (") and refused == []
+
+
+def test_pool_liquidity_is_none_when_the_call_fails_or_the_shape_is_wrong():
+    c = FakeClient([(ep("/v4/dex/pairs/quotes/latest"), THROTTLED)])
+    assert forwarding.pool_liquidity(c, "ethereum", "0xpool") is None
+    c = FakeClient([(ep("/v4/dex/pairs/quotes/latest"), {"data": [{"quote": []}]})])
+    assert forwarding.pool_liquidity(c, "ethereum", "0xpool") is None
+    c = FakeClient(
+        [(ep("/v4/dex/pairs/quotes/latest"), {"data": [{"quote": [{"liquidity": "x"}]}]})]
+    )
+    assert forwarding.pool_liquidity(c, "ethereum", "0xpool") is None
+
+
+def test_a_txn_named_by_hash_and_maker_raises_when_the_wallet_walk_fails_or_misses():
+    c = FakeClient([(ep("/v1/dex/token"), {"data": {}}), (lc(maker=MAKER), THROTTLED)])
+    with pytest.raises(Throttled):
+        investigate("ethereum", UNI, txn=HERO_REMOVE["txn"], maker=MAKER, client=c)
+    permanent = {"_err": "HTTP 400: bad", "_throttled": False, "_status": 400}
+    c = FakeClient([(ep("/v1/dex/token"), {"data": {}}), (lc(maker=MAKER), permanent)])
+    with pytest.raises(NoCandidate, match="HTTP 400"):
+        investigate("ethereum", UNI, txn=HERO_REMOVE["txn"], maker=MAKER, client=c)
+    c = FakeClient(scenario(trigger_rows=[], maker_rows=[HERO_ADD]))
+    with pytest.raises(NoCandidate, match="is not a removal by"):
+        investigate("ethereum", UNI, txn=HERO_REMOVE["txn"], maker=MAKER, client=c)
+
+
+def test_a_second_removal_by_the_wallet_inside_the_window_is_disclosed_in_the_notes():
+    second = row("remove", -400_000.0, ts=T0 + 60_000, txn="0xsecond")
+    c = FakeClient(scenario(trigger_rows=[HERO_REMOVE], maker_rows=[HERO_ADD, HERO_REMOVE, second]))
+    v = investigate("ethereum", UNI, client=c)
+    assert v.adjudication["other_removals_in_window"] == 1
+    assert any("1 other removal(s) totalling $400,000" in x for x in v.notes)
+
+
+def test_the_headline_for_a_rebalance_and_a_partial_reads_as_one_sentence():
+    back = row("add", 2_900_000.0, ts=T0 + 420_000, txn="0xback")
+    c = FakeClient(scenario(trigger_rows=[HERO_REMOVE], maker_rows=[HERO_REMOVE, back]))
+    v = investigate("ethereum", UNI, client=c)
+    assert v.kind == "REBALANCE"
+    assert v.headline().startswith("REBALANCE · 99.3% put back into the same pool")
+    assert v.headline().endswith("(Uniswap v3 (Ethereum) · UNI/USDC) 7 min 00 s later")
+
+    part = row("add", 900_000.0, ts=T0 + 420_000, txn="0xpart", en="Uniswap v4 (Ethereum)", f=V4)
+    c = FakeClient(scenario(trigger_rows=[HERO_REMOVE], maker_rows=[HERO_REMOVE, part]))
+    v = investigate("ethereum", UNI, client=c)
+    assert v.kind == "PARTIAL"
+    assert v.headline() == "PARTIAL · 30.8% re-added by the same wallet across its pools"
+
+
+def test_a_sibling_address_is_none_for_a_chain_that_was_never_followed():
+    assert forwarding._sibling_address([{"platform": "ethereum", "address": UNI}], "bsc") is None
+
+
+def test_the_receipt_takes_extra_top_level_fields(hero_routes):
+    import time
+
+    c = FakeClient(hero_routes)
+    v = investigate("ethereum", UNI, client=c)
+    r = receipt(v, c, started=time.time(), extra={"note": "x"})
+    assert r["note"] == "x" and r["verdict"]["kind"] == "MIGRATION"
+
+
+def test_watch_reports_a_refused_and_a_throttled_investigation_and_keeps_going(monkeypatch):
+    import io
+
+    calls = []
+
+    def boom(*a, **k):
+        calls.append(1)
+        raise (NoCandidate("nope") if len(calls) == 1 else Throttled("slow down"))
+
+    monkeypatch.setattr(forwarding, "investigate", boom)
+    routes = scenario(trigger_rows=[HERO_REMOVE], maker_rows=[HERO_ADD, HERO_REMOVE])
+    out = io.StringIO()
+    fired = forwarding.watch(
+        [("ethereum", UNI, "UNI")], cycles=1, client=FakeClient(routes), out=out
+    )
+    assert fired == [] and "refused: nope" in out.getvalue()
+    out = io.StringIO()
+    fired = forwarding.watch(
+        [("ethereum", UNI, "UNI")], cycles=1, client=FakeClient(routes), out=out
+    )
+    assert fired == [] and "throttled: slow down — will retry next cycle" in out.getvalue()
+
+
+def test_post_webhook_posts_the_headline_and_the_verdict_and_survives_a_dead_url(
+    monkeypatch, hero_routes, capsys
+):
+    import urllib.error
+    import urllib.request
+
+    v = investigate("ethereum", UNI, client=FakeClient(hero_routes))
+    seen = {}
+
+    class R:
+        status = 204
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    def fake_open(req, timeout=0):
+        seen["url"], seen["body"] = req.full_url, json.loads(req.data)
+        return R()
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_open)
+    assert forwarding.post_webhook("https://hook", v) == 204
+    assert seen["url"] == "https://hook" and seen["body"]["verdict"]["kind"] == "MIGRATION"
+    assert seen["body"]["headline"] == v.headline()
+
+    def dead(req, timeout=0):
+        raise urllib.error.URLError("refused")
+
+    monkeypatch.setattr(urllib.request, "urlopen", dead)
+    assert forwarding.post_webhook("https://hook", v) is None
+    assert "webhook failed" in capsys.readouterr().err
+
+
+def test_watch_says_when_a_later_cycle_brings_nothing_new():
+    import io
+
+    routes = scenario(trigger_rows=[HERO_REMOVE], maker_rows=[HERO_ADD, HERO_REMOVE])
+    out = io.StringIO()
+    fired = forwarding.watch(
+        [("ethereum", UNI, "UNI")],
+        cycles=2,
+        client=FakeClient(routes),
+        out=out,
+        sleep=lambda s: None,
+    )
+    assert fired == [] and "0 new rows, no qualifying removal" in out.getvalue()
+
+
+def test_a_cross_chain_destination_whose_pool_list_is_throttled_is_named_without_an_address():
+    bsc_add = row(
+        "add",
+        2_900_000.0,
+        ts=T0 + 300_000,
+        en="PancakeSwap v3 (BSC)",
+        eid=1344,
+        f="0x0bfbcf9fa4f9c56b0f40a671ad40e0805a091865",
+        t0a=BSC_UNI,
+        txn="0xbscadd",
+    )
+    routes = scenario(
+        trigger_rows=[HERO_REMOVE],
+        maker_rows=[HERO_REMOVE],
+        siblings=[("BSC", BSC_UNI, 3_105_047.0)],
+        sibling_rows={("bsc", BSC_UNI): [bsc_add]},
+    )
+    routes.insert(0, (ep("/v1/dex/token/pools", platform="bsc"), THROTTLED))
+    v = investigate("ethereum", UNI, client=FakeClient(routes))
+    assert v.kind == "MIGRATION" and v.destination["platform"] == "bsc"
+    assert v.destination["addr"] is None and "liquidity_now_usd" not in v.destination
+
+
+def test_watch_with_zero_cycles_polls_nothing():
+    import io
+
+    c = FakeClient([])
+    assert forwarding.watch([("ethereum", UNI, "UNI")], cycles=0, client=c, out=io.StringIO()) == []
+    assert c.calls == []
+
+
+def test_watch_on_a_token_with_no_rows_primes_an_empty_mark():
+    import io
+
+    out = io.StringIO()
+    fired = forwarding.watch(
+        [("ethereum", UNI, "UNI")], cycles=1, client=FakeClient([(lc(), envelope([]))]), out=out
+    )
+    assert fired == [] and "0 new rows, no qualifying removal" in out.getvalue()

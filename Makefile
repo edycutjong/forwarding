@@ -16,8 +16,8 @@ typecheck:  ## mypy over the product and the proxy (scripts/, api/)
 test:  ## pytest, offline only (no internet)
 	pytest -q -m "not live"
 
-test-coverage:  ## offline tests with coverage of the judged path (scripts/forwarding.py, mcp_server.py, api/), gated
-	pytest -q -m "not live" --cov --cov-report=term-missing --cov-report=xml --cov-fail-under=90
+test-coverage:  ## offline tests with statement + branch coverage of every file in scripts/ and api/, gated
+	pytest -q -m "not live" --cov --cov-report=term-missing --cov-report=xml --cov-fail-under=100
 
 test-live:  ## the live tests — hit the real CoinMarketCap API, keyless
 	pytest -q -m live

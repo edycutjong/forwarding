@@ -67,7 +67,7 @@ Full annotated transcript with the receipt: **[DEMO.md](DEMO.md)**.
 | **Credits used** | **0** — every endpoint is on the keyless `/public-api` surface |
 | Credentials | none; run with every CMC env var unset |
 | Base rate | **335** removals ≥ $100,000 followed one wallet at a time: rebalance 194 · migration 19 · partial 10 · exit 112 — **67% were the same wallet putting liquidity back within 6 h** |
-| Tests | **126** offline tests + 10 live · **2,000 property cases, 0 failing** |
+| Tests | **320** offline tests + 10 live · **2,000 property cases, 0 failing** |
 | Latency | adjudicate replay p50 **0.004 ms** (n=1000) · live investigation p50 **27.0 s**, p95 28.0 s (n=5) |
 | Raw receipts | [`hero.json`](docs/proof/hero.json) · [`exit.json`](docs/proof/exit.json) · [`rebalance.json`](docs/proof/rebalance.json) · [`jit.json`](docs/proof/jit.json) · [`base_rate.json`](docs/proof/base_rate.json) · [`live_run.json`](docs/proof/live_run.json) · [`bench_live.json`](docs/proof/bench_live.json) · [`bench_replay.json`](docs/proof/bench_replay.json) · [`spike_maker.json`](docs/proof/spike_maker.json) |
 
@@ -79,7 +79,7 @@ The other three outcomes, captured by the same published rule: **EXIT** (LINK, 0
 python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984   # the hero, live
 python3 scripts/forwarding.py investigate --platform ethereum --address 0x514910771af9ca656af840dff83e8264ecf986ca   # LINK
 python3 scripts/forwarding.py watch --cycles 1                    # the autonomous loop, one pass over 11 tokens
-make test                                                         # 126 offline tests
+make test                                                         # 320 offline tests
 make test-live                                                    # 10 tests against the real CMC contract
 make verify                                                       # replay every receipt, assert I1–I6, check the page
 pytest tests/test_property.py --hypothesis-show-statistics        # the 2,000

@@ -17,7 +17,7 @@ make setup           # dev deps only (pytest, pytest-cov, hypothesis, ruff, mypy
 make lint            # ruff check + format check
 make typecheck       # mypy over scripts/ and api/
 make test            # offline tests, no internet
-make test-coverage   # the same, with coverage of the judged path gated at 90%
+make test-coverage   # the same, with coverage of every file in scripts/ and api/ gated at 100%
 make test-live       # the tests that hit the real CoinMarketCap API and the deployment
 make demo            # the judged capability, live, no key
 make bench           # p50/p95 of adjudicate() over the committed receipts (deterministic)

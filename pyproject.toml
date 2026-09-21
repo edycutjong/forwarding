@@ -24,21 +24,13 @@ addopts = "-q"
 markers = ["live: hits the real CoinMarketCap API"]
 
 [tool.coverage.run]
-# Coverage is measured on the judged path only: the engine, the MCP server and the two Vercel
-# functions. seed.py, base_rate.py, bench.py, verify.py, spike_maker.py and render_site.py are
-# omitted — CI EXECUTES them (make verify / check / bench), which is the stronger claim for a
-# script whose job is to produce a receipt. check_submission_readiness.py is driven by its own
-# test through a subprocess, which the tracer cannot see.
+# Every Python file in scripts/ and api/ is measured, branches included, and gated at 100%:
+# the engine, the MCP server, the two Vercel functions, and every script that produces a
+# receipt (seed, base_rate, bench, verify, spike_maker, render_site, the readiness scan).
+# CI also EXECUTES the receipt scripts (make verify / check / bench) — that is the stronger
+# claim for a script whose job is to produce a receipt; the unit tests are the second.
 source = ["scripts", "api"]
-omit = [
-  "scripts/seed.py",
-  "scripts/base_rate.py",
-  "scripts/bench.py",
-  "scripts/verify.py",
-  "scripts/spike_maker.py",
-  "scripts/render_site.py",
-  "scripts/check_submission_readiness.py",
-]
+branch = true
 
 [tool.coverage.report]
 skip_covered = false

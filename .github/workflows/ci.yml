@@ -37,7 +37,7 @@ jobs:
       # diagnosed as a rate limit rather than reported as a test failure. Coverage is measured
       # on the judged path (scripts/forwarding.py, scripts/mcp_server.py, api/) and gated —
       # the receipt-producing scripts are EXECUTED by the verify and bench jobs instead.
-      - run: pytest -q -m "not live" --cov --cov-report=term-missing --cov-report=xml --cov-fail-under=90
+      - run: pytest -q -m "not live" --cov --cov-report=term-missing --cov-report=xml --cov-fail-under=100
       - uses: actions/upload-artifact@v7
         if: matrix.python-version == '3.11'
         with: { name: coverage, path: coverage.xml, retention-days: 7 }
@@ -139,7 +139,7 @@ jobs:
       - name: All gates passed
         run: |
           echo "all CI/CD gates passed"
-          echo "  Stage 1 — Lint + typecheck · Tests + coverage (3.11/3.12/3.13, ≥90%)"
+          echo "  Stage 1 — Lint + typecheck · Tests + coverage (3.11/3.12/3.13, ≥100%)"
           echo "  Stage 2 — Dependency audit · No placeholders, no drift"
           echo "  Stage 3 — Every receipt replayed · Deterministic benchmark"
           echo "  Stage 4 — The judged capability, live and keyless"

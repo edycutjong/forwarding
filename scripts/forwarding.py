@@ -271,7 +271,7 @@ class Client:
                 last = f"{type(e).__name__}: {e}"
                 self._record(path, params, 0, ms, error=last)
                 return {"_err": last, "_throttled": False, "_status": 0}
-        return {"_err": last, "_throttled": True}
+        return {"_err": last, "_throttled": True}  # pragma: no cover — the loop always returns
 
     @property
     def credits(self):
@@ -666,13 +666,13 @@ def adjudicate(removal, adds, *, source_platform, complete=True, pools=None):
     elif kind == "REBALANCE":
         # the first ADD back into the pool — never the removal row itself, which is also in
         # the window (live 2026-09-19: LINK printed "0 s later" for a 7-minute re-add)
+        # (REBALANCE means same_share >= FULL > 0, so at least one such add exists)
         same_adds = [
             a["row"]
             for a in adds
             if a["row"].get("tp") == "add" and (a["platform"], pool_id(a["row"])) == src
         ]
-        if same_adds:
-            elapsed = (min(ts_ms(r) for r in same_adds) - ts_ms(removal)) // 1000
+        elapsed = (min(ts_ms(r) for r in same_adds) - ts_ms(removal)) // 1000
     other_removes = [
         a["row"]
         for a in adds
@@ -1436,7 +1436,7 @@ def main(argv=None):
                 )
             print(f"  wrote {a.json}")
         return 0
-    return 2
+    return 2  # pragma: no cover — argparse admits no other subcommand
 
 
 if __name__ == "__main__":

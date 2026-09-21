@@ -196,3 +196,103 @@ def test_fmt_elapsed_reads_like_a_human_wrote_it():
     assert forwarding.fmt_elapsed(59) == "59 s"
     assert forwarding.fmt_elapsed(7 * 3600 + 120) == "7 h 02 min"
     assert forwarding.fmt_elapsed(None) == "—"
+
+
+def test_a_rebalance_verdict_prints_the_same_pool_and_its_depth_now(routed, capsys):
+    back = row("add", 2_900_000.0, ts=HERO_REMOVE["ts"], txn="0xback")
+    back["ts"] = str(int(HERO_REMOVE["ts"]) + 420_000)
+    routed(scenario(trigger_rows=[HERO_REMOVE], maker_rows=[HERO_REMOVE, back]))
+    code = forwarding.main(["--quiet", "investigate", "--address", UNI])
+    out = capsys.readouterr().out
+    assert code == 0 and "◆ REBALANCE · severity grey" in out
+    assert "back into the same pool 7 min 00 s later · pool now holds $1,234,567" in out
+
+
+def test_an_incomplete_verdict_names_the_chain_whose_follow_was_throttled(routed, capsys):
+    bsc = "0xbf5140a22578168fd562dccf235e5d43a02ce9b1"
+    routed(
+        scenario(
+            trigger_rows=[HERO_REMOVE],
+            maker_rows=[HERO_REMOVE],
+            siblings=[("BSC", bsc, 3_105_047.0)],
+            sibling_rows={("bsc", bsc): THROTTLED},
+        )
+    )
+    code = forwarding.main(["--quiet", "investigate", "--address", UNI])
+    out = capsys.readouterr().out
+    assert code == 0 and "◆ INCOMPLETE" in out
+    assert "follow did not complete on: bsc — a throttle is never an Exit; re-run" in out
+
+
+def test_the_verdict_elides_past_four_adds_and_prints_refusals_and_notes(routed, capsys):
+    adds = [
+        row("add", 600_000.0, ts=int(HERO_REMOVE["ts"]) + 60_000 * (i + 1), txn=f"0xadd{i}")
+        for i in range(6)
+    ]
+    absurd = row("remove", -1e42, ts=int(HERO_REMOVE["ts"]) + 1000, m="0xbb", txn="0xabsurd")
+    routes = scenario(trigger_rows=[absurd, HERO_REMOVE], maker_rows=[HERO_REMOVE, *adds])
+    routes.insert(0, (ep("/v1/dex/token"), THROTTLED))  # the header call fails: a note
+    routed(routes)
+    code = forwarding.main(["--quiet", "investigate", "--address", UNI])
+    out = capsys.readouterr().out
+    assert code == 0 and "◆ REBALANCE" in out
+    assert "… 2 more add(s) in the window" in out
+    assert "  refused\n    · " in out and "price-feed artefact" in out
+    assert "  notes\n    · token header unavailable:" in out
+
+
+def test_removals_and_follow_exit_seventy_five_on_a_throttle_and_one_on_any_other_error(
+    routed, capsys
+):
+    routed([(ep("/v1/dex/token"), {"data": {}}), (lc(), THROTTLED)])
+    assert forwarding.main(["--quiet", "removals", "--address", UNI]) == 75
+    assert "throttled the anonymous tier" in capsys.readouterr().err
+    routed([(ep("/v1/dex/token"), {"data": {}}), (lc(), THROTTLED)])
+    assert forwarding.main(["--quiet", "follow", "--address", UNI, "--maker", MAKER]) == 75
+    assert "throttled the anonymous tier" in capsys.readouterr().err
+
+    permanent = {"_err": "HTTP 400: bad request", "_throttled": False, "_status": 400}
+    routed([(ep("/v1/dex/token"), {"data": {}}), (lc(), permanent)])
+    assert forwarding.main(["--quiet", "removals", "--address", UNI]) == 1
+    assert "error — HTTP 400" in capsys.readouterr().out
+    routed([(ep("/v1/dex/token"), {"data": {}}), (lc(), permanent)])
+    assert forwarding.main(["--quiet", "follow", "--address", UNI, "--maker", MAKER]) == 1
+    assert "error — HTTP 400" in capsys.readouterr().out
+
+
+def test_watch_with_json_writes_the_verdicts_calls_and_responses(routed, capsys, tmp_path):
+    routed(scenario(trigger_rows=[HERO_REMOVE], maker_rows=[HERO_ADD, HERO_REMOVE]))
+    out = tmp_path / "watch.json"
+    code = forwarding.main(
+        [
+            "--quiet",
+            "--json",
+            str(out),
+            "watch",
+            "--cycles",
+            "1",
+            "--watchlist",
+            _watchlist(tmp_path),
+        ]
+    )
+    assert code == 0 and f"wrote {out}" in capsys.readouterr().out
+    r = json.loads(out.read_text())
+    assert [v["kind"] for v in r["verdicts"]] == ["MIGRATION"]
+    assert r["calls"] and len(r["responses"]) == len({c["sha256"] for c in r["calls"]})
+
+
+def test_the_script_runs_as_a_program(monkeypatch, capsys):
+    import runpy
+
+    monkeypatch.setattr("sys.argv", ["forwarding"])
+    with pytest.raises(SystemExit) as e:
+        runpy.run_path(forwarding.__file__, run_name="__main__")
+    assert e.value.code == 2 and "investigate" in capsys.readouterr().out
+
+
+def test_the_trace_line_shows_no_detail_for_a_body_it_cannot_count(capsys):
+    receipt = {"endpoint": "/v1/dex/token", "params": {}, "status": 200, "ms": 12}
+    forwarding.print_trace_line(receipt, {"status": {"credit_count": 1}})
+    forwarding.print_trace_line(receipt, {"data": {"sym": "UNI"}})
+    lines = capsys.readouterr().out.splitlines()
+    assert len(lines) == 2 and all("rows" not in ln and "items" not in ln for ln in lines)

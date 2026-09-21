@@ -38,8 +38,7 @@ SITE = BUILD / "site"
 REPO = "https://github.com/edycutjong/forwarding"
 SITE_URL = "https://forwarding.edycu.dev"
 # One host. Vercel serves site/ and the two functions at SITE_URL (the production domain);
-# forwarding-cmc.vercel.app is the deployment alias and 308s here, so the live box is same-origin.
-ALIAS_URL = "https://forwarding-cmc.vercel.app"
+# the deployment's default vercel.app alias 308s here, so the live box is same-origin.
 EVENT = "https://dorahacks.io/hackathon/coinmarketcap-api-202609/detail"
 EVENT_BUIDLS = "https://dorahacks.io/hackathon/coinmarketcap-api-202609/buidl"
 AUTHOR = "Edy Cu"
@@ -1494,7 +1493,6 @@ def context():
         "bench.live_p95": f"{bench_live.get('investigate', {}).get('p95', 0):.1f}",
         "bench.live_n": str(bench_live.get("investigate", {}).get("n", 0)),
         # deck-only slots (scripts/site_templates/pitch.html)
-        "alias_host": ALIAS_URL.replace("https://", ""),
         "event_buidls": EVENT_BUIDLS,
         "icon.animated": cover_icon(),
         "live.calls": str(live_run["calls_made"]),

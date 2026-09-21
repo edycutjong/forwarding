@@ -212,3 +212,42 @@ def test_serve_reads_lines_and_writes_one_reply_per_request():
     mcp_server.serve(inp, out)
     replies = [json.loads(ln) for ln in out.getvalue().splitlines()]
     assert len(replies) == 1 and replies[0]["id"] == 1
+
+
+# ── The protocol in-process: what the pipe test above proves, the tracer can also see ─────────
+
+
+def test_the_handshake_ping_unknown_method_and_a_bad_line_in_process():
+    import io
+
+    reply = handle(rpc("initialize", {"protocolVersion": "2025-03-26"}))
+    assert reply["result"]["protocolVersion"] == "2025-03-26"
+    assert reply["result"]["serverInfo"]["name"] == "forwarding-address"
+    assert handle(rpc("initialize"))["result"]["protocolVersion"] == mcp_server.PROTOCOL
+    assert handle(rpc("ping", mid=2)) == {"jsonrpc": "2.0", "id": 2, "result": {}}
+    assert handle(rpc("nope/none", mid=4))["error"]["code"] == -32601
+    assert mcp_server._required("not-a-tool") == []
+
+    out = io.StringIO()
+    mcp_server.serve(io.StringIO("this is not json\n"), out)
+    assert json.loads(out.getvalue())["error"]["code"] == -32700
+
+
+def test_largest_removals_and_follow_maker_answer_a_throttle_with_an_error_result(monkeypatch):
+    _install(monkeypatch, [(ep("/v1/dex/token"), {"data": {}}), (lc(), THROTTLED)])
+    for name, args in (
+        ("largest_removals", {"platform": "ethereum", "address": UNI}),
+        ("follow_maker", {"platform": "ethereum", "address": UNI, "maker": MAKER}),
+    ):
+        reply = handle(rpc("tools/call", {"name": name, "arguments": args}))
+        assert reply["result"]["isError"] is True
+        assert reply["result"]["content"][0]["text"].startswith("ERROR — HTTP 429")
+
+
+def test_the_server_module_runs_as_a_program(monkeypatch, capsys):
+    import io
+    import runpy
+
+    monkeypatch.setattr("sys.stdin", io.StringIO(json.dumps(rpc("ping")) + "\n"))
+    runpy.run_path(mcp_server.__file__, run_name="__main__")
+    assert json.loads(capsys.readouterr().out) == {"jsonrpc": "2.0", "id": 1, "result": {}}
