@@ -1229,15 +1229,14 @@ def print_verdict(v, out=None):
             file=out,
         )
     if v.kind == "INCOMPLETE":
-        bad = [f["platform"] for f in v.follows if not f["complete"]]
-        why = (
-            "throttled"
-            if any(f["throttled"] for f in v.follows)
-            else "did not see the whole window"
+        # the cause is per chain: one follow can be throttled while another stalled in the window
+        bad = ", ".join(
+            f"{f['platform']} ({'throttled' if f['throttled'] else 'did not see the whole window'})"
+            for f in v.follows
+            if not f["complete"]
         )
         print(
-            f"    follow did not complete on: {', '.join(bad)} ({why}) — "
-            "an unseen window is never an Exit; re-run",
+            f"    follow did not complete on: {bad} — an unseen window is never an Exit; re-run",
             file=out,
         )
     adds = [a for a in v.evidence if a["row"].get("tp") == "add"]
