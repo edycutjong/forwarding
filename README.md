@@ -115,8 +115,8 @@ wallet followed one at a time ([`base_rate.json`](docs/proof/base_rate.json)):
 | No same-wallet re-add within ±6 h on that chain *(an upper bound on true exits)* | 112 | 33.4% |
 
 **Two in three “liquidity pulled” alerts were the same wallet putting it back within six hours.**
-Marco, who runs a DAO treasury's Telegram alert bot, gets several of these a week and cannot
-tell them apart from the alert.
+Marco — a composite of the treasury operators this is built for, not a customer — runs a DAO
+treasury's Telegram alert bot, gets several of these a week and cannot tell them apart from the alert.
 
 ### The Solution
 
@@ -235,7 +235,7 @@ dates and receipts, in **[FEEDBACK.md](FEEDBACK.md)**.
 | | |
 |---|---|
 | **For judges** | [forwarding.edycu.dev/judge](https://forwarding.edycu.dev/judge) — the claim, the 30-second path, the receipt, the reproduce command, the limitations. No auth, no cookie, no redirect. The same page as [JUDGE.md](JUDGE.md), rendered from the same receipts. |
-| **Landing page** | [forwarding.edycu.dev](https://forwarding.edycu.dev) — the receipt, the red-to-amber flip, the two rows, the base rate, and a live box. One host: Vercel serves the page and the functions at this domain; `forwarding.edycu.dev` is the deployment alias and redirects here |
+| **Landing page** | [forwarding.edycu.dev](https://forwarding.edycu.dev) — the receipt, the red-to-amber flip, the two rows, the base rate, and a live box. One host: Vercel serves the page and the functions at this domain; `forwarding-cmc.vercel.app` is the deployment alias and 308-redirects here |
 | **Pitch deck** | [forwarding.edycu.dev/pitch](https://forwarding.edycu.dev/pitch/) — 11 slides, arrow keys, `P` for notes, `Cmd+P` for a PDF; rendered from the same receipts as this page |
 | **Live proxy** | `GET /api/lookup?platform=ethereum&address=0x…` — the same-chain investigation through a keyless CORS proxy (CMC sends no CORS header, so a browser cannot call it directly). Holds no secret because no endpoint needs one. |
 | **Health** | [`/api/health`](https://forwarding.edycu.dev/api/health) — the engine, the rule, the receipts' ages, and `key_exported: false` |
@@ -437,7 +437,7 @@ forwarding/
 - [x] Autonomous watch loop with a per-token high-water mark and an optional webhook
 - [x] Live deployment: landing page, `/judge`, `/pitch`, keyless `/api/lookup`, `/api/health` — one host, forwarding.edycu.dev on Vercel
 - [x] Base rate over 335 removals, benchmarks, receipts for every branch
-- [ ] Demo video — recorded against the live product, at real speed, with the trace on screen
+- [x] Demo video — recorded against the live product, at real speed, with the trace on screen: [youtu.be/ED5h27Xi2V0](https://youtu.be/ED5h27Xi2V0) (2:54)
 - [ ] A 24-hour unattended `watch` log catching a real removal as it lands (`docs/proof/watch_24h.log`)
 - [ ] Following liquidity through a second wallet — deliberately not built: a wallet is not an entity, and guessing one would put a number on the card that no row supports
 

@@ -22,7 +22,7 @@ git clone {{repo}}.git && cd forwarding
 ```
 
 Expected: the trace of every call as it happens (endpoint, status, ms), then a red
-`● LP REMOVED` line, then the verdict — for UNI, as of {{hero.captured}}:
+`● LP REMOVED` line, then the verdict — for UNI, as of {{live.captured}} ([`live_run.json`](docs/proof/live_run.json)):
 
 ```
 {{hero.headline}}
@@ -38,8 +38,9 @@ and ask Claude Code *“where did the UNI liquidity go?”* — it calls `where_
 and the tool answers with the verdict and the raw rows. Hand it a just-in-time transaction and
 it refuses. Real session transcript: [docs/proof/mcp_session.md](docs/proof/mcp_session.md).
 
-1. **Nothing else is required.** No `pip install`, no `.env`, no API key, no signup. One thing is
-   not a bug: the endpoint is CoinMarketCap’s shared anonymous tier, rate-limited per IP.
+1. **Nothing else is required.** No `pip install`, no `.env`, no API key, no signup. One thing
+   that can look like a bug is not one: the endpoint is CoinMarketCap’s shared anonymous tier,
+   rate-limited per IP.
    A clean run is {{bench.live_p50}} s (p50 of {{bench.live_n}} live runs, {{hero.calls}} calls at 2 s
    spacing). If the tier is throttling, the script backs off (15 s, 30 s, 60 s) and says so;
    if your IP’s quota is exhausted it exits **75** with the way through — wait a minute, or
@@ -54,14 +55,20 @@ it refuses. Real session transcript: [docs/proof/mcp_session.md](docs/proof/mcp_
 
 Full annotated transcript with the receipt: **[DEMO.md](DEMO.md)**.
 
-## Receipt — live run, {{hero.captured_iso}}
+## Receipt — two live runs of the same removal
+
+The bare command picks the largest qualifying removal in the token’s newest 300 rows, so weeks
+from now it may pick a newer one; `--maker {{hero.maker}}` pins this one. Both runs are
+committed: [`live_run.json`](docs/proof/live_run.json) is the bare command ({{live.captured_iso}}),
+[`hero.json`](docs/proof/hero.json) is the pinned run ({{hero.captured_iso}}). Same rows, same verdict.
 
 | | |
 |---|---|
 | **The removal** | **−{{hero.removed_usd}}** out of {{hero.venue}} · {{hero.pair}}, {{hero.utc}}, {{hero.share_of_pool}} of the pool, maker `{{hero.maker}}` |
-| **The verdict** | **{{hero.kind}} · {{hero.recovered_pct}}% recovered** — +{{hero.recovered_usd}} into {{hero.dest_venue}} · {{hero.dest_pair}}, **{{hero.elapsed}}** later, the same {{hero.a0}} {{hero.sym}} to ten decimals |
+| **The verdict** | **{{hero.kind}} · {{hero.recovered_pct}}% recovered** — +{{hero.recovered_usd}} into {{hero.dest_venue}} · {{hero.dest_pair}}, **{{hero.elapsed}}** later, the same {{hero.a0_10}} {{hero.sym}} to ten decimals |
 | **Re-derive it** | `{{hero.add_tu}} ÷ {{hero.remove_tu}} = {{hero.share_4dp}}` — two `tu` fields from `/v1/dex/liquidity-change/list?maker=` |
-| API calls | {{hero.calls}}, all HTTP 200, {{hero.wall}} wall clock |
+| **Same wallet, same amount** | `a0 = {{hero.remove_a0_raw}}` on the remove, `a0 = {{hero.add_a0_raw}}` on the add — identical to ten decimals; `{{hero.ts_add}} − {{hero.ts_remove}} = {{hero.elapsed_ms}} ms` = {{hero.elapsed}} |
+| API calls | bare command: {{live.calls}}, all HTTP 200, {{live.wall}} wall clock ({{live.backoffs}}) · pinned: {{hero.calls}}, all HTTP 200, {{hero.wall}} ({{hero.backoffs}}) |
 | **Credits used** | **0** — every endpoint is on the keyless `/public-api` surface |
 | Credentials | none; run with every CMC env var unset |
 | Base rate | **{{base.n}}** removals ≥ ${{base.min_usd}} followed one wallet at a time: {{base.summary}} — **{{base.put_back_pct}}% were the same wallet putting liquidity back within 6 h** |
@@ -74,7 +81,8 @@ The other three outcomes, captured by the same published rule: {{others.summary}
 ## Reproduce
 
 ```bash
-{{cli_cmd}}   # the hero, live
+{{cli_cmd}}   # the hero, live — the bare command
+{{cli_cmd}} --maker {{hero.maker}}   # the same removal, pinned to its wallet: reproduces this card after the sweep has moved on
 python3 scripts/forwarding.py investigate --platform ethereum --address 0x514910771af9ca656af840dff83e8264ecf986ca   # LINK
 python3 scripts/forwarding.py watch --cycles 1                    # the autonomous loop, one pass over 11 tokens
 make test                                                         # {{tests}} offline tests

@@ -22,7 +22,7 @@ python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840
 ```
 
 Expected: the trace of every call as it happens (endpoint, status, ms), then a red
-`● LP REMOVED` line, then the verdict — for UNI, as of 2026-09-18 23:16:31 UTC:
+`● LP REMOVED` line, then the verdict — for UNI, as of 2026-09-18 23:36:32 UTC ([`live_run.json`](docs/proof/live_run.json)):
 
 ```
 ◆ MIGRATION · severity amber
@@ -40,8 +40,9 @@ and ask Claude Code *“where did the UNI liquidity go?”* — it calls `where_
 and the tool answers with the verdict and the raw rows. Hand it a just-in-time transaction and
 it refuses. Real session transcript: [docs/proof/mcp_session.md](docs/proof/mcp_session.md).
 
-1. **Nothing else is required.** No `pip install`, no `.env`, no API key, no signup. One thing is
-   not a bug: the endpoint is CoinMarketCap’s shared anonymous tier, rate-limited per IP.
+1. **Nothing else is required.** No `pip install`, no `.env`, no API key, no signup. One thing
+   that can look like a bug is not one: the endpoint is CoinMarketCap’s shared anonymous tier,
+   rate-limited per IP.
    A clean run is 27.0 s (p50 of 5 live runs, 11 calls at 2 s
    spacing). If the tier is throttling, the script backs off (15 s, 30 s, 60 s) and says so;
    if your IP’s quota is exhausted it exits **75** with the way through — wait a minute, or
@@ -56,14 +57,20 @@ it refuses. Real session transcript: [docs/proof/mcp_session.md](docs/proof/mcp_
 
 Full annotated transcript with the receipt: **[DEMO.md](DEMO.md)**.
 
-## Receipt — live run, 2026-09-18T23:16:31Z
+## Receipt — two live runs of the same removal
+
+The bare command picks the largest qualifying removal in the token’s newest 300 rows, so weeks
+from now it may pick a newer one; `--maker 0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9` pins this one. Both runs are
+committed: [`live_run.json`](docs/proof/live_run.json) is the bare command (2026-09-18T23:36:32Z),
+[`hero.json`](docs/proof/hero.json) is the pinned run (2026-09-18T23:16:31Z). Same rows, same verdict.
 
 | | |
 |---|---|
 | **The removal** | **−$21,330,275** out of Ring Exchange (Ethereum) · UNI/WBTC, 2026-09-02 03:59:11 UTC, an unknown share of the pool, maker `0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9` |
-| **The verdict** | **MIGRATION · 99.8% recovered** — +$21,287,255 into Ring Exchange (Ethereum) · UNI/WETH, **2 min 12 s** later, the same 1,962,475.54 UNI to ten decimals |
+| **The verdict** | **MIGRATION · 99.8% recovered** — +$21,287,255 into Ring Exchange (Ethereum) · UNI/WETH, **2 min 12 s** later, the same 1,962,475.5391248302 UNI to ten decimals |
 | **Re-derive it** | `21,287,254.93 ÷ 21,330,274.56 = 0.9980` — two `tu` fields from `/v1/dex/liquidity-change/list?maker=` |
-| API calls | 11, all HTTP 200, 73.0 s wall clock |
+| **Same wallet, same amount** | `a0 = -1962475.5391248302` on the remove, `a0 = 1962475.5391248302` on the add — identical to ten decimals; `1788321683000 − 1788321551000 = 132,000 ms` = 2 min 12 s |
+| API calls | bare command: 14, all HTTP 200, 50.6 s wall clock (1 backoff) · pinned: 11, all HTTP 200, 73.0 s (2 backoffs) |
 | **Credits used** | **0** — every endpoint is on the keyless `/public-api` surface |
 | Credentials | none; run with every CMC env var unset |
 | Base rate | **335** removals ≥ $100,000 followed one wallet at a time: rebalance 194 · migration 19 · partial 10 · exit 112 — **67% were the same wallet putting liquidity back within 6 h** |
@@ -76,7 +83,8 @@ The other three outcomes, captured by the same published rule: **EXIT** (LINK, 0
 ## Reproduce
 
 ```bash
-python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984   # the hero, live
+python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984   # the hero, live — the bare command
+python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984 --maker 0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9   # the same removal, pinned to its wallet: reproduces this card after the sweep has moved on
 python3 scripts/forwarding.py investigate --platform ethereum --address 0x514910771af9ca656af840dff83e8264ecf986ca   # LINK
 python3 scripts/forwarding.py watch --cycles 1                    # the autonomous loop, one pass over 11 tokens
 make test                                                         # 324 offline tests

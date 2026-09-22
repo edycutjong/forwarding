@@ -11,6 +11,14 @@ git clone https://github.com/edycutjong/forwarding.git && cd forwarding
 python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984
 ```
 
+The bare command picks the largest qualifying removal in UNI's newest 300 rows, so weeks from now
+it may pick a newer one. To reproduce *this* card after the sweep has moved on, pin the wallet —
+that run is committed too, as [`hero.json`](docs/proof/hero.json) (11 calls, 73.0 s with two backoffs):
+
+```bash
+python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984 --maker 0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9
+```
+
 That is the whole thing. No `pip install`, no `.env`, no signup — `forwarding.py` is stdlib-only
 and every endpoint it calls is keyless. **There is no offline flag on this path, deliberately.**
 The one replay mode in the repository (`scripts/bench.py --replay`, `scripts/verify.py`) replays

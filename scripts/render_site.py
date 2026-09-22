@@ -109,6 +109,10 @@ def load(name):
     return json.loads(p.read_text()) if p.exists() else None
 
 
+def plural(n: int, noun: str) -> str:
+    return f"{n} {noun}" if n == 1 else f"{n} {noun}s"
+
+
 def money(x, dp=0):
     return f"${x:,.{dp}f}"
 
@@ -1496,6 +1500,12 @@ def context():
         "live.calls": str(live_run["calls_made"]),
         "live.wall": f"{live_run['wall_clock_s']:.1f} s",
         "live.captured": live_run["captured_utc"].replace("T", " ").replace("Z", " UTC"),
+        "live.captured_iso": live_run["captured_utc"],
+        # backoffs = retries the run slept through (attempts − 1 per call); the wall clock includes them
+        "live.backoffs": plural(sum((c.get("attempts") or 1) - 1 for c in live_run["calls"]), "backoff"),
+        "hero.backoffs": plural(sum((c.get("attempts") or 1) - 1 for c in hero["calls"]), "backoff"),
+        # the ten-decimal identity is the claim; print it at ten decimals where it is claimed
+        "hero.a0_10": f"{abs(float(add.get('a0') or 0)):,.10f}",
         "live.trace": deck_trace(live_run["calls"]),
         "hero.dest_liq_full": money(dest.get("liquidity_now_usd") or 0),
         "hero.ts_remove": esc(r["ts"]),
