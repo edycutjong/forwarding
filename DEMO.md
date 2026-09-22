@@ -186,12 +186,12 @@ times (invariant I4).
 
 ## Tests
 
-`make test` runs **322** offline tests in about ten seconds; `make test-live` runs 10 more
+`make test` runs **324** offline tests in about ten seconds; `make test-live` runs 10 more
 against the real contract.
 
 | | Count |
 |---|---|
-| Offline tests (`make test`) | **322** |
+| Offline tests (`make test`) | **324** |
 | Live tests against the real contract and the deployment (`make test-live`) | 10 |
 | Regression tests named for the live defect they pin | 12 |
 | Property-based verification of `adjudicate()` | **2,000 generated investigations, 0 failing** |

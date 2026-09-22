@@ -39,6 +39,7 @@ import contextlib
 import hashlib
 import http.client
 import json
+import math
 import os
 import re
 import sys
@@ -67,7 +68,7 @@ def _spacing_from_env(default=2.0):
         v = float(raw)
     except ValueError:
         return default
-    return v if v > 0 else default
+    return v if math.isfinite(v) and v > 0 else default
 
 
 SPACING_S = _spacing_from_env()  # between calls; the proxy lowers it via Client(spacing=…)
@@ -409,6 +410,7 @@ def walk(client, params, pages, until=None):
         "tlu": None,
         "lpc": None,
         "malformed_dropped": 0,
+        "blocked": False,
     }
     for _ in range(pages):
         q = dict(params, limit=PAGE)
@@ -438,7 +440,12 @@ def walk(client, params, pages, until=None):
             meta["exhausted"] = True
             break
         if not fresh:
-            meta["stalled"] = True
+            # a stall on duplicates means nothing is left to see; a page the guard refused
+            # entirely means we could not look — that walk is blocked, never complete (I6)
+            if meta["malformed_dropped"] and all(not well_formed(r) for r in batch):
+                meta["blocked"] = True
+            else:
+                meta["stalled"] = True
             break
         cursor = data.get("lastId")
         if not cursor:
@@ -447,7 +454,7 @@ def walk(client, params, pages, until=None):
         if until and until(fresh):
             meta["stopped"] = True
             break
-    meta["complete"] = meta["error"] is None
+    meta["complete"] = meta["error"] is None and not meta["blocked"]
     return out, meta
 
 
@@ -935,7 +942,9 @@ def investigate(
     token["sym"] = sym
 
     # 5. adjudicate — pure arithmetic on the rows above
-    complete = all(f["complete"] for f in follows)
+    # I6: an EXIT needs every follow to have ended cleanly AND to have walked back past the
+    # window start — a page budget that ran out inside the window has not seen the whole window
+    complete = all(f["complete"] and f["reached_window_start"] for f in follows)
     keyed_pools = {(platform, k): v for k, v in pools.items()}
     a = adjudicate(removal, adds, source_platform=platform, complete=complete, pools=keyed_pools)
     if a["other_removals_in_window"]:
@@ -1003,6 +1012,7 @@ def _follow_entry(platform, address, rows, meta):
         "complete": meta["complete"],
         "reached_window_start": meta.get("reached_window_start", False),
         "jit_dropped": meta.get("jit_dropped", 0),
+        "malformed_dropped": meta.get("malformed_dropped", 0),
         "error": meta["error"],
         "throttled": meta["throttled"],
     }

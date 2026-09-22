@@ -251,7 +251,7 @@ so the page leads with the dated receipt and the CLI is the surface with a quota
 |---|---|
 | Live run wall clock | **50.6 s** — 14 keyless calls including one 15 s backoff ([`live_run.json`](docs/proof/live_run.json)); clean path p50 **27.0 s**, p95 28.0 s (n=5) |
 | **Credits used** | **0** — keyless, with every CMC env var explicitly unset |
-| Tests | **322** offline tests (~10 s, no network) + 10 live against the real contract and the deployment |
+| Tests | **324** offline tests (~10 s, no network) + 10 live against the real contract and the deployment |
 | Regression tests named for the live defect they pin | 12 |
 | **Property-based verification of `adjudicate()`** | **2,000 generated investigations, 0 failing** — invariants I1–I6 never violated |
 | Permission-boundary tests | 4 — the agent surface cannot send or be handed a key; the proxy takes a slug and an address, same chain, no secret |
@@ -361,7 +361,7 @@ itself so it can never pass as keyless.
 make setup           # dev deps only (pytest, pytest-cov, hypothesis, ruff, mypy, pip-audit)
 make lint            # ruff check + format check
 make typecheck       # mypy over scripts/ and api/
-make test            # 322 offline tests, no internet
+make test            # 324 offline tests, no internet
 make test-coverage   # the same, coverage of every file in scripts/ and api/ gated at 100%
 make test-live       # 10 tests against the real CoinMarketCap contract and the deployment
 make demo            # the judged capability, live, zero config
@@ -374,7 +374,7 @@ make ci              # lint typecheck test-coverage verify check audit
 | Layer | Tool | Status |
 |---|---|---|
 | Code quality | ruff (check + format) · mypy | ✅ |
-| Unit testing | pytest, 322 offline tests, 100% statement + branch coverage gate on scripts/ and api/ | ✅ |
+| Unit testing | pytest, 324 offline tests, 100% statement + branch coverage gate on scripts/ and api/ | ✅ |
 | Property testing | hypothesis, 2,000 cases over `adjudicate()` | ✅ |
 | Boundary testing | the agent surface and the hosted proxy, least privilege proven | ✅ |
 | Live contract testing | pytest `-m live` against real CMC and the deployment; a throttle skips, never passes | ✅ |
@@ -416,7 +416,7 @@ forwarding/
 │   ├── render_site.py                docs/proof/*.json → site/index.html · site/judge.html · site/pitch/index.html · JUDGE.md
 │   └── check_submission_readiness.py placeholder, stale-count and stale-number scanner
 ├── api/lookup.py · api/health.py     the Vercel functions — keyless, same-chain, CORS
-├── tests/                            322 offline + 10 live; boundary · property · regressions named for defects
+├── tests/                            324 offline + 10 live; boundary · property · regressions named for defects
 ├── site/                             generated: the landing page (/), the judge page (/judge), the deck (/pitch) — served by Vercel
 ├── docs/proof/                       hero · runner_up · exit · rebalance · uni_v3_v4 · jit · base_rate · live_run · benchmarks · spike · MCP session
 ├── docs/SPEC.md                      the rule: thresholds, state machine, invariants I1–I6

@@ -260,6 +260,8 @@ def test_a_malformed_FORWARDING_SPACING_falls_back_to_the_default_instead_of_rai
     assert forwarding._spacing_from_env() == 2.0
     monkeypatch.setenv("FORWARDING_SPACING", "-1")
     assert forwarding._spacing_from_env() == 2.0
+    monkeypatch.setenv("FORWARDING_SPACING", "inf")  # a2a r02: time.sleep(inf) would raise
+    assert forwarding._spacing_from_env() == 2.0
     monkeypatch.setenv("FORWARDING_SPACING", "0.25")
     assert forwarding._spacing_from_env() == 0.25
     monkeypatch.delenv("FORWARDING_SPACING")

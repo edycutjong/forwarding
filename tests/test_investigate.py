@@ -220,6 +220,45 @@ def test_a_missing_token_header_is_a_note_not_a_failure():
 # ── Follows, completion, I6 ───────────────────────────────────────────────────────────────────
 
 
+def test_a_follow_whose_page_was_refused_entirely_is_blocked_and_can_never_be_an_exit():
+    """a2a r02 (2026-09-22): the ingestion guard (r01) turned an all-malformed page into a stall,
+    and a stall was 'complete' — so a maker whose rows the API mangled would have read EXIT.
+    Refused data means we could not look; I6 says that is INCOMPLETE, never an EXIT."""
+    mangled = [dict(row("add", 1.0, txn=f"0x{i:02x}", m=MAKER), lgid=None) for i in range(3)]
+    routes = scenario(trigger_rows=[HERO_REMOVE], maker_rows=mangled)
+    v = investigate("ethereum", UNI, client=FakeClient(routes))
+    assert v.kind == "INCOMPLETE"
+    f = v.follows[0]
+    assert f["complete"] is False and f["malformed_dropped"] == 3 and f["rows_total"] == 0
+
+
+def test_a_follow_that_stopped_inside_the_window_has_not_seen_it_and_is_not_an_exit():
+    """a2a r02 (2026-09-22, found while verifying): `complete` only said the walk ended without an
+    error; a walk that stalled (or spent its page budget) before reaching the window start left
+    the older part of the window unseen, and the verdict could still say EXIT. The follow entry
+    already carried reached_window_start — it just was not consulted."""
+    inside = [
+        row("add", 1.0, ts=T0 - 60_000 * (i + 1), m=MAKER, txn=f"0xin{i:02x}", lgid=str(i))
+        for i in range(3)
+    ]  # every row is newer than the window start; the paged API then repeats itself
+    page = [HERO_REMOVE] + inside
+    routes = scenario(trigger_rows=[HERO_REMOVE], maker_rows=page)
+    routes = [
+        (
+            lc(platform="ethereum", address=UNI, maker=MAKER, page=None),
+            envelope(page, last_id="C1"),
+        ),
+        (
+            lc(platform="ethereum", address=UNI, maker=MAKER, page="C1"),
+            envelope(page, last_id="C2"),
+        ),
+    ] + routes
+    v = investigate("ethereum", UNI, client=FakeClient(routes))
+    f = v.follows[0]
+    assert f["complete"] is True and f["reached_window_start"] is False
+    assert v.kind == "INCOMPLETE"
+
+
 def test_an_exit_requires_every_planned_follow_to_have_completed():
     routes = scenario(
         trigger_rows=[HERO_REMOVE],
