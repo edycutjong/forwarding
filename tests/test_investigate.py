@@ -255,8 +255,22 @@ def test_a_follow_that_stopped_inside_the_window_has_not_seen_it_and_is_not_an_e
     ] + routes
     v = investigate("ethereum", UNI, client=FakeClient(routes))
     f = v.follows[0]
-    assert f["complete"] is True and f["reached_window_start"] is False
+    assert f["walk_complete"] is True and f["reached_window_start"] is False
     assert v.kind == "INCOMPLETE"
+    # a2a r03: one field, one meaning — the entry's `complete` is the composite, so verify.py and
+    # bench.py, which recompute the verdict from all(f["complete"]), apply the rule the receipt
+    # was produced under instead of recomputing an EXIT the receipt refused
+    assert f["complete"] is False
+    assert all(x["complete"] for x in v.follows) is False
+    assert (
+        forwarding.adjudicate(
+            v.removal,
+            v.evidence,
+            source_platform="ethereum",
+            complete=all(x["complete"] for x in v.follows),
+        )["kind"]
+        == "INCOMPLETE"
+    )
 
 
 def test_an_exit_requires_every_planned_follow_to_have_completed():

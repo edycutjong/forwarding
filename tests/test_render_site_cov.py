@@ -527,7 +527,7 @@ def test_verdict_slots_for_an_exit_and_an_incomplete():
     assert "did not complete on <b>arbitrum</b>" in s["support"]
     assert (
         s["route_line"]
-        == "▶ INCOMPLETE · not an Exit · re-run; the follow was throttled on arbitrum"
+        == "▶ INCOMPLETE · not an Exit · re-run; the follow did not complete on arbitrum"
     )
     assert s["route_class"] == "exit"
 

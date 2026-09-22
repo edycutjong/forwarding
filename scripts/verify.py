@@ -141,7 +141,7 @@ def verify_receipt(name, failures):
         )
         check(
             all(f["complete"] for f in v["follows"]),
-            "I6 every planned follow completed (200)",
+            "I6 every planned follow completed (200) and saw its whole window",
             failures,
         )
         check(

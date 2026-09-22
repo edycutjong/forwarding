@@ -880,10 +880,8 @@ def verdict_slots(name, d):
         )
     elif kind == "INCOMPLETE":
         bad = ", ".join(f["platform"] for f in v.get("follows") or [] if not f.get("complete"))
-        support = (
-            f"{alert} A follow did not complete on <b>{esc(bad)}</b> — a throttle is never an Exit."
-        )
-        line = f"▶ INCOMPLETE · not an Exit · re-run; the follow was throttled on {bad}"
+        support = f"{alert} A follow did not complete on <b>{esc(bad)}</b> — an unseen window is never an Exit."
+        line = f"▶ INCOMPLETE · not an Exit · re-run; the follow did not complete on {bad}"
     else:  # EXIT
         chains = ", ".join(f["platform"] for f in v.get("follows") or [])
         support = (

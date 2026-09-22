@@ -942,9 +942,7 @@ def investigate(
     token["sym"] = sym
 
     # 5. adjudicate — pure arithmetic on the rows above
-    # I6: an EXIT needs every follow to have ended cleanly AND to have walked back past the
-    # window start — a page budget that ran out inside the window has not seen the whole window
-    complete = all(f["complete"] and f["reached_window_start"] for f in follows)
+    complete = all(f["complete"] for f in follows)  # the entry already folds in the window start
     keyed_pools = {(platform, k): v for k, v in pools.items()}
     a = adjudicate(removal, adds, source_platform=platform, complete=complete, pools=keyed_pools)
     if a["other_removals_in_window"]:
@@ -1009,7 +1007,11 @@ def _follow_entry(platform, address, rows, meta):
         "rows_in_window": len(rows),
         "rows_total": meta.get("rows_total", 0),
         "pages": meta["pages"],
-        "complete": meta["complete"],
+        # I6 (a2a r02–r03): "complete" means we saw the whole window — the walk ended cleanly AND
+        # walked back past the window start. One field, one meaning: verify.py, bench.py, the CLI
+        # and the page all read this and never have to know the rule.
+        "complete": meta["complete"] and meta.get("reached_window_start", False),
+        "walk_complete": meta["complete"],  # the walk's own verdict, kept for readers
         "reached_window_start": meta.get("reached_window_start", False),
         "jit_dropped": meta.get("jit_dropped", 0),
         "malformed_dropped": meta.get("malformed_dropped", 0),
@@ -1228,9 +1230,14 @@ def print_verdict(v, out=None):
         )
     if v.kind == "INCOMPLETE":
         bad = [f["platform"] for f in v.follows if not f["complete"]]
+        why = (
+            "throttled"
+            if any(f["throttled"] for f in v.follows)
+            else "did not see the whole window"
+        )
         print(
-            f"    follow did not complete on: {', '.join(bad)} — "
-            "a throttle is never an Exit; re-run",
+            f"    follow did not complete on: {', '.join(bad)} ({why}) — "
+            "an unseen window is never an Exit; re-run",
             file=out,
         )
     adds = [a for a in v.evidence if a["row"].get("tp") == "add"]

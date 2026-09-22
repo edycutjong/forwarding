@@ -866,8 +866,8 @@ footer .bottom .ver{color:var(--accent)}
       line = '▶ REBALANCE · severity rewritten red → ' + esc(v.severity) + ' · ' + pct + ' back into the same pool ' + elapsed + ' later';
       found = 'the add: back into the same pool, +' + money(v.recovered_usd); routed = 'routed';
     } else if (v.kind === 'INCOMPLETE') {
-      support = alert + ' A follow did not complete — a throttle is never an Exit. Re-run, or run the CLI.';
-      line = '▶ INCOMPLETE · not an Exit · the follow was throttled; re-run';
+      support = alert + ' A follow did not complete — an unseen window is never an Exit. Re-run, or run the CLI.';
+      line = '▶ INCOMPLETE · not an Exit · the follow did not complete; re-run';
     } else {
       support = alert + ' Nothing re-added by <b>' + esc(short(r.m, 6)) + '</b> within ±' + (v.window_h ? v.window_h.back : 6) + ' h on <b>' + esc(platform) + '</b> — same-chain follow on this page; the CLI searches every sibling chain before it calls this an Exit.';
       line = '▶ EXIT on this chain · ' + sevPlain + ' · nothing re-added within ±' + (v.window_h ? v.window_h.back : 6) + ' h on ' + esc(platform) + ' — run the CLI for the cross-chain verdict';

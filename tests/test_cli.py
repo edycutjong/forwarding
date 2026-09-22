@@ -221,7 +221,10 @@ def test_an_incomplete_verdict_names_the_chain_whose_follow_was_throttled(routed
     code = forwarding.main(["--quiet", "investigate", "--address", UNI])
     out = capsys.readouterr().out
     assert code == 0 and "◆ INCOMPLETE" in out
-    assert "follow did not complete on: bsc — a throttle is never an Exit; re-run" in out
+    assert (
+        "follow did not complete on: bsc (throttled) — an unseen window is never an Exit; re-run"
+        in out
+    )
 
 
 def test_the_verdict_elides_past_four_adds_and_prints_refusals_and_notes(routed, capsys):
