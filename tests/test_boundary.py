@@ -16,6 +16,7 @@ never pass as keyless — is pinned in tests/test_fetch.py and tests/test_cli.py
 import io
 import json
 import sys
+import time
 import urllib.request
 from pathlib import Path
 
@@ -158,13 +159,19 @@ def test_the_hosted_proxy_follows_the_same_chain_only_and_holds_no_secret(monkey
     lookup.CACHE.clear()
     seen = []
     routes = scenario(trigger_rows=[HERO_REMOVE], maker_rows=[HERO_ADD, HERO_REMOVE])
-    monkeypatch.setattr(
-        lookup.forwarding,
-        "Client",
-        lambda **kw: FakeClient(routes, on_call=lambda r, b: seen.append(r)),
-    )
+    client_kwargs = {}
+
+    def make_client(**kw):
+        client_kwargs.update(kw)
+        return FakeClient(routes, on_call=lambda r, b: seen.append(r))
+
+    monkeypatch.setattr(lookup.forwarding, "Client", make_client)
     status, _, body = _get(f"/api/lookup?platform=ethereum&address={UNI[:2] + UNI[2:].upper()}")
     assert status == 200
+    # a2a r01: the function has a wall clock (vercel.json maxDuration 60 s) — it retries once,
+    # not the CLI's 3× (105 s of backoff), and says what budget it answered under
+    assert client_kwargs["retries"] == lookup.PROXY_RETRIES == 1
+    assert body["budget_s"] == lookup.BUDGET_S < 60
     assert body["verdict"]["kind"] == "MIGRATION"
     chains = {r["params"].get("platform") or r["params"].get("network_slug") for r in seen}
     assert chains == {"ethereum"}  # quotes/latest names the chain network_slug; nothing else
@@ -199,6 +206,28 @@ def test_the_hosted_proxy_follows_the_same_chain_only_and_holds_no_secret(monkey
     )
     status, _, body = _get(f"/api/lookup?platform=ethereum&address={UNI}")
     assert status == 200 and body["refused"].startswith("no removal")
+    # a2a r01: `auth` is read from the environment at call time, like the client's key is — the
+    # payload can never say "none" while a stray key in the deployment is billing; the value
+    # names the variable, never the key
+    for var in forwarding.KEY_VARS:
+        monkeypatch.delenv(var, raising=False)
+    assert lookup.auth_position().startswith("none")
+    monkeypatch.setenv("CMC_API_KEY", "0123456789abcdef0123456789abcdef")
+    assert lookup.auth_position().startswith("keyed — CMC_API_KEY")
+    assert "0123456789abcdef" not in lookup.auth_position()
+    monkeypatch.delenv("CMC_API_KEY")
+    # the per-instance cache is capped: the 257th distinct address evicts the oldest entry
+    lookup.CACHE.clear()
+    for i in range(lookup.CACHE_MAX):
+        lookup.CACHE[("ethereum", f"0x{i:040x}")] = (time.time() + 60, {"i": i})
+    monkeypatch.setattr(
+        lookup.forwarding,
+        "investigate",
+        lambda *a, **kw: (_ for _ in ()).throw(forwarding.NoCandidate("none")),
+    )
+    _get(f"/api/lookup?platform=ethereum&address={UNI}")
+    assert len(lookup.CACHE) == lookup.CACHE_MAX and ("ethereum", f"0x{0:040x}") not in lookup.CACHE
+    lookup.CACHE.clear()
     # the only verbs are GET and the CORS preflight
     h = _sink(lookup.handler, "/api/lookup")
     h.do_OPTIONS()

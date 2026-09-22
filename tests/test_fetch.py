@@ -233,6 +233,39 @@ def test_a_page_that_adds_nothing_new_is_a_stall_and_the_walk_stops():
     assert meta["stalled"] is True and meta["pages"] == 2
 
 
+def test_a_row_the_walk_cannot_timestamp_or_key_is_refused_and_counted_not_raised():
+    """a2a r01 (2026-09-22): a single row with no `ts` used to raise ValueError inside the
+    follow's until= min(), aborting the whole join; two rows with no `lgid` collapsed to one key."""
+    good = row("add", 1.0, ts=3000, txn="0xaa", lgid="1")
+    no_ts = dict(row("add", 1.0, txn="0xbb", lgid="2"), ts=None)
+    bad_ts = dict(row("add", 1.0, txn="0xcc", lgid="3"), ts="not-a-number")
+    no_lgid = dict(row("add", 1.0, ts=3000, txn="0xdd"), lgid=None)
+    no_lgid2 = dict(row("add", 1.0, ts=3000, txn="0xee"), lgid=None)
+    no_txn = dict(row("add", 1.0, ts=3000, lgid="4"), txn=None)
+    page = [good, no_ts, bad_ts, no_lgid, no_lgid2, no_txn]
+    c = FakeClient([(lc(), envelope(page, last_id=None))])
+    rows, meta = walk(c, {"platform": "ethereum", "address": UNI}, pages=1)
+    assert [r["lgid"] for r in rows] == ["1"]
+    assert meta["malformed_dropped"] == 5 and meta["complete"] is True
+    # the until= callback only ever sees well-formed rows, so min(ts) cannot raise
+    c = FakeClient([(lc(), envelope([no_ts, good], last_id="MORE"))])
+    rows, meta = walk(c, {"platform": "ethereum", "address": UNI}, pages=3, until=lambda pg: True)
+    assert meta["stopped"] is True and len(rows) == 1
+
+
+def test_a_malformed_FORWARDING_SPACING_falls_back_to_the_default_instead_of_raising(monkeypatch):
+    """a2a r01 (2026-09-22): the env parse ran at import with no guard — a typo in the variable
+    took down the CLI, the MCP server and both Vercel functions at once."""
+    monkeypatch.setenv("FORWARDING_SPACING", "abc")
+    assert forwarding._spacing_from_env() == 2.0
+    monkeypatch.setenv("FORWARDING_SPACING", "-1")
+    assert forwarding._spacing_from_env() == 2.0
+    monkeypatch.setenv("FORWARDING_SPACING", "0.25")
+    assert forwarding._spacing_from_env() == 0.25
+    monkeypatch.delenv("FORWARDING_SPACING")
+    assert forwarding._spacing_from_env() == 2.0
+
+
 def test_rows_are_keyed_by_txn_and_log_index_together():
     """One txn emits several rows; log indexes repeat across txns. Neither alone is an identity."""
     a = row("add", 1.0, ts=3000, txn="0xaa", lgid="1")

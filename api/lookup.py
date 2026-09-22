@@ -23,9 +23,25 @@ import forwarding  # noqa: E402
 
 CACHE: dict[tuple[str, str], tuple[float, dict]] = {}  # per function instance, 60 s
 CACHE_S = 60
+CACHE_MAX = 256  # a warm instance must not grow with every distinct address ever asked
 SPACING_S = 0.4  # faster than the CLI's 2 s: one visitor, six calls, one shared IP
+# The CLI retries 3× (15 + 30 + 60 s of backoff) because it has no wall clock. This function has
+# one: vercel.json maxDuration is 60 s, so it retries once (15 s) and then answers "throttled"
+# as JSON — the platform must never be the one to end the request.
+PROXY_RETRIES = 1
+BUDGET_S = 45
 EVM = re.compile(r"^0x[0-9a-fA-F]{40}$")
 SLUG = re.compile(r"^[a-z0-9-]{2,32}$")
+
+
+def auth_position():
+    """What the client will actually send — read from the environment at call time, like the
+    client does, so the payload can never claim keyless while a key is billing. Names the
+    variable, never the value."""
+    var = forwarding.escape_hatch_var()
+    if var is None:
+        return "none — keyless /public-api, no key exists in this deployment"
+    return f"keyed — {var} is set in this deployment (the CLI's escape hatch); credits bill"
 
 
 def lookup(platform, address):
@@ -36,7 +52,7 @@ def lookup(platform, address):
         payload["cached"] = True
         return payload
     started = time.time()
-    c = forwarding.Client(spacing=SPACING_S)
+    c = forwarding.Client(spacing=SPACING_S, retries=PROXY_RETRIES)
     try:
         v = forwarding.investigate(platform, address, cross_chain=False, client=c, trigger_pages=1)
         payload = {
@@ -56,11 +72,14 @@ def lookup(platform, address):
             "calls": c.calls,
             "credits_used": c.credits,
             "wall_clock_s": round(time.time() - started, 1),
-            "auth": "none — keyless /public-api, no key exists in this deployment",
+            "budget_s": BUDGET_S,
+            "auth": auth_position(),
             "cached": False,
         }
     )
     if "throttled" not in payload:
+        if len(CACHE) >= CACHE_MAX:
+            CACHE.pop(next(iter(CACHE)))
         CACHE[key] = (time.time() + CACHE_S, payload)
     return payload
 

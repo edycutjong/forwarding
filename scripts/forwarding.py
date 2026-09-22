@@ -55,7 +55,22 @@ KEY_URL = "https://coinmarketcap.com/api"
 PAGE = 100  # hard cap on the endpoint
 RETRIES = 3
 BACKOFF_S = 15  # 15 s, 30 s, 60 s — the anonymous tier clears in about a minute
-SPACING_S = float(os.environ.get("FORWARDING_SPACING", "2.0"))  # between calls; the proxy lowers it
+
+
+def _spacing_from_env(default=2.0):
+    """FORWARDING_SPACING is a documented escape hatch; a typo in it must not kill the module —
+    every entry point (the CLI, the MCP server, both Vercel functions) imports this file."""
+    raw = os.environ.get("FORWARDING_SPACING")
+    if raw is None:
+        return default
+    try:
+        v = float(raw)
+    except ValueError:
+        return default
+    return v if v > 0 else default
+
+
+SPACING_S = _spacing_from_env()  # between calls; the proxy lowers it via Client(spacing=…)
 
 # ── The published rule (docs/SPEC.md) ─────────────────────────────────────────────────────────
 MIN_USD = 100_000.0  # a removal below this is not an alert
@@ -299,7 +314,21 @@ def usd(row):
 
 
 def row_key(row):
+    """(txn, lgid) — walk() has already refused any row missing either, so neither is None here."""
     return (row.get("txn"), str(row.get("lgid")))
+
+
+def well_formed(row):
+    """A row the walk can identify and place in time: a parseable `ts`, a `txn` and an `lgid`.
+    Anything else is refused at ingestion and counted, so a single malformed row can never abort
+    a follow (ValueError in min()) or collapse two rows into one key (None == None)."""
+    if row.get("txn") is None or row.get("lgid") is None:
+        return False
+    try:
+        ts_ms(row)
+    except (TypeError, ValueError):
+        return False
+    return True
 
 
 def pool_id(row):
@@ -379,6 +408,7 @@ def walk(client, params, pages, until=None):
         "stopped": False,
         "tlu": None,
         "lpc": None,
+        "malformed_dropped": 0,
     }
     for _ in range(pages):
         q = dict(params, limit=PAGE)
@@ -395,6 +425,9 @@ def walk(client, params, pages, until=None):
         meta["pages"] += 1
         fresh = []
         for r in batch:
+            if not well_formed(r):
+                meta["malformed_dropped"] += 1
+                continue
             k = row_key(r)
             if k in seen:
                 continue
