@@ -43,8 +43,8 @@ it refuses. Real session transcript: [docs/proof/mcp_session.md](docs/proof/mcp_
 1. **Nothing else is required.** No `pip install`, no `.env`, no API key, no signup. One thing
    that can look like a bug is not one: the endpoint is CoinMarketCap’s shared anonymous tier,
    rate-limited per IP.
-   A clean run is 27.0 s (p50 of 5 live runs, 11 calls at 2 s
-   spacing). If the tier is throttling, the script backs off (15 s, 30 s, 60 s) and says so;
+   A clean run of the pinned path is 27.0 s (p50 of 5 live runs, 11 calls
+   at 2 s spacing; the bare command adds the sweep pages — 14 calls in the run above). If the tier is throttling, the script backs off (15 s, 30 s, 60 s) and says so;
    if your IP’s quota is exhausted it exits **75** with the way through — wait a minute, or
    export a free key as `CMC_API_KEY` (an escape hatch, never a requirement; every receipt here
    was taken with no key set).
@@ -60,9 +60,12 @@ Full annotated transcript with the receipt: **[DEMO.md](DEMO.md)**.
 ## Receipt — two live runs of the same removal
 
 The bare command picks the largest qualifying removal in the token’s newest 300 rows, so weeks
-from now it may pick a newer one; `--maker 0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9` pins this one. Both runs are
-committed: [`live_run.json`](docs/proof/live_run.json) is the bare command (2026-09-18T23:36:32Z),
-[`hero.json`](docs/proof/hero.json) is the pinned run (2026-09-18T23:16:31Z). Same rows, same verdict.
+from now it may pick a newer one; `--txn 0x5081d9…dcd495 --maker 0x4f0a…b9a9` pins this one
+(the two flags together skip the sweep and walk the wallet; `--maker` alone still sweeps). Both runs
+are committed: [`live_run.json`](docs/proof/live_run.json) is the bare command (2026-09-18T23:36:32Z);
+[`hero.json`](docs/proof/hero.json) is the pinned invocation `seed.py` made after its watchlist sweep
+chose this removal (2026-09-18T23:16:31Z) — its `selection_rule` field records that choosing, its
+`calls` are the pinned path (no sweep pages). Same rows, same verdict.
 
 | | |
 |---|---|
@@ -84,7 +87,7 @@ The other three outcomes, captured by the same published rule: **EXIT** (LINK, 0
 
 ```bash
 python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984   # the hero, live — the bare command
-python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984 --maker 0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9   # the same removal, pinned to its wallet: reproduces this card after the sweep has moved on
+python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984 --txn 0x5081d91ab6eae50971e0dec5b5f2b03561893a638768ec4773197622dddcd495 --maker 0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9   # the same removal, pinned by txn + wallet: reproduces this card after the sweep has moved on
 python3 scripts/forwarding.py investigate --platform ethereum --address 0x514910771af9ca656af840dff83e8264ecf986ca   # LINK
 python3 scripts/forwarding.py watch --cycles 1                    # the autonomous loop, one pass over 11 tokens
 make test                                                         # 324 offline tests

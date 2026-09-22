@@ -1451,6 +1451,10 @@ def context():
             else "an unknown share"
         ),
         "hero.txn_short": short(r["txn"], 6),
+        "hero.txn": r["txn"],
+        # the invocation seed.py made for hero.json (investigate(..., txn=r["txn"], maker=r["m"])):
+        # --txn AND --maker skips the sweep and walks the wallet; --maker alone still sweeps
+        "pinned_cmd": f"{CLI_CMD} --txn {r['txn']} --maker {r['m']}",
         "hero.add_txn_short": short(add["txn"], 6),
         "hero.dest_venue": esc(dest.get("venue", "")),
         "hero.dest_pair": esc(dest.get("pair", "")),

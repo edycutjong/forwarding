@@ -12,11 +12,14 @@ python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840
 ```
 
 The bare command picks the largest qualifying removal in UNI's newest 300 rows, so weeks from now
-it may pick a newer one. To reproduce *this* card after the sweep has moved on, pin the wallet —
-that run is committed too, as [`hero.json`](docs/proof/hero.json) (11 calls, 73.0 s with two backoffs):
+it may pick a newer one. To reproduce *this* card after the sweep has moved on, pin it by transaction
+and wallet — the two flags together skip the sweep and walk the wallet (`--maker` alone still sweeps).
+That is the invocation `seed.py` made for [`hero.json`](docs/proof/hero.json) after its watchlist
+sweep chose this removal: 11 calls, 73.0 s with two backoffs; its `selection_rule` field records the
+choosing, its `calls` are this path. Re-run 2026-09-22: 11 calls, 11 × 200, MIGRATION, 43.7 s.
 
 ```bash
-python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984 --maker 0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9
+python3 scripts/forwarding.py investigate --platform ethereum --address 0x1f9840a85d5af5bf1d1762f925bdaddc4201f984 --txn 0x5081d91ab6eae50971e0dec5b5f2b03561893a638768ec4773197622dddcd495 --maker 0x4f0aa5900b8292273b2f9a178d5468f8048bb9a9
 ```
 
 That is the whole thing. No `pip install`, no `.env`, no signup — `forwarding.py` is stdlib-only

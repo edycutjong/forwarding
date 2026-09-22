@@ -41,8 +41,8 @@ it refuses. Real session transcript: [docs/proof/mcp_session.md](docs/proof/mcp_
 1. **Nothing else is required.** No `pip install`, no `.env`, no API key, no signup. One thing
    that can look like a bug is not one: the endpoint is CoinMarketCap’s shared anonymous tier,
    rate-limited per IP.
-   A clean run is {{bench.live_p50}} s (p50 of {{bench.live_n}} live runs, {{hero.calls}} calls at 2 s
-   spacing). If the tier is throttling, the script backs off (15 s, 30 s, 60 s) and says so;
+   A clean run of the pinned path is {{bench.live_p50}} s (p50 of {{bench.live_n}} live runs, {{hero.calls}} calls
+   at 2 s spacing; the bare command adds the sweep pages — {{live.calls}} calls in the run above). If the tier is throttling, the script backs off (15 s, 30 s, 60 s) and says so;
    if your IP’s quota is exhausted it exits **75** with the way through — wait a minute, or
    export a free key as `CMC_API_KEY` (an escape hatch, never a requirement; every receipt here
    was taken with no key set).
@@ -58,9 +58,12 @@ Full annotated transcript with the receipt: **[DEMO.md](DEMO.md)**.
 ## Receipt — two live runs of the same removal
 
 The bare command picks the largest qualifying removal in the token’s newest 300 rows, so weeks
-from now it may pick a newer one; `--maker {{hero.maker}}` pins this one. Both runs are
-committed: [`live_run.json`](docs/proof/live_run.json) is the bare command ({{live.captured_iso}}),
-[`hero.json`](docs/proof/hero.json) is the pinned run ({{hero.captured_iso}}). Same rows, same verdict.
+from now it may pick a newer one; `--txn {{hero.txn_short}} --maker {{hero.maker_short}}` pins this one
+(the two flags together skip the sweep and walk the wallet; `--maker` alone still sweeps). Both runs
+are committed: [`live_run.json`](docs/proof/live_run.json) is the bare command ({{live.captured_iso}});
+[`hero.json`](docs/proof/hero.json) is the pinned invocation `seed.py` made after its watchlist sweep
+chose this removal ({{hero.captured_iso}}) — its `selection_rule` field records that choosing, its
+`calls` are the pinned path (no sweep pages). Same rows, same verdict.
 
 | | |
 |---|---|
@@ -82,7 +85,7 @@ The other three outcomes, captured by the same published rule: {{others.summary}
 
 ```bash
 {{cli_cmd}}   # the hero, live — the bare command
-{{cli_cmd}} --maker {{hero.maker}}   # the same removal, pinned to its wallet: reproduces this card after the sweep has moved on
+{{pinned_cmd}}   # the same removal, pinned by txn + wallet: reproduces this card after the sweep has moved on
 python3 scripts/forwarding.py investigate --platform ethereum --address 0x514910771af9ca656af840dff83e8264ecf986ca   # LINK
 python3 scripts/forwarding.py watch --cycles 1                    # the autonomous loop, one pass over 11 tokens
 make test                                                         # {{tests}} offline tests
