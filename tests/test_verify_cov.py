@@ -108,7 +108,7 @@ def test_an_incomplete_follow_on_an_exit_breaks_i6(proof, receipt):
     failures = []
     verify.verify_receipt("exit", failures)
     assert "I6 an incomplete follow is never an EXIT" in failures
-    assert "I6 every planned follow completed (200)" in failures
+    assert "I6 every planned follow completed (200) and saw its whole window" in failures
     assert "I6 every follow reached the window start" in failures
 
 
