@@ -448,6 +448,7 @@ forwarding/
 | | |
 |---|---|
 | **Demo video** | **[https://youtu.be/ED5h27Xi2V0](https://youtu.be/ED5h27Xi2V0)** — 2 min 54 s: a real keyless run at real speed (the 15 s throttle kept in), the verdict, the two rows, a real Claude Code session against the MCP server; subtitles in the upload |
+| **DoraHacks BUIDL** | **[dorahacks.io/buidl/49020](https://dorahacks.io/buidl/49020)** — the submission page (AI Agents and Automation track) |
 | **For judges** | **[forwarding.edycu.dev/judge](https://forwarding.edycu.dev/judge)** · [JUDGE.md](JUDGE.md) — the 30-second path |
 | **The receipt** | **[DEMO.md](DEMO.md)** — the live run transcribed, with [`docs/proof/live_run.json`](docs/proof/live_run.json) behind it |
 | **Landing page** | **[forwarding.edycu.dev](https://forwarding.edycu.dev)** — the receipt beside its raw rows, and a live box |

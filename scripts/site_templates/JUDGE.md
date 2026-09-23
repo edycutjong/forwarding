@@ -124,6 +124,8 @@ replace {{endpoints.count}} keyless endpoints.
 
 | | |
 |---|---|
+| **Demo video** | [youtu.be/ED5h27Xi2V0](https://youtu.be/ED5h27Xi2V0) — 2 min 54 s, a real keyless run at real speed |
+| **DoraHacks BUIDL** | [dorahacks.io/buidl/49020](https://dorahacks.io/buidl/49020) — the submission page |
 | **Run it** | [DEMO.md](DEMO.md) — annotated transcript + receipt |
 | **How it works** | [ARCHITECTURE.md](ARCHITECTURE.md) — derived from the code |
 | **The rule** | [docs/SPEC.md](docs/SPEC.md) — state machine, thresholds, invariants I1–I6 |
