@@ -1,6 +1,6 @@
 # Development only. The product — scripts/forwarding.py, scripts/mcp_server.py, api/ — is
 # stdlib and needs none of this; a judge runs it with a bare python3.
-pytest>=9.1.1
+pytest>=9.2.0
 pytest-cov>=7.1
 hypothesis>=6.168.0
 ruff>=0.16.7
